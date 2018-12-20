@@ -300,3 +300,4 @@ typings/
 .dynamodb/
 
 # End of https://www.gitignore.io/api/node,angular,firebase,intellij,intellij+all,intellij+iml
+functions/service-account.json
