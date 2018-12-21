@@ -39,11 +39,13 @@ exports.flushResponse = function (response) {
     responsePayload["template"]["outputs"] = this.outputs
     responsePayload["template"]["quickReplies"] = this.quickreplies
 
+    var responsePayloadStr = JSON.stringify(responsePayload)
+
     this.outputs.length = global.define.ZERO
     this.quickreplies.length = global.define.ZERO
 
-    global.log.debug("responseManager", "flushResponse", "current response payload: " + JSON.stringify(responsePayload))
+    global.log.debug("responseManager", "flushResponse", "current response payload: " + responsePayloadStr)
 
     response.setHeader(global.define.HEADERS_CONTENT_TYPE, global.define.HEADERS_CONTENT_TYPE_APPLICATION_JSON);
-    response.status(global.define.HTTP_STATUS_OK).send(JSON.stringify(responsePayload))
+    response.status(global.define.HTTP_STATUS_OK).send(responsePayloadStr)
 }
