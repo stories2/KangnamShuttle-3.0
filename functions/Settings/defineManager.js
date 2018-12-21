@@ -11,3 +11,5 @@ exports.HEADERS_CONTENT_TYPE = "Content-Type"
 exports.HEADERS_CONTENT_TYPE_APPLICATION_JSON = "application/json"
 
 exports.HTTP_STATUS_OK = 200
+
+exports.ZERO = 0

@@ -39,8 +39,8 @@ exports.flushResponse = function (response) {
     responsePayload["template"]["outputs"] = this.outputs
     responsePayload["template"]["quickReplies"] = this.quickreplies
 
-    this.outputs.clear()
-    this.quickreplies.clear()
+    this.outputs.length = global.define.ZERO
+    this.quickreplies.length = global.define.ZERO
 
     global.log.debug("responseManager", "flushResponse", "current response payload: " + JSON.stringify(responsePayload))
 
