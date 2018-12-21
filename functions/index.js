@@ -11,7 +11,10 @@ const v3PublicApi = express()
 const publicRoute = require('./Route/V3/publicRoute')
 
 //Global
+global.define = require('./Settings/defineManager')
 global.admin = adminManager.getAdminSDK()
+global.log = require('./Utils/logManager')
+global.response = require('./Utils/responseManager')
 
 v3PublicApi.use(cors)
 v3PublicApi.post('/hello', publicRoute.hello)
