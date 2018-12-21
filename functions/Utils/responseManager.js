@@ -1,10 +1,10 @@
 exports.outputs = []
-exports.quickreplise = []
+exports.quickreplies = []
 exports.responseTemplate = {
     "version": "2.0",
     "template": {
         "outputs": [],
-        "quickReplise": []
+        "quickReplies": []
     }
 }
 
@@ -21,11 +21,11 @@ exports.pushTemplate = function (template) {
 }
 
 exports.pushQuickReply = function (quickReply) {
-    var quickRepliesLen = this.quickreplise.length
+    var quickRepliesLen = this.quickreplies.length
 
     if(quickRepliesLen < global.define.MAXIMUM_OF_QUICK_REPLIES_LENGTH) {
-        this.quickreplise.push(quickReply)
-        global.log.debug("responseManager", "pushQuickReply", "quick reply added: " + JSON.stringify(this.quickreplise))
+        this.quickreplies.push(quickReply)
+        global.log.debug("responseManager", "pushQuickReply", "quick reply added: " + JSON.stringify(this.quickreplies))
     }
     else {
         global.log.warn("responseManager", "pushQuickReply", "overflow detected, current length: " + quickRepliesLen + " <-> " + global.define.MAXIMUM_OF_QUICK_REPLIES_LENGTH)
@@ -34,11 +34,16 @@ exports.pushQuickReply = function (quickReply) {
 
 exports.flushResponse = function (response) {
 
-    this.responseTemplate["template"]["outputs"] = this.outputs
-    this.responseTemplate["template"]["quickReplise"] = this.quickreplise
+    var responsePayload = this.responseTemplate
 
-    global.log.debug("responseManager", "flushResponse", "current response payload: " + JSON.stringify(this.responseTemplate))
+    responsePayload["template"]["outputs"] = this.outputs
+    responsePayload["template"]["quickReplies"] = this.quickreplies
+
+    this.outputs.clear()
+    this.quickreplies.clear()
+
+    global.log.debug("responseManager", "flushResponse", "current response payload: " + JSON.stringify(responsePayload))
 
     response.setHeader(global.define.HEADERS_CONTENT_TYPE, global.define.HEADERS_CONTENT_TYPE_APPLICATION_JSON);
-    response.status(global.define.HTTP_STATUS_OK).send(JSON.stringify(this.responseTemplate))
+    response.status(global.define.HTTP_STATUS_OK).send(JSON.stringify(responsePayload))
 }
