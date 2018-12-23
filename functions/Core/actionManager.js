@@ -29,6 +29,7 @@ exports.getCurrentActionIndex = function (request, callbackFunc) {
         var userSnapshotData = JSON.parse(JSON.stringify(userSnapshot))
         if(userSnapshotData !== undefined || userSnapshotData != null) {
 
+            request.user = userSnapshotData
             global.log.debug("actionManager", "getCurrentActionIndex", "user info: " + JSON.stringify(userSnapshotData))
             if(request.params.hasOwnProperty("index")) {
                 userSnapshotData["action"] = request.params.index
@@ -111,8 +112,8 @@ exports.getCurrentActionBox = function(actionIndex, callbackFunc) {
 }
 
 exports.executeOrder = function (request, response, actionIndex) {
-    const basicAction = require('../Action/BasicAction')
-    const thuSuAction = require('../Action/ThuSuAction')
+    const basicAction = require('../Action/basicAction')
+    const thuSuAction = require('../Action/thuSuAction')
 
     const actionTable = {
         "1": basicAction.hello,
