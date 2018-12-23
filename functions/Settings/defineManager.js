@@ -16,3 +16,6 @@ exports.HTTP_STATUS_CODE_UNAUTHORIZED = 401
 exports.HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500
 
 exports.ZERO = 0
+
+exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
+exports.DB_PATH_USERS_USER_KEY = "/users/%s"
