@@ -19,3 +19,12 @@ exports.ZERO = 0
 
 exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
 exports.DB_PATH_USERS_USER_KEY = "/users/%s"
+
+exports.DEFAULT_USER_DATA = {
+    "action": "1",
+    "register": "1990-01-01T00:00:00",
+    "update": "1990-01-01T00:00:00"
+}
+
+exports.GMT_KOREA_TIME_MIN = 540
+exports.HOUR_TO_MILE = 60000

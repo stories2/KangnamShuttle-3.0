@@ -18,6 +18,7 @@ const preprocessManager = require('./Attribute/preprocessManager')
 global.define = require('./Settings/defineManager')
 global.admin = adminManager.getAdminSDK()
 global.log = require('./Utils/logManager')
+global.datetime = require('./Utils/datetimeManager')
 
 v3PublicApi.use(cors)
 v3PublicApi.use(preprocessManager.addModules)
