@@ -11,9 +11,7 @@ exports.run = function (request, response, callbackFunc) {
             getCurrentActionIndex(request, function (actionIndex) { // get user last or current action index
                 getCurrentActionBox(actionIndex, function (action) { // get action info
                     request.action = action
-                    executeOrder(request, response, actionIndex) // execute order
-
-                    callbackFunc() // response to user
+                    executeOrder(request, response, actionIndex, callbackFunc) // execute order
                 })
             })
         }
@@ -148,7 +146,7 @@ exports.getCurrentActionBox = function(actionIndex, callbackFunc) {
     })
 }
 
-exports.executeOrder = function (request, response, actionIndex) {
+exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     const basicAction = require('../Action/basicAction')
     const thuSuAction = require('../Action/thuSuAction')
 
@@ -159,5 +157,5 @@ exports.executeOrder = function (request, response, actionIndex) {
 
     global.log.debug("actionManager", "executeOrder", "execute action #" + actionIndex)
 
-    actionTable[actionIndex](request, response)
+    actionTable[actionIndex](request, response, callbackFunc) // <-- pass request, response, callbackFunc(flush response data)
 }
