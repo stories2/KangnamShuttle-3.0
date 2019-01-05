@@ -14,6 +14,8 @@ exports.todayPantiesColor = function (request, response, callbackFunc) {
     global.log.debug("thuSuAction", "todayPantiesColor", "panti #" + pantiIndex + " generated text: " + currentResponseTemplate["simpleText"]["text"])
 
     responseManager.pushTemplate(currentResponseTemplate)
-    responseManager.pushQuickReply(action["quickReplies"])
+    for(var index in action["quickReplies"]) {
+        responseManager.pushQuickReply(action["quickReplies"][index])
+    }
     callbackFunc()
 }

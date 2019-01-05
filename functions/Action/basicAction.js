@@ -4,6 +4,8 @@ exports.hello = function (request, response, callbackFunc) {
     global.log.debug("basicAction", "hello", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
     responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
-    responseManager.pushQuickReply(action["quickReplies"])
+    for(var index in action["quickReplies"]) {
+        responseManager.pushQuickReply(action["quickReplies"][index])
+    }
     callbackFunc()
 }
