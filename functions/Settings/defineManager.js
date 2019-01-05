@@ -25,6 +25,11 @@ exports.DEFAULT_USER_DATA = {
     "register": "1990-01-01T00:00:00",
     "update": "1990-01-01T00:00:00"
 }
+exports.DEFAULT_RESPONSE_TYPE_ZERO = "0"
+
+exports.LIST_OF_PANTIES_COLOR = [
+    "파랑", "검점", "빨강", "하양", "핑크", "살색"
+]
 
 exports.GMT_KOREA_TIME_MIN = 540
 exports.HOUR_TO_MILE = 60000
