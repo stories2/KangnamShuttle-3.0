@@ -19,6 +19,7 @@ exports.ZERO = 0
 
 exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
 exports.DB_PATH_USERS_USER_KEY = "/users/%s"
+exports.DB_PATH_USERS_USER_KEY_UPDATE = "/users/%s/update"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",

@@ -26,15 +26,15 @@ exports.run = function (request, response, callbackFunc) {
 exports.updateLastRequestDateTime = function(request) {
     const util = require('util')
     const admin = global.admin
-    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["properties"]["plusfriendUserKey"])
+    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY_UPDATE, request.body["userRequest"]["user"]["properties"]["plusfriendUserKey"])
 
     global.log.debug("actionManager", "updateLastRequestDateTime", "user db path: " + userDbPath)
 
     var userRef = admin.database().ref(userDbPath)
     userRef.once("value", function (userSnapshot) {
-        var userSnapshotData = JSON.parse(JSON.stringify(userSnapshot))
+        var userSnapshotData = userSnapshot.val()
 
-        userSnapshotData["update"] = global.datetime.getCurrentTime().toISOString()
+        userSnapshotData = global.datetime.getCurrentTime().toISOString()
 
         admin.database().ref(userDbPath).set(userSnapshotData)
     })
@@ -69,6 +69,7 @@ exports.isUserRegistered = function(request, callbackFunc) {
             })
         }
         else { // <-- user already registered
+            global.log.info("actionManager", "isUserRegistered", "user already registered")
             callbackFunc(true) // return with success value
         }
     })
@@ -83,19 +84,19 @@ exports.getCurrentActionIndex = function (request, callbackFunc) {
 
     global.log.debug("actionManager", "getCurrentActionIndex", "current user text: " + userText + " user db path: " + userDbPath)
 
-    userRef = admin.database().ref(userDbPath)
+    var userRef = admin.database().ref(userDbPath)
     userRef.once("value", function (userSnapshot) {
         var userSnapshotData = JSON.parse(JSON.stringify(userSnapshot))
 
         request.user = userSnapshotData
         global.log.debug("actionManager", "getCurrentActionIndex", "user info: " + JSON.stringify(userSnapshotData))
         if(request.params.hasOwnProperty("index")) {
-            userSnapshotData["action"] = request.params.index
+            userSnapshotData.action = request.params.index
             global.log.debug("actionManager", "getCurrentActionIndex", "request action param exist: " + userSnapshotData.action)
 
             var userSnapshotDataStr = JSON.stringify(userSnapshotData)
             global.log.debug("actionManager", "getCurrentActionIndex", "path: " + userDbPath + " update: " + userSnapshotDataStr)
-            admin.database().ref(userDbPath).set(userSnapshotData, function (error) {
+            userRef.set(userSnapshotData, function (error) {
                 if(error) {
                     global.log.error("actionManager", "getCurrentActionIndex", "cannot save data: " + JSON.stringify(error))
                 }
@@ -111,7 +112,7 @@ exports.getCurrentActionIndex = function (request, callbackFunc) {
 
             global.log.debug("actionManager", "getCurrentActionIndex", "find action from: " + actionDbPath)
 
-            actionRef = admin.database().ref(actionDbPath)
+            var actionRef = admin.database().ref(actionDbPath)
             actionRef.once("value", function(actionSnapshot) {
 
                 var actionSnapshotData = JSON.parse(JSON.stringify(actionSnapshot))
