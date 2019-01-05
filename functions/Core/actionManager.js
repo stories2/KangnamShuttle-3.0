@@ -26,7 +26,7 @@ exports.run = function (request, response, callbackFunc) {
 exports.updateLastRequestDateTime = function(request) {
     const util = require('util')
     const admin = global.admin
-    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["type"])
+    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["properties"]["plusfriendUserKey"])
 
     global.log.debug("actionManager", "updateLastRequestDateTime", "user db path: " + userDbPath)
 
@@ -43,7 +43,7 @@ exports.updateLastRequestDateTime = function(request) {
 exports.isUserRegistered = function(request, callbackFunc) {
     const util = require('util')
     const admin = global.admin
-    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["type"])
+    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["properties"]["plusfriendUserKey"])
 
     global.log.debug("actionManager", "isUserRegistered", "user db path: " + userDbPath)
 
@@ -78,7 +78,7 @@ exports.getCurrentActionIndex = function (request, callbackFunc) {
 
     const util = require('util')
     const admin = global.admin
-    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["type"])
+    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["properties"]["plusfriendUserKey"])
     var userText = request.body["userRequest"]["utterance"]
 
     global.log.debug("actionManager", "getCurrentActionIndex", "current user text: " + userText + " user db path: " + userDbPath)
