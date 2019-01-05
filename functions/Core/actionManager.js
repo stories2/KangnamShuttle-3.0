@@ -5,9 +5,11 @@ exports.run = function (request, response, callbackFunc) {
     const getCurrentActionIndex = this.getCurrentActionIndex
     const getCurrentActionBox = this.getCurrentActionBox
     const executeOrder = this.executeOrder
+    const updateLastRequestDateTime = this.updateLastRequestDateTime
 
     isUserRegistered(request, function (passed) { // <-- check user is registered
         if(passed) {
+            updateLastRequestDateTime(request)
             getCurrentActionIndex(request, function (actionIndex) { // get user last or current action index
                 getCurrentActionBox(actionIndex, function (action) { // get action info
                     request.action = action
@@ -18,6 +20,23 @@ exports.run = function (request, response, callbackFunc) {
         else {
             callbackFunc() // <-- user not detected and cannot register it
         }
+    })
+}
+
+exports.updateLastRequestDateTime = function(request) {
+    const util = require('util')
+    const admin = global.admin
+    var userDbPath = util.format(global.define.DB_PATH_USERS_USER_KEY, request.body["userRequest"]["user"]["type"])
+
+    global.log.debug("actionManager", "updateLastRequestDateTime", "user db path: " + userDbPath)
+
+    var userRef = admin.database().ref(userDbPath)
+    userRef.once("value", function (userSnapshot) {
+        var userSnapshotData = JSON.parse(JSON.stringify(userSnapshot))
+
+        userSnapshotData["update"] = global.datetime.getCurrentTime().toISOString()
+
+        admin.database().ref(userDbPath).set(userSnapshotData)
     })
 }
 
