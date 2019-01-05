@@ -27,7 +27,7 @@ exports.getCurrentActionIndex = function (request, callbackFunc) {
     userRef = admin.database().ref(userDbPath)
     userRef.once("value", function (userSnapshot) {
         var userSnapshotData = JSON.parse(JSON.stringify(userSnapshot))
-        if(userSnapshotData !== undefined || userSnapshotData != null) {
+        if(userSnapshotData !== undefined && userSnapshotData != null) {
 
             request.user = userSnapshotData
             global.log.debug("actionManager", "getCurrentActionIndex", "user info: " + JSON.stringify(userSnapshotData))
