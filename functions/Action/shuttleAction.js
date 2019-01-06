@@ -15,7 +15,14 @@ exports.shuttleSelectDirection = function (request, response, callbackFunc) { //
     const responseManager = request.responseManager
     global.log.debug("shuttleAction", "shuttleSelectDirection", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
-    responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+    var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+    var templateButtons = template["basicCard"]["buttons"]
+    template["basicCard"]["buttons"] = []
+    for(var index in templateButtons) {
+        template["basicCard"]["buttons"].push(templateButtons[index])
+    }
+
+    responseManager.pushTemplate(template)
     for(var index in action["quickReplies"]) {
         responseManager.pushQuickReply(action["quickReplies"][index])
     }
@@ -27,7 +34,14 @@ exports.shuttleDirectionUp = function (request, response, callbackFunc) { // ÏÉÅ
     const responseManager = request.responseManager
     global.log.debug("shuttleAction", "shuttleDirectionUp", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
-    responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+    var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+    var templateItems = template["listCard"]["items"]
+    template["listCard"]["items"] = []
+    for(var index in templateItems) {
+        template["listCard"]["items"].push(templateItems[index])
+    }
+
+    responseManager.pushTemplate(template)
     for(var index in action["quickReplies"]) {
         responseManager.pushQuickReply(action["quickReplies"][index])
     }
@@ -39,7 +53,14 @@ exports.shuttleDirectionDown = function (request, response, callbackFunc) { // Ì
     const responseManager = request.responseManager
     global.log.debug("shuttleAction", "shuttleDirectionDown", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
-    responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+    var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+    var templateItems = template["listCard"]["items"]
+    template["listCard"]["items"] = []
+    for(var index in templateItems) {
+        template["listCard"]["items"].push(templateItems[index])
+    }
+
+    responseManager.pushTemplate(template)
     for(var index in action["quickReplies"]) {
         responseManager.pushQuickReply(action["quickReplies"][index])
     }
