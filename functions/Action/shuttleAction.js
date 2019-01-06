@@ -47,7 +47,8 @@ exports.shuttleDirectionUp = function (request, response, callbackFunc) { // ÏÉÅ
         for(var index in templateItems) {
 
             var station = scheduleSnapshotData["Order"][index]
-            global.log.debug("shuttleAction", "shuttleDirectionUp", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec)
+            var scheduleSize = Object.keys(scheduleSnapshotData[station]).length
+            global.log.debug("shuttleAction", "shuttleDirectionUp", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
 
             var scheduleTimeSecBak = global.define.ZERO
 
@@ -67,7 +68,7 @@ exports.shuttleDirectionUp = function (request, response, callbackFunc) { // ÏÉÅ
                         break;
                     }
                 }
-                else if(scheduleIndex == scheduleSnapshotData[station].length - 1) {
+                else if(scheduleIndex == scheduleSize - 1) {
                     if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
 
                         templateItems[index]["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
@@ -125,7 +126,8 @@ exports.shuttleDirectionDown = function (request, response, callbackFunc) { // Ì
         for(var index in templateItems) {
 
             var station = scheduleSnapshotData["Order"][index]
-            global.log.debug("shuttleAction", "shuttleDirectionUp", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec)
+            var scheduleSize = Object.keys(scheduleSnapshotData[station]).length
+            global.log.debug("shuttleAction", "shuttleDirectionUp", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
 
             var scheduleTimeSecBak = global.define.ZERO
 
@@ -145,7 +147,7 @@ exports.shuttleDirectionDown = function (request, response, callbackFunc) { // Ì
                         break;
                     }
                 }
-                else if(scheduleIndex == scheduleSnapshotData[station].length - 1) {
+                else if(scheduleIndex == scheduleSize - 1) {
                     if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
 
                         templateItems[index]["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
