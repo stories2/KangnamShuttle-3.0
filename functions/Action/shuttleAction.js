@@ -108,6 +108,7 @@ exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상
 }
 
 exports.shuttleDirectionDown = function (request, response, callbackFunc) { // 하행선 가까운 도착 시간 안내 #103
+    const util = require('util')
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
     global.log.debug("shuttleAction", "shuttleDirectionDown", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
