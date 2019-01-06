@@ -20,6 +20,8 @@ exports.ZERO = 0
 exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
 exports.DB_PATH_USERS_USER_KEY = "/users/%s"
 exports.DB_PATH_USERS_USER_KEY_UPDATE = "/users/%s/update"
+exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_DOWN = "/shuttle/schedule/directionDown"
+exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_UP = "/shuttle/schedule/directionUp"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",
@@ -34,3 +36,9 @@ exports.LIST_OF_PANTIES_COLOR = [
 
 exports.GMT_KOREA_TIME_MIN = 540
 exports.HOUR_TO_MILE = 60000
+exports.TIME_SEC_10MIN = 600
+
+exports.RESPONSE_SHUTTLE_SCHEDULE_FIRST = 1
+exports.RESPONSE_SHUTTLE_SCHEDULE_NORMAL = 2
+exports.RESPONSE_SHUTTLE_SCHEDULE_LAST = 3
+exports.RESPONSE_SHUTTLE_SCHEDULE_MISSED = 4
