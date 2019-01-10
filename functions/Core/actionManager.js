@@ -170,13 +170,18 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     const basicAction = require('../Action/basicAction')
     const thuSuAction = require('../Action/thuSuAction')
     const shuttleAction = require('../Action/shuttleAction')
+    const systemAction = require('../Action/systemAction')
 
     const actionTable = {
         "1": basicAction.hello,
+
         "100": shuttleAction.shuttleOrderMenu,
         "101": shuttleAction.shuttleSelectDirection,
         "102": shuttleAction.shuttleDirectionUp,
         "103": shuttleAction.shuttleDirectionDown,
+
+        "9000": systemAction.showSystemInfo,
+
         "10000": thuSuAction.todayPantiesColor
     }
 

@@ -16,12 +16,14 @@ exports.HTTP_STATUS_CODE_UNAUTHORIZED = 401
 exports.HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500
 
 exports.ZERO = 0
+exports.ONE = 1
 
 exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
 exports.DB_PATH_USERS_USER_KEY = "/users/%s"
 exports.DB_PATH_USERS_USER_KEY_UPDATE = "/users/%s/update"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_DOWN = "/shuttle/schedule/directionDown"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_UP = "/shuttle/schedule/directionUp"
+exports.DB_PATH_SYSTEM_VERSION = "/system/version"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",
