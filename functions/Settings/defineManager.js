@@ -23,6 +23,8 @@ exports.DB_PATH_USERS_USER_KEY = "/users/%s"
 exports.DB_PATH_USERS_USER_KEY_UPDATE = "/users/%s/update"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_DOWN = "/shuttle/schedule/directionDown"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_UP = "/shuttle/schedule/directionUp"
+exports.DB_PATH_SHUTTLE_ROUTE = "/shuttle/route"
+exports.DB_PATH_SHUTTLE_SCHEDULE_PIC = "/shuttle/schedulePic"
 exports.DB_PATH_SYSTEM_VERSION = "/system/version"
 
 exports.DEFAULT_USER_DATA = {

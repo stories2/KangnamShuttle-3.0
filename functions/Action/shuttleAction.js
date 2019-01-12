@@ -186,3 +186,51 @@ exports.shuttleDirectionDown = function (request, response, callbackFunc) { // í
         callbackFunc()
     })
 }
+
+exports.shuttleRoute = function(request, response, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const action = JSON.parse(JSON.stringify(request.action))
+    const responseManager = request.responseManager
+    global.log.debug("shuttleAction", "shuttleRoute", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
+
+    var routeRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_ROUTE)
+    routeRef.once("value", function(routeSnapshot) {
+
+        var routeStringFormat = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"]
+        routeStringFormat = util.format(routeStringFormat, routeSnapshot.val())
+
+        global.log.debug("shuttleAction", "shuttleRoute", "current formatted route: " + routeStringFormat)
+
+        action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"] = routeStringFormat
+        responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+        for(var index in action["quickReplies"]) {
+            responseManager.pushQuickReply(action["quickReplies"][index])
+        }
+        callbackFunc()
+    })
+}
+
+exports.shuttleSchedulePic = function (request, response, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const action = JSON.parse(JSON.stringify(request.action))
+    const responseManager = request.responseManager
+    global.log.debug("shuttleAction", "shuttleSchedulePic", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
+
+    var shuttleSchedulePic = admin.database().ref(global.define.DB_PATH_SHUTTLE_SCHEDULE_PIC)
+    shuttleSchedulePic.once("value", function(schedulePicSnapshot) {
+
+        var schedulePicFormat = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleImage"]["imageUrl"]
+        schedulePicFormat = util.format(schedulePicFormat, schedulePicSnapshot.val())
+
+        global.log.debug("shuttleAction", "shuttleSchedulePic", "current formatted schedule pic url: " + schedulePicFormat)
+
+        action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleImage"]["imageUrl"] = schedulePicFormat
+        responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+        for(var index in action["quickReplies"]) {
+            responseManager.pushQuickReply(action["quickReplies"][index])
+        }
+        callbackFunc()
+    })
+}
