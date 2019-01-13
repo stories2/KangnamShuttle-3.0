@@ -234,3 +234,23 @@ exports.shuttleSchedulePic = function (request, response, callbackFunc) {
         callbackFunc()
     })
 }
+
+exports.shuttleLocationPage = function (request, response, callbackFunc) {
+    const action = JSON.parse(JSON.stringify(request.action))
+    const responseManager = request.responseManager
+    global.log.debug("shuttleAction", "shuttleSchedulePic", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
+
+    var responseAction = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+    var basicCardButtons = responseAction["basicCard"]["buttons"]
+    responseAction["basicCard"]["buttons"] = []
+
+    for(var index in basicCardButtons) {
+        responseAction["basicCard"]["buttons"].push(basicCardButtons[index])
+    }
+
+    responseManager.pushTemplate(responseAction)
+    for(var index in action["quickReplies"]) {
+        responseManager.pushQuickReply(action["quickReplies"][index])
+    }
+    callbackFunc()
+}
