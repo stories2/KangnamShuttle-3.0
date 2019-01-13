@@ -20,8 +20,14 @@ exports.showSystemInfo = function(request, response, callbackFunc) { // 시스�
         var listItems = responseTemplate["listCard"]["items"]
         responseTemplate["listCard"]["items"] = []
 
+        var listButtons = responseTemplate["listCard"]["buttons"]
+        responseTemplate["listCard"]["buttons"] = []
+
         for(var index in listItems) {
             responseTemplate["listCard"]["items"].push(listItems[index])
+        }
+        for(var index in listButtons) {
+            responseTemplate["listCard"]["buttons"].push(listButtons[index])
         }
         responseManager.pushTemplate(responseTemplate)
         for(var index in action["quickReplies"]) {
