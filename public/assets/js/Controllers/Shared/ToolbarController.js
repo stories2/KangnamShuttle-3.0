@@ -3,6 +3,16 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
 
     $scope.title = APP_TITLE
     $scope.toggleLeft = buildToggler('left');
+    $scope.menuList = [
+        {
+            "name": "홈",
+            "url": "#!/home"
+        },
+        {
+            "name": "실시간 달구지 위치",
+            "url": "#!/shuttleLocation"
+        }
+    ]
 
     function buildToggler(navID) {
         return function () {

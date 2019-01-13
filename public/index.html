@@ -41,8 +41,7 @@
                     <div layout-padding layout="column" layout-fill>
                         <div layout="row">
                             <ul class="alt" flex>
-                                <li><a href="#!/home"><div>홈</div></a></li>
-                                <li><a href="#!/shuttleLocation"><div>실시간 달구지 위치</div></a></li>
+                                <li ng-repeat="menu in menuList" ng-click="toggleLeft()"><a href="{{menu.url}}"><div>{{menu.name}}</div></a></li>
                             </ul>
                         </div>
                     </div>
