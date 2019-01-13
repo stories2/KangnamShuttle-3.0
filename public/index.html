@@ -38,12 +38,15 @@
                             </md-button>
                         </div>
                     </md-toolbar>
-                    <div layout-padding >
-
+                    <div layout-padding layout="column" layout-fill>
+                        <ul class="alt">
+                            <li><a href="#!/home">홈</a></li>
+                            <li><a href="#!/shuttleLocation">실시간 달구지 위치</a></li>
+                        </ul>
                     </div>
                 </md-content>
             </md-sidenav>
-            <md-content flex>
+            <md-content flex style="overflow-y: auto">
                 <md-content flex>
                     <md-toolbar class="md-hue-2 toolbar-black">
                         <div class="md-toolbar-tools" >
@@ -88,7 +91,7 @@
                     </div>
                 </div>
 
-                <md-content style="height: auto" ng-view layout="column" >
+                <md-content style="height: auto"  ng-view layout="column" >
 
                 </md-content>
 
