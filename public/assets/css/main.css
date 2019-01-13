@@ -228,7 +228,8 @@ strong, b {
   color: #555555; }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #555555; }
+  /*color: #555555;*/
+}
 
 blockquote {
   border-left-color: rgba(0, 0, 0, 0.25); }
@@ -2389,7 +2390,8 @@ ul.icons {
 
 /* Header */
 body {
-  padding-top: 3.25rem; }
+  /*padding-top: 3.25rem;*/
+}
   body:before {
     content: ' ';
     background-image: url(../../images/bg.jpg);
