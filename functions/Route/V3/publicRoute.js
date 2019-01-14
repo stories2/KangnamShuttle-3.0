@@ -19,3 +19,17 @@ exports.hello = function (request, response) {
     )
     request.responseManager.flushResponse(response)
 }
+
+exports.paramTest = function(request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var url = require('url');
+    var url_parts = url.parse(request.url, true);
+    var query = url_parts.query;
+
+    global.log.debug("publicRoute", "paramTest", "request header: " + JSON.stringify(request.headers))
+    global.log.debug("publicRoute", "paramTest", "request body: " + JSON.stringify(request.body))
+    global.log.debug("publicRoute", "paramTest", "request query: " + JSON.stringify(query))
+    global.log.debug("publicRoute", "paramTest", "request param: " + JSON.stringify(request.params))
+
+    responseManager.ok(response, {})
+}
