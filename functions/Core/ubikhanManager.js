@@ -149,5 +149,9 @@ exports.signInUbikhan = function(signInData, successFunc, errorFunc) {
 }
 
 exports.getLocation = function (request, response, callbackFunc) {
-    
+    var admin = global.admin
+    var shuttleLocationRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_LOCATION)
+    shuttleLocationRef.once("value", function(locationSnapshot) {
+        callbackFunc(locationSnapshot)
+    })
 }
