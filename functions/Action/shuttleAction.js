@@ -11,6 +11,7 @@ exports.shuttleOrderMenu = function (request, response, callbackFunc) { // 달�
 }
 
 exports.shuttleSelectDirection = function (request, response, callbackFunc) { // 어디로 갈껀가요 #101
+    // 퀵 응답은 관리자 페이지에서 수정을 할 수 있으며 DB에 반영이 될 것
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
     const admin = global.admin
