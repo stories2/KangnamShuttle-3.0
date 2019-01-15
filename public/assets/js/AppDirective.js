@@ -9,6 +9,23 @@ app.directive('map', function($window, KSAppService) {
             var markStackList = []
             var map = undefined
 
+            scope.$on('locationChanged', function (event, data) {
+                KSAppService.debug("AppDirective-map", "locationChanged", "data: " + JSON.stringify(data))
+                refreshMark(data["list"])
+            })
+
+            function refreshMark(locationList) {
+                resetMark()
+                for(var key in locationList) {
+                    var item = locationList[key]
+                    pushMark({
+                        lat: item["lat"],
+                        lng: item["lon"],
+                        // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                    })
+                }
+            }
+
             function init() {
                 KSAppService.info("AppDirective-map", "init", "init")
 
