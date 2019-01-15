@@ -86,6 +86,92 @@ app.service("KSAppService", function ($log, $http, $window, $mdToast) {
         }
         return;
     };
+    var deleteReq = function (url, data, successFunc, failFunc) {
+        printLogMessage("KSAppService", "deleteReq", "send data to url: " + url, LOG_LEVEL_INFO);
+        // data["seconds"] = this.PreventCache()
+        var token = getToken()
+
+        if(token !== undefined) {
+            $http.defaults.headers.common['Authorization'] = token
+            printLogMessage("KSAppService", "deleteReq", "request with token", LOG_LEVEL_INFO)
+        }
+
+        $http({
+            method: "DELETE",
+            dataType: 'json',
+            url: url,
+            cache: false,
+            contentType: 'application/json',
+            data: data,
+            crossDomain: true,
+            // headers: {
+            //     "Authorization": token
+            // },
+            xhrFields: {
+                withCredentials: false
+            },
+            beforeSend: function (xhr) {
+                if (typeof token != 'undefined') {
+                    printLogMessage("KSAppService", "deleteReq", "auth: " + token, LOG_LEVEL_DEBUG);
+                    xhr.setRequestHeader("Authorization", token);
+                }
+                else {
+                    printLogMessage("KSAppService", "deleteReq", "no token sending", LOG_LEVEL_WARN);
+                }
+            }
+        })
+            .then(function (receivedData) {
+                printLogMessage("KSAppService", "deleteReq", "data received successfully", LOG_LEVEL_INFO);
+                successFunc(receivedData);
+            })
+            .catch(function (xhr, textStatus, errorThrown) {
+                printLogMessage("KSAppService", "deleteReq", "something has problem: " + textStatus, LOG_LEVEL_ERROR);
+                failFunc(xhr.responseText, textStatus);
+            });
+    };
+    var patchReq = function (url, data, successFunc, failFunc) {
+        printLogMessage("KSAppService", "patchReq", "send data to url: " + url, LOG_LEVEL_INFO);
+        // data["seconds"] = this.PreventCache()
+        var token = getToken()
+
+        if(token !== undefined) {
+            $http.defaults.headers.common['Authorization'] = token
+            printLogMessage("KSAppService", "patchReq", "request with token", LOG_LEVEL_INFO)
+        }
+
+        $http({
+            method: "PATCH",
+            dataType: 'json',
+            url: url,
+            cache: false,
+            contentType: 'application/json',
+            data: data,
+            crossDomain: true,
+            // headers: {
+            //     "Authorization": token
+            // },
+            xhrFields: {
+                withCredentials: false
+            },
+            beforeSend: function (xhr) {
+                if (typeof token != 'undefined') {
+                    printLogMessage("KSAppService", "patchReq", "auth: " + token, LOG_LEVEL_DEBUG);
+                    xhr.setRequestHeader("Authorization", token);
+                }
+                else {
+                    printLogMessage("KSAppService", "patchReq", "no token sending", LOG_LEVEL_WARN);
+                }
+            }
+        })
+            .then(function (receivedData) {
+                printLogMessage("KSAppService", "patchReq", "data received successfully", LOG_LEVEL_INFO);
+                successFunc(receivedData);
+            })
+            .catch(function (xhr, textStatus, errorThrown) {
+                printLogMessage("KSAppService", "patchReq", "something has problem: " + textStatus, LOG_LEVEL_ERROR);
+                failFunc(xhr.responseText, textStatus);
+            });
+    };
     var postReq = function (url, data, successFunc, failFunc) {
         printLogMessage("KSAppService", "postReq", "send data to url: " + url, LOG_LEVEL_INFO);
         // data["seconds"] = this.PreventCache()
@@ -181,6 +267,8 @@ app.service("KSAppService", function ($log, $http, $window, $mdToast) {
         'warn': warn,
         'error': error,
         'printLogMessage': printLogMessage,
+        'deleteReq': deleteReq,
+        'patchReq': patchReq,
         'postReq': postReq,
         'getReq': getReq,
         'setToken': setToken,
