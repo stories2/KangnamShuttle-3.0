@@ -56,6 +56,8 @@ exports.updateLocation = function (request, response, callbackFunc) {
 
 exports.saveBusLocationData = function(locationData) {
     var admin = global.admin
+    const datetimeManager = require('../Utils/datetimeManager')
+    locationData["updateDateTime"] = datetimeManager.getCurrentTime().toISOString()
     admin.database().ref(global.define.DB_PATH_SHUTTLE_LOCATION).set(locationData, function (error) {
         if(error) {
             global.log.error("ubikhanManager", "saveBusLocationData", "cannot save location data: " + JSON.stringify(error))
