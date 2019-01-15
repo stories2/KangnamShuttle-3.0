@@ -13,7 +13,7 @@ exports.request = function (headerOptions, successFunc, errorFunc, data) {
         response.on("end", function () {
             global.log.debug("httpRequestManager", "callbackController-end", "response: " + responseStr)
 
-            successFunc(responseStr)
+            successFunc(response, responseStr)
         })
 
         response.on("error", function (error) {
