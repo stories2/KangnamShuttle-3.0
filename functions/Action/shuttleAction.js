@@ -49,7 +49,104 @@ exports.shuttleSelectDirection = function (request, response, callbackFunc) { //
 }
 
 exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
+    const util = require('util')
+    const admin = global.admin
+    const action = JSON.parse(JSON.stringify(request.action))
+    const responseManager = request.responseManager
+    var userText = request.body["userRequest"]["utterance"]
+    global.log.debug("shuttleAction", "shuttleDirectionDynamic", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
+    var shuttleScheduleRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_SCHEDULE)
+    shuttleScheduleRef.once("value", function(shuttleScheduleSnapshot) {
+
+        var allScheduleData = JSON.parse(JSON.stringify(shuttleScheduleSnapshot))
+        var scheduleSnapshotData = null
+        for(var key in allScheduleData) {
+            if(allScheduleData[key]["name"] == userText) {
+                scheduleSnapshotData = allScheduleData[key]
+                break
+            }
+        }
+
+        if(scheduleSnapshotData) {
+            var currentTimeSec = global.datetime.getCurrentTimeSec(global.datetime.getCurrentTime())
+            var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+
+            var templateItems = []
+            template["listCard"]["items"] = []
+            for(var index in scheduleSnapshotData["Order"]) {
+
+                var templateItem = {
+                    "description": "%s",
+                    "title": scheduleSnapshotData["station"][index]
+                }
+
+                var station = scheduleSnapshotData["Order"][index]
+                var scheduleSize = Object.keys(scheduleSnapshotData[station]).length
+                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
+
+                var scheduleTimeSecBak = global.define.ZERO
+
+                for(var scheduleIndex in scheduleSnapshotData[station]) {
+                    var scheduleTimeSec = scheduleSnapshotData[station][scheduleIndex]
+
+                    global.log.debug("shuttleAction", "shuttleDirectionDynamic", "#" + scheduleIndex + ": " + scheduleTimeSec)
+                    if(scheduleIndex == global.define.ZERO) {
+                        var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
+                        if(currentTimeSec < scheduleTimeSec) { // first schedule action["response"][1]
+
+                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_FIRST],
+                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
+                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
+                            templateItems.push(templateItem)
+
+                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found first #" + scheduleIndex + " -> " + scheduleTimeSec)
+                            break;
+                        }
+                    }
+                    else if(scheduleIndex == scheduleSize - 1) {
+                        if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
+
+                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
+                            templateItems.push(templateItem)
+                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found missed #" + scheduleIndex + " -> " + scheduleTimeSec)
+                            break;
+                        }
+                        else { // same as currentTimeSec <= scheduleTimeSec : last schedule action["response"][3]
+                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_LAST],
+                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec))
+                            templateItems.push(templateItem)
+                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found last #" + scheduleIndex + " -> " + scheduleTimeSec)
+                            break;
+                        }
+                    }
+                    else { // normal schedule action["response"][2]
+                        var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
+                        if(scheduleTimeSecBak <= currentTimeSec && currentTimeSec < scheduleTimeSec) {
+
+                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_NORMAL],
+                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
+                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
+                            templateItems.push(templateItem)
+                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found normal #" + scheduleIndex + " -> " + scheduleTimeSec)
+                            break;
+                        }
+                    }
+                    scheduleTimeSecBak = scheduleTimeSec
+                }
+            }
+            template["listCard"]["items"] = templateItems
+            template["listCard"]["header"]["title"] = util.format(template["listCard"]["header"]["title"], userText)
+            responseManager.pushTemplate(template)
+            for(var index in action["quickReplies"]) {
+                if(index == 2) { // Refresh quick button
+                    action["quickReplies"][index]["messageText"] = util.format(action["quickReplies"][index]["messageText"], userText)
+                }
+                responseManager.pushQuickReply(action["quickReplies"][index])
+            }
+        }
+        callbackFunc()
+    })
 }
 
 exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상행선 가까운 도착 시간 안내 #102 <-- Deprecated
