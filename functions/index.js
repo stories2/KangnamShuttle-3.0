@@ -16,7 +16,8 @@ const preprocessManager = require('./Attribute/preprocessManager')
 
 //Global
 global.define = require('./Settings/defineManager')
-global.admin = adminManager.getAdminSDK()
+global.envManager = require('./Utils/envManager')
+global.admin = adminManager.getAdminSDK(global.envManager)
 global.log = require('./Utils/logManager')
 global.datetime = require('./Utils/datetimeManager')
 

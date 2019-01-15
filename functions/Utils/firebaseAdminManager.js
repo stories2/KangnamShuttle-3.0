@@ -1,12 +1,9 @@
-exports.getAdminSDK = function () {
+exports.getAdminSDK = function (envManager) {
     const functions = require('firebase-functions');
     var admin = require('firebase-admin');
     const serviceAccount = require("../service-account.json");
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: functions.config().project.database,
-        storageBucket: functions.config().project.storage,
-        projectId: functions.config().project.project_id
-    });
+    const projectInfo = envManager.getProjectInfo(functions)
+    projectInfo["credential"] = admin.credential.cert(serviceAccount)
+    admin.initializeApp(projectInfo);
     return admin
 }
