@@ -26,6 +26,7 @@ exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_UP = "/shuttle/schedule/directionUp"
 exports.DB_PATH_SHUTTLE_SCHEDULE = "/shuttle/schedule"
 exports.DB_PATH_SHUTTLE = "/shuttle"
 exports.DB_PATH_SHUTTLE_ROUTE = "/shuttle/route"
+exports.DB_PATH_SHUTTLE_LOCATION = "/shuttle/location"
 exports.DB_PATH_SHUTTLE_SCHEDULE_PIC = "/shuttle/schedulePic"
 exports.DB_PATH_SYSTEM_VERSION = "/system/version"
 

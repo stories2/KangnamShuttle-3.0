@@ -21,7 +21,9 @@ exports.request = function (headerOptions, successFunc, errorFunc, data) {
         })
     }
 
-    httpManager.request(headerOptions, callbackController)
-    httpManager.write(data)
-    httpManager.end()
+    var currentRequest = httpManager.request(headerOptions, callbackController)
+    if(data != null) {
+        currentRequest.write(data)
+    }
+    currentRequest.end()
 }
