@@ -8,3 +8,5 @@ var APP_TITLE = "강남대학교 달구지봇"
 
 var TOAST_SHOW_SHORT = 800
 var TOAST_SHOW_LONG = 3000
+
+var ZERO = 0
