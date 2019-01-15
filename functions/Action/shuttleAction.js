@@ -13,20 +13,46 @@ exports.shuttleOrderMenu = function (request, response, callbackFunc) { // 달�
 exports.shuttleSelectDirection = function (request, response, callbackFunc) { // 어디로 갈껀가요 #101
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
+    const admin = global.admin
     global.log.debug("shuttleAction", "shuttleSelectDirection", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
-    var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
-    var templateButtons = template["basicCard"]["buttons"]
-    template["basicCard"]["buttons"] = []
-    for(var index in templateButtons) {
-        template["basicCard"]["buttons"].push(templateButtons[index])
-    }
+    var shuttleRef = admin.database().ref(global.define.DB_PATH_SHUTTLE)
+    shuttleRef.once("value", function(shuttleSnapshot) {
 
-    responseManager.pushTemplate(template)
-    for(var index in action["quickReplies"]) {
-        responseManager.pushQuickReply(action["quickReplies"][index])
-    }
-    callbackFunc()
+        var shuttleData = JSON.parse(JSON.stringify(shuttleSnapshot))
+
+        for(var index in action["quickReplies"]) {
+            responseManager.pushQuickReply(action["quickReplies"][index])
+        }
+
+        var template = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]
+        template["basicCard"]["description"] = shuttleData["notice"]
+        global.log.debug("shuttleAction", "shuttleSelectDirection", "notice data: " + shuttleData["notice"])
+        template["basicCard"]["buttons"] = []
+        for(var key in shuttleData["schedule"]) {
+
+            var directionName = shuttleData["schedule"][key]["name"]
+
+            var buttonItem = {
+                "action": "message",
+                "label": directionName,
+                "messageText": directionName
+            }
+
+            var quickItem = {
+                "action": "message",
+                "label": directionName,
+                "messageText": directionName
+            }
+            global.log.debug("shuttleAction", "shuttleSelectDirection", "schedule detected: " + key + " direction name: " + directionName)
+
+            template["basicCard"]["buttons"].push(buttonItem)
+            responseManager.pushQuickReply(quickItem)
+        }
+
+        responseManager.pushTemplate(template)
+        callbackFunc()
+    })
 }
 
 exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상행선 가까운 도착 시간 안내 #102
