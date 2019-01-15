@@ -31,6 +31,26 @@ app.service("KSAppService", function ($log, $http, $window, $mdToast) {
             .hideDelay(delay));
     };
 
+    var verb = function (className, methodName, message) {
+        printLogMessage(className, methodName, message, LOG_LEVEL_VERBOSE)
+    }
+
+    var info = function (className, methodName, message) {
+        printLogMessage(className, methodName, message, LOG_LEVEL_INFO)
+    }
+
+    var debug = function (className, methodName, message) {
+        printLogMessage(className, methodName, message, LOG_LEVEL_DEBUG)
+    }
+
+    var warn = function (className, methodName, message) {
+        printLogMessage(className, methodName, message, LOG_LEVEL_WARN)
+    }
+
+    var error = function (className, methodName, message) {
+        printLogMessage(className, methodName, message, LOG_LEVEL_ERROR)
+    }
+
     var printLogMessage = function (className, methodName, message, logLevel) {
         var logDateTime = new Date().toISOString();
         var logMsg = "" + logDateTime + " ";
@@ -155,6 +175,11 @@ app.service("KSAppService", function ($log, $http, $window, $mdToast) {
             });
     };
     return {
+        'verb': verb,
+        'info': info,
+        'debug': debug,
+        'warn': warn,
+        'error': error,
         'printLogMessage': printLogMessage,
         'postReq': postReq,
         'getReq': getReq,
