@@ -179,6 +179,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
         "101": shuttleAction.shuttleSelectDirection,
         "102": shuttleAction.shuttleDirectionUp,
         "103": shuttleAction.shuttleDirectionDown,
+        "110": shuttleAction.shuttleDirectionDynamic,
         "120": shuttleAction.shuttleLocationPage,
         "130": shuttleAction.shuttleSchedulePic,
         "140": shuttleAction.shuttleRoute,

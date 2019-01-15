@@ -38,16 +38,9 @@ exports.shuttleSelectDirection = function (request, response, callbackFunc) { //
                 "label": directionName,
                 "messageText": directionName
             }
-
-            var quickItem = {
-                "action": "message",
-                "label": directionName,
-                "messageText": directionName
-            }
             global.log.debug("shuttleAction", "shuttleSelectDirection", "schedule detected: " + key + " direction name: " + directionName)
 
             template["basicCard"]["buttons"].push(buttonItem)
-            responseManager.pushQuickReply(quickItem)
         }
 
         responseManager.pushTemplate(template)
@@ -55,7 +48,11 @@ exports.shuttleSelectDirection = function (request, response, callbackFunc) { //
     })
 }
 
-exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상행선 가까운 도착 시간 안내 #102
+exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
+
+}
+
+exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상행선 가까운 도착 시간 안내 #102 <-- Deprecated
     const util = require('util')
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
@@ -134,7 +131,7 @@ exports.shuttleDirectionUp = function (request, response, callbackFunc) { // 상
     })
 }
 
-exports.shuttleDirectionDown = function (request, response, callbackFunc) { // 하행선 가까운 도착 시간 안내 #103
+exports.shuttleDirectionDown = function (request, response, callbackFunc) { // 하행선 가까운 도착 시간 안내 #103 <-- Deprecated
     const util = require('util')
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
