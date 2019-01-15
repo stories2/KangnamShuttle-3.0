@@ -28,6 +28,9 @@ exports.convertSecToTimeOrMin = function (comparison, sec1, sec2) { // must sec 
     }
     else {
         var min = Math.floor(gap / 60)
+        if(min <= 1) {
+            return "잠시 후"
+        }
         return "" + min + "분 후"
     }
 }
