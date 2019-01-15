@@ -33,3 +33,27 @@ exports.paramTest = function(request, response) {
 
     responseManager.ok(response, {})
 }
+
+exports.realtimeShuttleLocation = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    const ubikhanManager = require('../../Core/ubikhanManager')
+
+    ubikhanManager.getLocation(request, response, function (data) {
+        responseManager.ok(response, data)
+    })
+}
+
+exports.updateRealtimeShuttleLocation = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    const ubikhanManager = require('../../Core/ubikhanManager')
+
+    ubikhanManager.updateLocation(request, response, function (status) {
+        status ?
+            responseManager.ok(response, {
+                status: status
+            }) :
+            responseManager.internalServerError(response, {
+                status: status
+            })
+    })
+}
