@@ -14,7 +14,7 @@ app.config(function($routeProvider) {
         })
         .when("/shuttleLocation", {
             templateUrl : "assets/view/shuttleLocation.html",
-            controller : null,
+            controller : "ShuttleLocationController",
             cache: false,
             disableCache: true,
         })
