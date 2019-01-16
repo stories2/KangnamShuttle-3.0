@@ -1,4 +1,4 @@
-app.directive('map', function($window, KSAppService) {
+app.directive('map', function($window, $timeout, KSAppService) {
     return {
         restrict: 'A',
         scope: {
@@ -8,14 +8,66 @@ app.directive('map', function($window, KSAppService) {
         link: function (scope, element, attrs) {
             var markStackList = []
             var map = undefined
+            var isDestroy = false
 
             scope.$on('locationChanged', function (event, data) {
                 KSAppService.debug("AppDirective-map", "locationChanged", "data: " + JSON.stringify(data))
                 refreshMark(data["list"])
             })
 
+            scope.$on('$destroy', function() {
+                KSAppService.info("AppDirective-map", "$destroy", "element destroyed")
+                isDestroy = true
+            });
+
+            function shuttleLocationProcess() {
+                KSAppService.info("AppDirective-map", "shuttleLocationProcess", "run shuttle location process")
+                if(!isDestroy) {
+                    getShuttleLocation()
+                    updateShuttleLocation()
+
+                    $timeout(shuttleLocationProcess, SHUTTLE_LOCATION_REFRESH_TIME)
+                }
+            }
+
+            function getShuttleLocation() {
+                var payload = {}
+
+                KSAppService.getReq(
+                    API_GET_SHUTTLE_LOCATION,
+                    payload,
+                    function (success) {
+                        KSAppService.debug("AppDirective-map", "getShuttleLocation", "shuttle location data received: " + JSON.stringify(success))
+                        passDataToMap(success)
+                    },
+                    function (error) {
+                        KSAppService.error("AppDirective-map", "getShuttleLocation", "cannot get location data: " + JSON.stringify(error))
+                    })
+            }
+
+            function passDataToMap(data) {
+                KSAppService.info("AppDirective-map", "passDataToMap", "pass location data to map")
+                // $rootScope.$broadcast('locationChanged', data["data"])
+                refreshMark(data["data"]["list"])
+            }
+
+            function updateShuttleLocation() {
+                var payload = {}
+
+                KSAppService.patchReq(
+                    API_GET_SHUTTLE_LOCATION,
+                    payload,
+                    function (success) {
+                        KSAppService.debug("AppDirective-map", "updateShuttleLocation", "pending shuttle location update: " + JSON.stringify(success))
+                    },
+                    function (error) {
+                        KSAppService.error("AppDirective-map", "updateShuttleLocation", "cannot request update shuttle location: " + JSON.stringify(error))
+                    })
+            }
+
             function refreshMark(locationList) {
                 resetMark()
+                KSAppService.debug("AppDirective-map", "refreshMark", "location list: " + JSON.stringify(locationList))
                 for(var key in locationList) {
                     var item = locationList[key]
                     pushMark({
@@ -29,12 +81,15 @@ app.directive('map', function($window, KSAppService) {
             function init() {
                 KSAppService.info("AppDirective-map", "init", "init")
 
+                isDestroy = false
+
                 map = new google.maps.Map(element[0], {
                     zoom: 14.2,
                     center: {lat: 37.274786, lng: 127.125394}
                 })
 
                 resetMark()
+                shuttleLocationProcess()
                 // pushMark({
                 //     lat: -33.890,
                 //     lng: 151.274,
