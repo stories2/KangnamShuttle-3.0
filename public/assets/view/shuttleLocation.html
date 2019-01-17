@@ -7,6 +7,34 @@
                     <h4>지도가 보이지 않을 시, 새로고침을 해주세요.</h4>
                 </header>
                 <div map style="height: 400px" stream="stream"></div>
+                <h3>달구지 정보</h3>
+                <h4>업데이트 시간: {{busLocationData["data"]["updateDateTime"]}}</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>기종 명</th>
+                            <th>위치</th>
+                            <th>속도</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(index, bus) in busLocationData['data']['list']"
+                                ng-style="{'text-decoration': (bus['startstatus'] == '0') ? 'line-through' : 'none'}">
+                                <td>{{bus["licenseid"]}}</td>
+                                <td>{{bus["address"]}}</td>
+                                <td>{{bus["carspeed"]}}KM/H</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>도움말</h3>
+                <ol>
+                    <li>지도가 보이지 않을 시, 브라우저를 새로고침해주세요.</li>
+                    <li>달구지 정보에 <span style="text-decoration: line-through">줄이</span> 그어졌을 시, 해당 달구지는 운행하지 않거나 시동이 꺼진 상태입니다.</li>
+                    <li>{{refreshTime / 1000}}초 마다 자동으로 달구지 정보가 갱신 됩니다.</li>
+                </ol>
             </div>
         </div>
     </section>
