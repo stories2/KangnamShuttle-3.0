@@ -39,10 +39,15 @@ app.directive('map', function($window, $timeout, KSAppService) {
                     function (success) {
                         KSAppService.debug("AppDirective-map", "getShuttleLocation", "shuttle location data received: " + JSON.stringify(success))
                         passDataToMap(success)
+                        passDataToController(success)
                     },
                     function (error) {
                         KSAppService.error("AppDirective-map", "getShuttleLocation", "cannot get location data: " + JSON.stringify(error))
                     })
+            }
+
+            function passDataToController(success) {
+                scope.stream(success)
             }
 
             function passDataToMap(data) {

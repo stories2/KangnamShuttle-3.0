@@ -3,4 +3,8 @@ app.controller("ShuttleLocationController", function ($scope, $http, $mdToast, $
     
     $scope.onLoad = function () {
     }
+    
+    $scope.stream = function (busLocationData) {
+        KSAppService.info("ShuttleLocationController", "stream", "location data accepted")
+    }
 })
