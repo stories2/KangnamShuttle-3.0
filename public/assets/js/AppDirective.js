@@ -78,6 +78,7 @@ app.directive('map', function($window, $timeout, KSAppService) {
                     pushMark({
                         lat: item["lat"],
                         lng: item["lon"],
+                        icon: item["startstatus"] == "1" ? "https://firebasestorage.googleapis.com/v0/b/kangnamshuttle3.appspot.com/o/Map%2FbusEnable.png?alt=media&token=f62ed4b5-afe7-4a26-8fcd-ad160f1575e1" : "https://firebasestorage.googleapis.com/v0/b/kangnamshuttle3.appspot.com/o/Map%2FbusDisable.png?alt=media&token=517cc599-f14e-4f70-ab45-42f895c7eab2"
                         // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                     })
                 }
