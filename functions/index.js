@@ -27,6 +27,7 @@ v3PublicApi.post('/hello', publicRoute.hello)
 v3PublicApi.get('/test/:param', publicRoute.paramTest)
 v3PublicApi.get('/realtimeShuttleLocation', publicRoute.realtimeShuttleLocation)
 v3PublicApi.patch('/realtimeShuttleLocation', publicRoute.updateRealtimeShuttleLocation)
+v3PublicApi.post('/auth', publicRoute.authSignUp)
 exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
 
 v3KakaoApi.use(cors)

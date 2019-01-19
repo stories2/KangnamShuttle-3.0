@@ -57,3 +57,13 @@ exports.updateRealtimeShuttleLocation = function (request, response) {
             })
     })
 }
+
+exports.authSignUp = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    const accountManager = require('../../Core/accountManager')
+
+    accountManager.createUserRoutine(request, response, function (responseData) {
+        responseData["success"] ?
+            responseManager.ok(response, responseData) : responseManager.unauthorized(response, responseData)
+    })
+}
