@@ -13,6 +13,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             "url": "#!/shuttleLocation"
         }
     ]
+    var uid = undefined
 
     $scope.onBtnSignInClicked = function () {
         $mdDialog.show({
@@ -22,11 +23,55 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             // targetEvent: ev,
             clickOutsideToClose:true
         })
-            .then(function(answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
+            .then(function(userData) {
+                KSAppService.debug("ToolbarController", "onBtnSignInClicked", "user data: " + JSON.stringify(userData))
+                if(userData["isSignIn"]) {
+                    startSignIn(userData)
+                }
+                else {
+                    startSignUp(userData)
+                }
             }, function() {
-                $scope.status = 'You cancelled the dialog.';
+                KSAppService.info("ToolbarController", "onBtnSignInClicked", "you just canceled sign in / up dialog")
             });
+    }
+    
+    function startSignIn(userData) {
+
+    }
+    
+    function startSignUp(userData) {
+        var payload = {
+            email: userData["email"],
+            password: userData["password"],
+            name: userData["name"]
+        }
+        KSAppService.postReq(
+            API_AUTH_SIGN_UP,
+            payload,
+            function (data) {
+                KSAppService.debug("ToolbarController", "startSignUp", "sign up result received: " + JSON.stringify(data))
+                feedbackSignUpResult(data)
+            },
+            function (error) {
+                KSAppService.debug("ToolbarController", "startSignUp", "sign up failed: " + JSON.stringify(error))
+                feedbackSignUpResult({
+                    "data": {
+                        "success": false
+                    }
+                })
+            }
+        )
+    }
+
+    function feedbackSignUpResult(data) {
+        if(data["data"]["success"]) {
+            uid = data["data"]["uid"]
+            KSAppService.showToast(FEEDBACK_SIGN_UP_SUCCESS, TOAST_SHOW_LONG)
+        }
+        else {
+            KSAppService.showToast(FEEDBACK_SIGN_UP_FAILED, TOAST_SHOW_LONG)
+        }
     }
 
     function buildToggler(navID) {
