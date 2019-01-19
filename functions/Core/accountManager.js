@@ -26,7 +26,7 @@ exports.createUserRoutine = function (request, response, callbackFunc) {
                         "pic": "",
                         "email": request.body["email"],
                         "uid": "",
-                        // "password": request.body["password"]
+                        "password": request.body["password"]
                     }
                     if(userData["nameKor"] === request.body["name"]) {
                         global.log.info("accountManager", "createUserRoutine", "get user's profile pic process will start")
@@ -169,6 +169,7 @@ exports.registerUser = function (userData, callbackFunc) {
         // photoURL: "http://www.example.com/12345678/photo.png",
         disabled: false
     }
+    userData["password"] = undefined
     global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
     global.log.debug("accountManager", "registerUser", "create user data: " + JSON.stringify(userCreateOption))
     admin.auth().createUser(userCreateOption)
