@@ -26,7 +26,8 @@ exports.createUserRoutine = function (request, response, callbackFunc) {
                         "pic": "",
                         "email": request.body["email"],
                         "uid": "",
-                        "password": request.body["password"]
+                        "password": request.body["password"],
+                        "role": global.define.ROLE_NORMAL
                     }
                     if(userData["nameKor"] === request.body["name"]) {
                         global.log.info("accountManager", "createUserRoutine", "get user's profile pic process will start")

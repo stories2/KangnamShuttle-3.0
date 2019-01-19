@@ -55,3 +55,7 @@ exports.API_KANGNAM_SHUTTLE_ADDONS_DOMAIN = "kangnam-shuttle-addons.herokuapp.co
 exports.API_AUTH_SIGN_IN = "/auth/%s"
 exports.API_SCHOOL_BASIC_INFO = "/school/profile/basic"
 exports.API_SCHOOL_PROFILE_PIC = "/school/profile/img"
+
+exports.ROLE_NORMAL = "Normal"
+exports.ROLE_ADMIN = "Admin"
+exports.ROLE_DEVELOPER = "Developer"
