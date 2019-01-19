@@ -21,7 +21,7 @@
 <div ng-app="KSApp" layout-fill>
     <div ng-layout="column" layout-fill>
 
-        <section layout="row" ng-controller="ToolbarController" ng-init="listenAuthStateChanged()">
+        <section layout="row"  flex style="height: 100%" ng-controller="ToolbarController" ng-init="listenAuthStateChanged()">
             <md-sidenav class="md-sidenav-left"
                         md-component-id="left"
 
@@ -47,7 +47,7 @@
                     </div>
                 </md-content>
             </md-sidenav>
-            <md-content flex style="overflow-y: auto">
+            <md-content flex>
                 <md-content flex>
                     <md-toolbar class="md-hue-2 toolbar-black">
                         <div class="md-toolbar-tools" >
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <md-content style="height: auto"  ng-view layout="column" >
+                <md-content flex ng-view layout="column" >
 
                 </md-content>
 
