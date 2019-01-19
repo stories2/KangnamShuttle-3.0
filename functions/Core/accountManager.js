@@ -28,29 +28,35 @@ exports.createUserRoutine = function (request, response, callbackFunc) {
                         "uid": "",
                         // "password": request.body["password"]
                     }
-                    global.log.info("accountManager", "createUserRoutine", "get user's profile pic process will start")
-                    getUserProfilePic(session, function (userProfilePic) {
-                        if(userProfilePic) {
-                            userData["pic"] = userProfilePic
-                            global.log.info("accountManager", "createUserRoutine", "register user to server process will start")
-                            registerUser(userData, function (uid) {
-                                if(uid) {
-                                    global.log.info("accountManager", "createUserRoutine", "ok, all process passed successfully")
-                                    responseTemplate["success"] = true
-                                    responseTemplate["uid"] = uid
-                                    callbackFunc(responseTemplate)
-                                }
-                                else {
-                                    global.log.warn("accountManager", "createUserRoutine", "cannot register user to server")
-                                    callbackFunc(responseTemplate)
-                                }
-                            })
-                        }
-                        else {
-                            global.log.warn("accountManager", "createUserRoutine", "cannot get user profile pic")
-                            callbackFunc(responseTemplate)
-                        }
-                    })
+                    if(userData["nameKor"] === request.body["name"]) {
+                        global.log.info("accountManager", "createUserRoutine", "get user's profile pic process will start")
+                        getUserProfilePic(session, function (userProfilePic) {
+                            if(userProfilePic) {
+                                userData["pic"] = userProfilePic
+                                global.log.info("accountManager", "createUserRoutine", "register user to server process will start")
+                                registerUser(userData, function (uid) {
+                                    if(uid) {
+                                        global.log.info("accountManager", "createUserRoutine", "ok, all process passed successfully")
+                                        responseTemplate["success"] = true
+                                        responseTemplate["uid"] = uid
+                                        callbackFunc(responseTemplate)
+                                    }
+                                    else {
+                                        global.log.warn("accountManager", "createUserRoutine", "cannot register user to server")
+                                        callbackFunc(responseTemplate)
+                                    }
+                                })
+                            }
+                            else {
+                                global.log.warn("accountManager", "createUserRoutine", "cannot get user profile pic")
+                                callbackFunc(responseTemplate)
+                            }
+                        })
+                    }
+                    else {
+                        global.log.warn("accountManager", "createUserRoutine", "name mismatch detected")
+                        callbackFunc(responseTemplate)
+                    }
                 }
                 else {
                     global.log.warn("accountManager", "createUserRoutine", "cannot get user basic info")
