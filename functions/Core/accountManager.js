@@ -214,6 +214,6 @@ exports.registerUser = function (userData, callbackFunc) {
                     global.log.error("accountManager", "registerUser", "create user is failed, and cannot delete user: " + JSON.stringify(error) + " #" + uid)
                     callbackFunc(undefined)
                 });
-            callbackFunc(undefined)
+            // callbackFunc(undefined)
         });
 }
