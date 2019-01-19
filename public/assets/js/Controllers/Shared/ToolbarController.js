@@ -67,7 +67,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                     firebase.auth().currentUser.sendEmailVerification();
                     KSAppService.showToast(FEEDBACK_VERIFY_FIRST, TOAST_SHOW_LONG)
                     KSAppService.warn("ToolbarController", "listenAuthStatusChanged", "this user not verified, send register email")
-                    $window.location.reload();
+                    // $window.location.reload();
                 }
             } else {
                 // User is signed out.
