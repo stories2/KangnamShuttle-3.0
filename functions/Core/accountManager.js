@@ -169,13 +169,14 @@ exports.registerUser = function (userData, callbackFunc) {
         // photoURL: "http://www.example.com/12345678/photo.png",
         disabled: false
     }
+    var uid = undefined
     userData["password"] = undefined
     global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
     global.log.debug("accountManager", "registerUser", "create user data: " + JSON.stringify(userCreateOption))
     admin.auth().createUser(userCreateOption)
         .then(function(userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
-            var uid = userRecord.uid
+            uid = userRecord.uid
             userData["uid"] = uid
             global.log.debug("accountManager", "registerUser", "user created uid: " + uid)
 
@@ -204,6 +205,15 @@ exports.registerUser = function (userData, callbackFunc) {
         })
         .catch(function(error) {
             global.log.error("accountManager", "registerUser", "cannot create user: " + JSON.stringify(error))
+            admin.auth().deleteUser(uid)
+                .then(function() {
+                    global.log.debug("accountManager", "registerUser", "create user is failed, so i delete user too: " + uid)
+                    callbackFunc(undefined)
+                })
+                .catch(function(error) {
+                    global.log.error("accountManager", "registerUser", "create user is failed, and cannot delete user: " + JSON.stringify(error) + " #" + uid)
+                    callbackFunc(undefined)
+                });
             callbackFunc(undefined)
         });
 }
