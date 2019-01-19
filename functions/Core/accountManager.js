@@ -170,7 +170,7 @@ exports.registerUser = function (userData, callbackFunc) {
         disabled: false
     }
     var uid = undefined
-    userData["password"] = undefined
+    userData["password"] = null
     global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
     global.log.debug("accountManager", "registerUser", "create user data: " + JSON.stringify(userCreateOption))
     admin.auth().createUser(userCreateOption)
@@ -204,7 +204,7 @@ exports.registerUser = function (userData, callbackFunc) {
             // console.log("Successfully created new user:", userRecord.uid);
         })
         .catch(function(error) {
-            global.log.error("accountManager", "registerUser", "cannot create user: " + JSON.stringify(error))
+            global.log.error("accountManager", "registerUser", "cannot create user: " + error)
             admin.auth().deleteUser(uid)
                 .then(function() {
                     global.log.debug("accountManager", "registerUser", "create user is failed, so i delete user too: " + uid)
