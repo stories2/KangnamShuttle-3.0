@@ -36,6 +36,14 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 KSAppService.info("ToolbarController", "onBtnSignInClicked", "you just canceled sign in / up dialog")
             });
     }
+
+    $scope.onBtnSignOutClicked = function () {
+        firebase.auth().signOut().then(function() {
+            KSAppService.info("ToolbarController", "onBtnSignOutClicked", "sign out successfully, bye bye")
+        }, function(error) {
+            KSAppService.error("ToolbarController", "onBtnSignOutClicked", "cannot sign out: " + error);
+        });
+    }
     
     function listenAuthStatusChanged() {
         firebase.auth().onAuthStateChanged(function(user) {
@@ -52,7 +60,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 KSAppService.debug("ToolbarController", "listenAuthStatusChanged", "signed in user info: " + JSON.stringify(user))
                 if(emailVerified) {
                     $scope.isUserSignedIn = true
-                    KSAppService.showToast(FEEDBACK_SIGN_IN_SUCCESS, TOAST_SHOW_LONG)
+                    KSAppService.showToast(displayName + FEEDBACK_SIGN_IN_SUCCESS, TOAST_SHOW_LONG)
                 }
                 else {
                     $scope.isUserSignedIn = false
