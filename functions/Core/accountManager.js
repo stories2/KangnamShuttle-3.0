@@ -26,7 +26,7 @@ exports.createUserRoutine = function (request, response, callbackFunc) {
                         "pic": "",
                         "email": request.body["email"],
                         "uid": "",
-                        "password": request.body["password"]
+                        // "password": request.body["password"]
                     }
                     global.log.info("accountManager", "createUserRoutine", "get user's profile pic process will start")
                     getUserProfilePic(session, function (userProfilePic) {
