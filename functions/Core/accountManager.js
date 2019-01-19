@@ -37,6 +37,7 @@ exports.createUserRoutine = function (request, response, callbackFunc) {
                                 if(uid) {
                                     global.log.info("accountManager", "createUserRoutine", "ok, all process passed successfully")
                                     responseTemplate["success"] = true
+                                    responseTemplate["uid"] = uid
                                     callbackFunc(responseTemplate)
                                 }
                                 else {
@@ -97,13 +98,105 @@ exports.getSignInSession = function (accountData, callbackFunc) {
 }
 
 exports.getUserBasicInfo = function (session, callbackFunc) {
+    const request = require('request')
+    var options = {
+        url: "https://" + global.define.API_KANGNAM_SHUTTLE_ADDONS_DOMAIN + global.define.API_SCHOOL_BASIC_INFO,
+        headers: {
+            "Cookie": session
+        }
+    }
 
+    global.log.debug("accountManager", "getUserBasicInfo", "payload: " + JSON.stringify(options))
+
+    request.get(
+        options,
+        function(error, response, body) {
+            body = JSON.parse(body)
+            if(!error && body["success"]) {
+                global.log.debug("accountManager", "getUserBasicInfo", "user basic info: " + JSON.stringify(body["info"]))
+                callbackFunc(body["info"])
+            }
+            else {
+                global.log.error("accountManager", "getUserBasicInfo", "cannot get basic info, error: " + JSON.stringify(error) + " body: " + JSON.stringify(body))
+                callbackFunc(undefined)
+            }
+        }
+    )
 }
 
 exports.getUserProfilePic = function (session, callbackFunc) {
+    const request = require('request')
+    var options = {
+        url: "https://" + global.define.API_KANGNAM_SHUTTLE_ADDONS_DOMAIN + global.define.API_SCHOOL_PROFILE_PIC,
+        headers: {
+            "Cookie": session
+        }
+    }
 
+    global.log.debug("accountManager", "getUserProfilePic", "payload: " + JSON.stringify(options))
+
+    request.get(
+        options,
+        function(error, response, body) {
+            body = JSON.parse(body)
+            if(!error && body["success"]) {
+                global.log.debug("accountManager", "getUserProfilePic", "user profile pic size: " + JSON.stringify(body["pic"]).length)
+                callbackFunc(body["pic"])
+            }
+            else {
+                global.log.error("accountManager", "getUserProfilePic", "cannot get profile pic, error: " + JSON.stringify(error) + " body: " + JSON.stringify(body))
+                callbackFunc(undefined)
+            }
+        }
+    )
 }
 
 exports.registerUser = function (userData, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
 
+    global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
+
+    admin.auth().createUser({
+        email: userData["email"],
+        emailVerified: false,
+        // phoneNumber: "+11234567890",
+        password: userData["password"],
+        displayName: userData["nameKor"],
+        // photoURL: "http://www.example.com/12345678/photo.png",
+        disabled: false
+    })
+        .then(function(userRecord) {
+            // See the UserRecord reference doc for the contents of userRecord.
+            var uid = userRecord.uid
+            userData["uid"] = uid
+            global.log.debug("accountManager", "registerUser", "user created uid: " + uid)
+
+            var accountDbPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
+            admin.database().ref(accountDbPath).set(userData, function (error) {
+
+                if(error) {
+                    global.log.error("accountManager", "registerUser", "cannot write user info to db, rollback: " + uid)
+                    admin.auth().deleteUser(uid)
+                        .then(function() {
+                            global.log.debug("accountManager", "registerUser", "write user info is failed, so i delete user too: " + uid)
+                            callbackFunc(undefined)
+                        })
+                        .catch(function(error) {
+                            global.log.error("accountManager", "registerUser", "write user info is failed, and cannot delete user: " + JSON.stringify(error) + " #" + uid)
+                            callbackFunc(undefined)
+                        });
+                }
+                else {
+                    global.log.debug("accountManager", "registerUser", "user registered: " + uid)
+                    callbackFunc(uid)
+                }
+            })
+
+            // console.log("Successfully created new user:", userRecord.uid);
+        })
+        .catch(function(error) {
+            global.log.error("accountManager", "registerUser", "cannot create user: " + JSON.stringify(error))
+            callbackFunc(undefined)
+        });
 }

@@ -29,6 +29,7 @@ exports.DB_PATH_SHUTTLE_ROUTE = "/shuttle/route"
 exports.DB_PATH_SHUTTLE_LOCATION = "/shuttle/location"
 exports.DB_PATH_SHUTTLE_SCHEDULE_PIC = "/shuttle/schedulePic"
 exports.DB_PATH_SYSTEM_VERSION = "/system/version"
+exports.DB_PATH_ACCOUNTS_UID = "/accounts/%s"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",
@@ -52,3 +53,5 @@ exports.RESPONSE_SHUTTLE_SCHEDULE_MISSED = 4
 
 exports.API_KANGNAM_SHUTTLE_ADDONS_DOMAIN = "kangnam-shuttle-addons.herokuapp.com"
 exports.API_AUTH_SIGN_IN = "/auth/%s"
+exports.API_SCHOOL_BASIC_INFO = "/school/profile/basic"
+exports.API_SCHOOL_PROFILE_PIC = "/school/profile/img"
