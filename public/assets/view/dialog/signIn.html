@@ -58,7 +58,28 @@
                 <div layout="row" layout-align="center center">
                     <md-input-container flex="100" flex-gt-md="70">
                         <label>이름</label>
-                        <input ng-model="data.name" type="text" placeholder="종합정보시스템에 등록된 이름 2글자 이상" required minlength="2">
+                        <input ng-model="data.name" type="text" placeholder="종합정보시스템에 등록된 한글 이름 2글자 이상" required minlength="2">
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <md-input-container flex="100" flex-gt-md="70">
+                        <md-checkbox name="accept" ng-model="data.accept" required>
+                            개인정보 수집 및 제공에 동의합니다.
+                        </md-checkbox>
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <md-input-container flex="100" flex-gt-md="70">
+                        <h3>수집되는 개인정보</h3>
+                        <ol>
+                            <li>생년월일</li>
+                            <li>강남대학교 이메일 주소</li>
+                            <li>한글 이름</li>
+                            <li>프로필 사진</li>
+                            <li>속해있는 과</li>
+                            <li>성별</li>
+                            <li>학번</li>
+                        </ol>
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="end center">
@@ -75,6 +96,7 @@
             <h3>도움말</h3>
             <ol>
                 <li>회원가입을 하는 이유는 간단합니다. 강남대학교와 관련이 있는지를 확인하는겁니다.</li>
+                <li>회원가입이 진행시 꽤 오랜 시간이 소요됩니다. 약 1~2분 소요</li>
                 <li>회원가입 후 <a href="http://mail.kangnam.ac.kr/">이메일</a> 인증이 되어야 이후 로그인이 성공합니다.</li>
                 <li>여러분의 개인 정보는 <a href="https://firebase.google.com/">Firebase</a> 에 의해 관리 됩니다.</li>
                 <li>문제가 생겼을 경우 <a href="https://github.com/stories2/KangnamShuttle-3.0/issues">여기</a> 에 문제를 최대한 자세히 기술해주세요.</li>
