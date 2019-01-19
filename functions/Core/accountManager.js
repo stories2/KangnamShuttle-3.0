@@ -160,10 +160,7 @@ exports.getUserProfilePic = function (session, callbackFunc) {
 exports.registerUser = function (userData, callbackFunc) {
     const admin = global.admin
     const util = require('util')
-
-    global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
-
-    admin.auth().createUser({
+    var userCreateOption = {
         email: userData["email"],
         emailVerified: false,
         // phoneNumber: "+11234567890",
@@ -171,7 +168,10 @@ exports.registerUser = function (userData, callbackFunc) {
         displayName: userData["nameKor"],
         // photoURL: "http://www.example.com/12345678/photo.png",
         disabled: false
-    })
+    }
+    global.log.debug("accountManager", "registerUser", "collected user data: " + JSON.stringify(userData))
+    global.log.debug("accountManager", "registerUser", "create user data: " + JSON.stringify(userCreateOption))
+    admin.auth().createUser(userCreateOption)
         .then(function(userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
             var uid = userRecord.uid

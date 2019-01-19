@@ -13,6 +13,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             "url": "#!/shuttleLocation"
         }
     ]
+    $scope.isUserSignedIn = false
     var uid = undefined
 
     $scope.onBtnSignInClicked = function () {
@@ -25,7 +26,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
         })
             .then(function(userData) {
                 KSAppService.debug("ToolbarController", "onBtnSignInClicked", "user data: " + JSON.stringify(userData))
-                if(userData["isSignIn"]) {
+                if(userData["signIn"]) {
                     startSignIn(userData)
                 }
                 else {
@@ -36,8 +37,48 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             });
     }
     
+    function listenAuthStatusChanged() {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                // ...
+                KSAppService.debug("ToolbarController", "listenAuthStatusChanged", "signed in user info: " + JSON.stringify(user))
+                if(emailVerified) {
+                    $scope.isUserSignedIn = true
+                    KSAppService.showToast(FEEDBACK_SIGN_IN_SUCCESS, TOAST_SHOW_LONG)
+                }
+                else {
+                    $scope.isUserSignedIn = false
+                    firebase.auth().currentUser.sendEmailVerification();
+                    KSAppService.showToast(FEEDBACK_VERIFY_FIRST, TOAST_SHOW_LONG)
+                    KSAppService.warn("ToolbarController", "listenAuthStatusChanged", "this user not verified, send register email")
+                }
+            } else {
+                // User is signed out.
+                // ...
+                $scope.isUserSignedIn = false
+                KSAppService.warn("ToolbarController", "listenAuthStatusChanged", "user not signed in")
+            }
+        });
+    }
+    
     function startSignIn(userData) {
-
+        firebase.auth().signInWithEmailAndPassword(userData["email"], userData["password"]).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+            $scope.isUserSignedIn = false
+            KSAppService.error("ToolbarController", "startSignIn", "sign in failed: " + errorCode + ", " + errorMessage)
+            KSAppService.showToast(FEEDBACK_SIGN_IN_FAILED + ", " + errorMessage, TOAST_SHOW_LONG)
+        });
     }
     
     function startSignUp(userData) {
@@ -103,4 +144,6 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             $mdDialog.hide($scope.data);
         };
     }
+
+    listenAuthStatusChanged()
 })
