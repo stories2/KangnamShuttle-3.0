@@ -24,6 +24,18 @@ app.config(function($routeProvider) {
             cache: false,
             disableCache: true,
         })
+        .when("/shuttle", {
+            templateUrl : "assets/view/shuttleManagement.html",
+            controller : "ShuttleManagementController",
+            cache: false,
+            disableCache: true,
+        })
+        .when("/api", {
+            templateUrl : "assets/view/apiManagement.html",
+            controller : "ApiManagementController",
+            cache: false,
+            disableCache: true,
+        })
         .otherwise({
             redirectTo: '/',
             cache: false,
