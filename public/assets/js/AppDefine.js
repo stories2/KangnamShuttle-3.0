@@ -18,6 +18,7 @@ var LIVE_SERVER_DOMAIN = "https://us-central1-kangnamshuttle3.cloudfunctions.net
 var API_GET_SHUTTLE_LOCATION = LIVE_SERVER_DOMAIN + "v3PublicApi/realtimeShuttleLocation"
 var API_AUTH_SIGN_UP = LIVE_SERVER_DOMAIN + "v3PublicApi/auth"
 var API_GET_MENU = LIVE_SERVER_DOMAIN + "v3PrivateApi/menu"
+var API_GET_ACCOUNTS_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 
 var FEEDBACK_SIGN_UP_SUCCESS = "계정 생성이 완료되었습니다."
 var FEEDBACK_SIGN_UP_FAILED = "계정 생성 중 문제가 발생되었습니다. 저런;"

@@ -1,1 +1,35 @@
-<h1>It Works!</h1>
+<div layout-fill layout="row" layout-align="center center" ng-init="onLoad()">
+    <section id="main" class="wrapper">
+        <div class="inner">
+            <div class="content">
+                <header>
+                    <h2>계정 관리</h2>
+                    <h4>가입한 모든 사용자 계정 관리</h4>
+                </header>
+                <md-button ng-click="onLoad()">Refresh</md-button>
+                <div class="table-wrapper" style="max-height: 500px;overflow-y: auto">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>프로필</th>
+                            <th>학번</th>
+                            <th>이름</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(uid, account) in accountList">
+                                <td class="md-avatar"><img style="height: 64px" ng-src="data:image/png;base64,{{ account['pic'] }}"></td>
+                                <td>{{ account["studentId"] }}</td>
+                                <td>{{ account["nameKor"] }}</td>
+                                <td><md-button class="fa fa-edit" ng-click="edit(account)"></md-button></td>
+                                <td><md-button class="fa fa-close"ng-click="delete(account)"></md-button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
