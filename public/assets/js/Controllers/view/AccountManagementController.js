@@ -12,7 +12,7 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
         KSAppService.debug("AccountManagementController", "AccountManagementController", "selected item: " + JSON.stringify(item))
 
         $mdDialog.show({
-            controller: accountDetailDialogController(),
+            controller: accountDetailDialogController,
             templateUrl: 'assets/view/dialog/accountDetail.html',
             parent: angular.element(document.body),
             // targetEvent: ev,
@@ -60,6 +60,8 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
     }
 
     function accountDetailDialogController($scope, $mdDialog, accountData) {
+
+        KSAppService.info("accountDetailDialogController", "accountDetailDialogController", "init")
 
         var data = accountData
 
