@@ -218,3 +218,15 @@ exports.registerUser = function (userData, callbackFunc) {
             // callbackFunc(undefined)
         });
 }
+
+exports.getAllAccountList = function (request, response, callbackFunc) {
+    
+}
+
+exports.patchAccount = function (request, response, callbackFunc) {
+    
+}
+
+exports.deleteAccount = function (request, response, callbackFunc) {
+
+}
