@@ -1,95 +1,147 @@
-exports.verifyAuthToken = function(request, response, next) {
-    var responseManager = require('../Utils/ResponseManager')
-    const admin = global.admin
-    const checkAccountRole = this.checkAccountRole
-
-    global.log.debug("AuthManager", "verifyAuthToken", "request header: " + JSON.stringify(request.headers))
-    global.log.debug("AuthManager", "verifyAuthToken", "request url: " + request.url + " method: " + request.method)
-
-    try {
-        token = request.get('Authorization')
-        admin.auth().verifyIdToken(token)
-            .then(function (decodedToken) {
-                global.log.debug("AuthManager", "verifyAuthToken", "token verified uid: " + decodedToken.uid)
-                request.user = decodedToken
-                admin.auth().getUser(decodedToken.uid)
-                    .then(function (userRecord) {
-                        global.log.info("AuthManager", "verifyAuthToken", "we found user info")
-                        userRecordData = userRecord.toJSON()
-                        userRecordDataStr = JSON.stringify(userRecordData)
-                        request.userRecordData = userRecordData
-                        global.log.debug("AuthManager", "verifyAuthToken", "user info decoded : " + userRecordDataStr)
-
-                        checkAccountRole(responseManager, decodedToken.uid, request, function (grantted) {
-                            if(grantted) {
-                                return next();
-                            }
-                            else {
-                                responseManager.forbidden(response, {})
-                            }
-                        })
-                    })
-                    .catch(function (error) {
-                        global.log.error("AuthManager", "verifyAuthToken", "cannot verify user: " + JSON.stringify(error))
-
-                        responseManager.unauthorized(response, {})
-                    })
-            })
-            .catch(function (error) {
-                global.log.error("AuthManager", "verifyAuthToken", "cannot verify token: " + JSON.stringify(error))
-
-                responseManager.unauthorized(response, {})
-            })
-    }
-    catch (exception) {
-        global.log.error("AuthManager", "verifyAuthToken", "server crashed: " + JSON.stringify(exception))
-
-        responseManager.internalServerError(response, {})
-    }
-}
-
-exports.checkAccountRole = function (responseManager, uid, request, callbackFunc) {
-    const admin = global.admin
-    var url = request.url
-    var method = request.method
-
-    var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
-    roleRef.once("value", function ( ) {
-
-    })
-}
+// exports.verifyAuthToken = function(request, response, next) {
+//     var responseManager = require('../Utils/ResponseManager')
+//     const admin = global.admin
+//     const checkAccountRole = this.checkAccountRole
+//
+//     global.log.debug("AuthManager", "verifyAuthToken", "request header: " + JSON.stringify(request.headers))
+//     global.log.debug("AuthManager", "verifyAuthToken", "request url: " + request.url + " method: " + request.method)
+//
+//     try {
+//         token = request.get('Authorization')
+//         admin.auth().verifyIdToken(token)
+//             .then(function (decodedToken) {
+//                 global.log.debug("AuthManager", "verifyAuthToken", "token verified uid: " + decodedToken.uid)
+//                 request.user = decodedToken
+//                 admin.auth().getUser(decodedToken.uid)
+//                     .then(function (userRecord) {
+//                         global.log.info("AuthManager", "verifyAuthToken", "we found user info")
+//                         userRecordData = userRecord.toJSON()
+//                         userRecordDataStr = JSON.stringify(userRecordData)
+//                         request.userRecordData = userRecordData
+//                         global.log.debug("AuthManager", "verifyAuthToken", "user info decoded : " + userRecordDataStr)
+//
+//                         checkAccountRole(responseManager, decodedToken.uid, request, function (grantted) {
+//                             if(grantted) {
+//                                 return next();
+//                             }
+//                             else {
+//                                 responseManager.forbidden(response, {})
+//                             }
+//                         })
+//                     })
+//                     .catch(function (error) {
+//                         global.log.error("AuthManager", "verifyAuthToken", "cannot verify user: " + JSON.stringify(error))
+//
+//                         responseManager.unauthorized(response, {})
+//                     })
+//             })
+//             .catch(function (error) {
+//                 global.log.error("AuthManager", "verifyAuthToken", "cannot verify token: " + JSON.stringify(error))
+//
+//                 responseManager.unauthorized(response, {})
+//             })
+//     }
+//     catch (exception) {
+//         global.log.error("AuthManager", "verifyAuthToken", "server crashed: " + JSON.stringify(exception))
+//
+//         responseManager.internalServerError(response, {})
+//     }
+// }
+//
+// exports.checkAccountRole = function (responseManager, uid, request, callbackFunc) {
+//     const admin = global.admin
+//     var url = request.url
+//     var method = request.method
+//
+//     var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
+//     roleRef.once("value", function ( roleSnapshot ) {
+//         var
+//     })
+// }
 
 exports.getUrlInfoFromDB = function (url, method, callbackFunc) {
     const admin = global.admin
 
     var apiRef = admin.database().ref(global.define.DB_PATH_API)
     apiRef.once("value", function (apiSnapshot) {
+        var apiSnapshotData = JSON.parse(JSON.stringify(apiSnapshot))
 
+        for(var index in apiSnapshotData) {
+            var api = apiSnapshot[index]
+            if(api["endpoint"] == url && api["method"] == method) {
+                callbackFunc(api)
+            }
+        }
+
+        callbackFunc(undefined)
     })
 }
 
 exports.getRoleListFromDB = function (callbackFunc) {
-
+    const admin = global.admin
+    var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
+    roleRef.once("value", function ( roleSnapshot ) {
+        var roleSnapshotData = JSON.parse(JSON.stringify(roleSnapshot))
+        callbackFunc(roleSnapshotData)
+    })
 }
 
 exports.getAccountInfoFromDB = function (uid, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const accountDBPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
 
+    var accountRef = admin.database().ref(accountDBPath)
+    accountRef.once("value", function ( accountSnapshot ) {
+        var accountSnapshotData = JSON.parse(JSON.stringify(accountSnapshot))
+        callbackFunc(accountSnapshotData)
+    })
 }
 
 exports.getAuthToken = function (request, callbackFunc) {
-
+    var token = request.get('Authorization')
+    callbackFunc(token)
 }
 
 exports.verifyToken = function (token, callbackFunc) {
-
+    const admin = global.admin
+    admin.auth().verifyIdToken(token)
+        .then(function (decodedToken) {
+            callbackFunc(decodedToken)
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "verifyToken", "cannot decode token: " + JSON.stringify(error))
+        })
 }
 
 exports.getUserInfoFromUID = function (uid, callbackFunc) {
-
+    const admin = global.admin
+    admin.auth().getUser(uid)
+        .then(function (userRecord) {
+            callbackFunc(userRecord)
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "getUserInfoFromUID", "cannot get user info from uid: " + JSON.stringify(error))
+        })
 }
 
 exports.checkThisAccountHasPermission = function(accountInfo, roleList, api, callbackFunc) {
+    var apiRequireRole = roleList[api["role"]]
+    var accountRole = roleList[accountInfo["role"]]
 
+    global.log.debug("AuthManager", "checkThisAccountHasPermission", "api role: " + JSON.stringify(apiRequireRole) + " account role: " + JSON.stringify(accountRole))
+
+    if(apiRequireRole && accountRole) {
+        if(apiRequireRole["level"] <= accountRole["level"]) {
+            callbackFunc(true)
+        }
+        else {
+            callbackFunc(false)
+        }
+    }
+    else {
+        callbackFunc(false)
+    }
 }
 
 exports.authRoutine = function (request, response, next) {
