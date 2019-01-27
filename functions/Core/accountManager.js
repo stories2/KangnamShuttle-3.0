@@ -220,7 +220,12 @@ exports.registerUser = function (userData, callbackFunc) {
 }
 
 exports.getAllAccountList = function (request, response, callbackFunc) {
-    
+    var admin = global.admin
+
+    var accountsRef = admin.database().ref(global.define.DB_PATH_ACCOUNT)
+    accountsRef.once("value", function ( accountSnapshot ) {
+        callbackFunc(accountSnapshot.val())
+    })
 }
 
 exports.patchAccount = function (request, response, callbackFunc) {
