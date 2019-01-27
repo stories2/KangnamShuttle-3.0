@@ -229,9 +229,62 @@ exports.getAllAccountList = function (request, response, callbackFunc) {
 }
 
 exports.patchAccount = function (request, response, callbackFunc) {
-    
+    var admin = global.admin
+    const util = require('util')
+    var uid = request.body["uid"]
+
+    var targetAccountDBPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
+    var bodyData = request.body
+
+    var accountsRef = admin.database().ref(targetAccountDBPath)
+    accountsRef.once("value", function ( accountSnapshot ) {
+        var accountSnapshotData = accountSnapshot.val()
+
+        accountSnapshotData["birthday"] = bodyData["birthday"]
+        accountSnapshotData["nameKor"] = bodyData["nameKor"]
+        accountSnapshotData["role"] = bodyData["role"]
+        accountSnapshotData["separate"] = bodyData["separate"]
+        accountSnapshotData["sex"] = bodyData["sex"]
+        accountSnapshotData["studentId"] = bodyData["studentId"]
+
+        global.log.debug("accountManager", "patchAccount", "patch user: " + JSON.stringify(accountSnapshotData))
+
+        accountsRef.set(accountSnapshotData, function (error) {
+            if(!error) {
+                global.log.info("accountManager", "patchAccount", "success")
+                callbackFunc(true)
+            }
+            else {
+                global.log.error("accountManager", "patchAccount", "failed: " + JSON.stringify(error))
+                callbackFunc(false)
+            }
+        })
+    })
 }
 
 exports.deleteAccount = function (request, response, callbackFunc) {
+    var admin = global.admin
+    const util = require('util')
+    var uid = request.body["uid"]
 
+    var targetAccountDBPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
+    admin.auth().deleteUser(uid)
+        .then(function() {
+            global.log.debug("accountManager", "deleteAccount", "user deleted: " + uid)
+            var accountsRef = admin.database().ref(targetAccountDBPath)
+            accountsRef.set({}, function (error) {
+                if(!error) {
+                    global.log.info("accountManager", "deleteAccount", "success")
+                    callbackFunc(true)
+                }
+                else {
+                    global.log.error("accountManager", "deleteAccount", "failed: " + JSON.stringify(error))
+                    callbackFunc(false)
+                }
+            })
+        })
+        .catch(function(error) {
+            global.log.error("accountManager", "deleteAccount", "cannot delete user: " + JSON.stringify(error) + " #" + uid)
+            callbackFunc(false)
+        });
 }
