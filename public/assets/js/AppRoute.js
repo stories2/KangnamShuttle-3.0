@@ -18,6 +18,12 @@ app.config(function($routeProvider) {
             cache: false,
             disableCache: true,
         })
+        .when("/accounts", {
+            templateUrl : "assets/view/accountManagement.html",
+            controller : "AccountManagementController",
+            cache: false,
+            disableCache: true,
+        })
         .otherwise({
             redirectTo: '/',
             cache: false,
