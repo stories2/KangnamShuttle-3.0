@@ -178,7 +178,7 @@ exports.getUrlInfoFromDB = function (url, method, callbackFunc) {
 
     var apiRef = admin.database().ref(global.define.DB_PATH_API)
     apiRef.once("value", function (apiSnapshot) {
-        var apiSnapshotData = JSON.parse(JSON.stringify(apiSnapshot))
+        var apiSnapshotData = apiSnapshot.val()
         for(var index in apiSnapshotData) {
             var api = apiSnapshotData[index]
             // global.log.debug("AuthManager", "getUrlInfoFromDB", "api: " + JSON.stringify(api) + " index: " + index)
@@ -196,7 +196,7 @@ exports.getRoleListFromDB = function (callbackFunc) {
     const admin = global.admin
     var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
     roleRef.once("value", function ( roleSnapshot ) {
-        var roleSnapshotData = JSON.parse(JSON.stringify(roleSnapshot))
+        var roleSnapshotData = roleSnapshot.val()
         callbackFunc(roleSnapshotData)
     })
 }
@@ -208,7 +208,7 @@ exports.getAccountInfoFromDB = function (uid, callbackFunc) {
 
     var accountRef = admin.database().ref(accountDBPath)
     accountRef.once("value", function ( accountSnapshot ) {
-        var accountSnapshotData = JSON.parse(JSON.stringify(accountSnapshot))
+        var accountSnapshotData = accountSnapshot.val()
         callbackFunc(accountSnapshotData)
     })
 }
