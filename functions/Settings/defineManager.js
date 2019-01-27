@@ -13,6 +13,7 @@ exports.HEADERS_CONTENT_TYPE_APPLICATION_JSON = "application/json"
 exports.HTTP_STATUS_CODE_OK = 200
 exports.HTTP_STATUS_CODE_BAD_REQUEST = 400
 exports.HTTP_STATUS_CODE_UNAUTHORIZED = 401
+exports.HTTP_STATUS_CODE_FORBIDDEN = 403
 exports.HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500
 
 exports.ZERO = 0
@@ -30,6 +31,8 @@ exports.DB_PATH_SHUTTLE_LOCATION = "/shuttle/location"
 exports.DB_PATH_SHUTTLE_SCHEDULE_PIC = "/shuttle/schedulePic"
 exports.DB_PATH_SYSTEM_VERSION = "/system/version"
 exports.DB_PATH_ACCOUNTS_UID = "/accounts/%s"
+exports.DB_PATH_ROLE = "/role"
+exports.DB_PATH_API = "/api"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",

@@ -8,11 +8,14 @@ const adminManager = require('./Utils/firebaseAdminManager')
 //Express
 const v3PublicApi = express()
 const v3KakaoApi = express()
+const v3PrivateApi = express()
 //Routes
 const publicRoute = require('./Route/V3/publicRoute')
 const kakaoRoute = require('./Route/V3/kakaoRoute')
+const privateRoute = require('./Route/V3/privateRoute')
 //Attribute
 const preprocessManager = require('./Attribute/preprocessManager')
+const authManager = require('./Attribute/AuthManager')
 
 //Global
 global.define = require('./Settings/defineManager')
@@ -29,6 +32,12 @@ v3PublicApi.get('/realtimeShuttleLocation', publicRoute.realtimeShuttleLocation)
 v3PublicApi.patch('/realtimeShuttleLocation', publicRoute.updateRealtimeShuttleLocation)
 v3PublicApi.post('/auth', publicRoute.authSignUp)
 exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
+
+v3PrivateApi.use(cors)
+v3PrivateApi.use(authManager.authRoutine)
+v3PrivateApi.use(preprocessManager.addModules)
+v3PrivateApi.get('/menu', privateRoute.getMenuListBasedOnRole)
+exports.v3PrivateApi = functions.https.onRequest(v3PrivateApi)
 
 v3KakaoApi.use(cors)
 v3KakaoApi.use(preprocessManager.addModules)
