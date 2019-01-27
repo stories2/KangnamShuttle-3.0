@@ -1,0 +1,29 @@
+<md-dialog flex="90" flex-gt-md="50">
+    <md-toolbar class="toolbar-black">
+        <div class="md-toolbar-tools">
+            <h2>계정 세부 설정</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class="fa fa-2x fa-close" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content md-theme="docs-dark">
+        <form name="accountForm">
+
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <!--&lt;!&ndash;<md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>&ndash;&gt;-->
+        <!--&lt;!&ndash;More on Wikipedia&ndash;&gt;-->
+        <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
+        <!--<span flex></span>-->
+        <!--<md-button ng-click="hide()">-->
+        <!--Cancel-->
+        <!--</md-button>-->
+        <md-button ng-click="hide()">
+            Exit
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

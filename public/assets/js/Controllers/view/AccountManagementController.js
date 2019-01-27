@@ -1,4 +1,4 @@
-app.controller("AccountManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, KSAppService) {
+app.controller("AccountManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, $mdDialog, KSAppService) {
     KSAppService.info("AccountManagementController", "AccountManagementController", "init");
 
     $scope.accountList = {}
@@ -9,6 +9,23 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
 
     $scope.edit = function (item) {
 
+        KSAppService.debug("AccountManagementController", "AccountManagementController", "selected item: " + JSON.stringify(item))
+
+        $mdDialog.show({
+            controller: accountDetailDialogController(),
+            templateUrl: 'assets/view/dialog/accountDetail.html',
+            parent: angular.element(document.body),
+            // targetEvent: ev,
+            clickOutsideToClose:true,
+            locals: {
+                accountData: item
+            }
+        })
+            .then(function(accountData) {
+                KSAppService.debug("AccountManagementController", "edit", "user data: " + JSON.stringify(accountData))
+            }, function() {
+                KSAppService.info("AccountManagementController", "edit", "you just canceled dialog")
+            });
     }
 
     $scope.delete = function (item) {
@@ -40,5 +57,23 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
 
     function initAccountList(data) {
         $scope.accountList = data["data"]
+    }
+
+    function accountDetailDialogController($scope, $mdDialog, accountData) {
+
+        var data = accountData
+
+        $scope.hide = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.submit = function() {
+            KSAppService.debug("accountDetailDialogController", "submit", "user data: " + JSON.stringify(data))
+            $mdDialog.hide(data);
+        };
     }
 })
