@@ -98,8 +98,8 @@ exports.authRoutine = function (request, response, next) {
     const requestUrl = request.url
     const requestMethod = request.method
 
-    global.log.debug("AuthManager", "verifyAuthToken", "request header: " + JSON.stringify(request.headers))
-    global.log.debug("AuthManager", "verifyAuthToken", "request url: " + requestUrl + " method: " + requestMethod)
+    global.log.debug("AuthManager", "authRoutine", "request header: " + JSON.stringify(request.headers))
+    global.log.debug("AuthManager", "authRoutine", "request url: " + requestUrl + " method: " + requestMethod)
 
     const getAuthToken = this.getAuthToken
     const verifyToken = this.verifyToken
@@ -112,24 +112,31 @@ exports.authRoutine = function (request, response, next) {
     getAuthToken(request, function (token) {
         if(token) {
             //----------------------------
+            global.log.debug("AuthManager", "authRoutine", "token: " + token)
             verifyToken(token, function (decodedToken) {
                 if(decodedToken) {
                     //----------------------------
+                    global.log.debug("AuthManager", "authRoutine", "decodedToken: " + JSON.stringify(decodedToken))
                     getUserInfoFromUID(decodedToken.uid, function (userInfo) {
                         if(userInfo) {
                             //----------------------------
+                            global.log.debug("AuthManager", "authRoutine", "userInfo: " + JSON.stringify(userInfo))
                             getUrlInfoFromDB(requestUrl, requestMethod, function (api) {
                                 if(api) {
                                     //----------------------------
+                                    global.log.debug("AuthManager", "authRoutine", "api: " + JSON.stringify(api))
                                     getRoleListFromDB(function (roleList) {
                                         if(roleList) {
                                             //----------------------------
+                                            global.log.debug("AuthManager", "authRoutine", "role list: " + JSON.stringify(roleList))
                                             getAccountInfoFromDB(decodedToken.uid, function (accountInfo) {
                                                 if(accountInfo) {
                                                     //----------------------------
+                                                    global.log.debug("AuthManager", "authRoutine", "accountInfo: " + JSON.stringify(accountInfo))
                                                     checkThisAccountHasPermission(accountInfo, roleList, api, function (granted) {
                                                         if(granted) {
                                                             //----------------------------
+                                                            global.log.info("AuthManager", "authRoutine", "permission granted")
                                                             next()
                                                             //----------------------------
                                                         }
