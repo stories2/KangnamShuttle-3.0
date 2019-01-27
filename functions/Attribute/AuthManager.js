@@ -59,93 +59,9 @@
 //     })
 // }
 
-exports.getUrlInfoFromDB = function (url, method, callbackFunc) {
-    const admin = global.admin
-
-    var apiRef = admin.database().ref(global.define.DB_PATH_API)
-    apiRef.once("value", function (apiSnapshot) {
-        var apiSnapshotData = JSON.parse(JSON.stringify(apiSnapshot))
-
-        for(var index in apiSnapshotData) {
-            var api = apiSnapshot[index]
-            if(api["endpoint"] == url && api["method"] == method) {
-                callbackFunc(api)
-            }
-        }
-
-        callbackFunc(undefined)
-    })
-}
-
-exports.getRoleListFromDB = function (callbackFunc) {
-    const admin = global.admin
-    var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
-    roleRef.once("value", function ( roleSnapshot ) {
-        var roleSnapshotData = JSON.parse(JSON.stringify(roleSnapshot))
-        callbackFunc(roleSnapshotData)
-    })
-}
-
-exports.getAccountInfoFromDB = function (uid, callbackFunc) {
-    const admin = global.admin
-    const util = require('util')
-    const accountDBPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
-
-    var accountRef = admin.database().ref(accountDBPath)
-    accountRef.once("value", function ( accountSnapshot ) {
-        var accountSnapshotData = JSON.parse(JSON.stringify(accountSnapshot))
-        callbackFunc(accountSnapshotData)
-    })
-}
-
-exports.getAuthToken = function (request, callbackFunc) {
-    var token = request.get('Authorization')
-    callbackFunc(token)
-}
-
-exports.verifyToken = function (token, callbackFunc) {
-    const admin = global.admin
-    admin.auth().verifyIdToken(token)
-        .then(function (decodedToken) {
-            callbackFunc(decodedToken)
-        })
-        .catch(function (error) {
-            global.log.error("AuthManager", "verifyToken", "cannot decode token: " + JSON.stringify(error))
-        })
-}
-
-exports.getUserInfoFromUID = function (uid, callbackFunc) {
-    const admin = global.admin
-    admin.auth().getUser(uid)
-        .then(function (userRecord) {
-            callbackFunc(userRecord)
-        })
-        .catch(function (error) {
-            global.log.error("AuthManager", "getUserInfoFromUID", "cannot get user info from uid: " + JSON.stringify(error))
-        })
-}
-
-exports.checkThisAccountHasPermission = function(accountInfo, roleList, api, callbackFunc) {
-    var apiRequireRole = roleList[api["role"]]
-    var accountRole = roleList[accountInfo["role"]]
-
-    global.log.debug("AuthManager", "checkThisAccountHasPermission", "api role: " + JSON.stringify(apiRequireRole) + " account role: " + JSON.stringify(accountRole))
-
-    if(apiRequireRole && accountRole) {
-        if(apiRequireRole["level"] <= accountRole["level"]) {
-            callbackFunc(true)
-        }
-        else {
-            callbackFunc(false)
-        }
-    }
-    else {
-        callbackFunc(false)
-    }
-}
-
 exports.authRoutine = function (request, response, next) {
     const responseManager = require('../Utils/ResponseManager')
+    const authManager = require('./AuthManager')
 
     const requestUrl = request.url
     const requestMethod = request.method
@@ -153,13 +69,13 @@ exports.authRoutine = function (request, response, next) {
     global.log.debug("AuthManager", "authRoutine", "request header: " + JSON.stringify(request.headers))
     global.log.debug("AuthManager", "authRoutine", "request url: " + requestUrl + " method: " + requestMethod)
 
-    const getAuthToken = this.getAuthToken
-    const verifyToken = this.verifyToken
-    const getUserInfoFromUID = this.getUserInfoFromUID
-    const getUrlInfoFromDB = this.getUrlInfoFromDB
-    const getRoleListFromDB = this.getRoleListFromDB
-    const getAccountInfoFromDB = this.getAccountInfoFromDB
-    const checkThisAccountHasPermission = this.checkThisAccountHasPermission
+    const getAuthToken = authManager.getAuthToken
+    const verifyToken = authManager.verifyToken
+    const getUserInfoFromUID = authManager.getUserInfoFromUID
+    const getUrlInfoFromDB = authManager.getUrlInfoFromDB
+    const getRoleListFromDB = authManager.getRoleListFromDB
+    const getAccountInfoFromDB = authManager.getAccountInfoFromDB
+    const checkThisAccountHasPermission = authManager.checkThisAccountHasPermission
 
     getAuthToken(request, function (token) {
         if(token) {
@@ -248,9 +164,96 @@ exports.authRoutine = function (request, response, next) {
         }
         else {
             global.log.error("AuthManager", "authRoutine", "Empty token")
-            responseManager.unauthorized(response, {
+            responseManager.badRequest(response, {
                 "message": "Empty token"
             })
         }
     })
+}
+
+exports.getUrlInfoFromDB = function (url, method, callbackFunc) {
+    const admin = global.admin
+
+    var apiRef = admin.database().ref(global.define.DB_PATH_API)
+    apiRef.once("value", function (apiSnapshot) {
+        var apiSnapshotData = JSON.parse(JSON.stringify(apiSnapshot))
+        for(var index in apiSnapshotData) {
+            var api = apiSnapshotData[index]
+            // global.log.debug("AuthManager", "getUrlInfoFromDB", "api: " + JSON.stringify(api) + " index: " + index)
+            if(api["endpoint"] == url && api["method"] == method) {
+                callbackFunc(api)
+                return
+            }
+        }
+
+        callbackFunc(undefined)
+    })
+}
+
+exports.getRoleListFromDB = function (callbackFunc) {
+    const admin = global.admin
+    var roleRef = admin.database().ref(global.define.DB_PATH_ROLE)
+    roleRef.once("value", function ( roleSnapshot ) {
+        var roleSnapshotData = JSON.parse(JSON.stringify(roleSnapshot))
+        callbackFunc(roleSnapshotData)
+    })
+}
+
+exports.getAccountInfoFromDB = function (uid, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const accountDBPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
+
+    var accountRef = admin.database().ref(accountDBPath)
+    accountRef.once("value", function ( accountSnapshot ) {
+        var accountSnapshotData = JSON.parse(JSON.stringify(accountSnapshot))
+        callbackFunc(accountSnapshotData)
+    })
+}
+
+exports.getAuthToken = function (request, callbackFunc) {
+    var token = request.get('Authorization')
+    callbackFunc(token)
+}
+
+exports.verifyToken = function (token, callbackFunc) {
+    const admin = global.admin
+    admin.auth().verifyIdToken(token)
+        .then(function (decodedToken) {
+            callbackFunc(decodedToken)
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "verifyToken", "cannot decode token: " + JSON.stringify(error))
+            callbackFunc(undefined)
+        })
+}
+
+exports.getUserInfoFromUID = function (uid, callbackFunc) {
+    const admin = global.admin
+    admin.auth().getUser(uid)
+        .then(function (userRecord) {
+            callbackFunc(userRecord)
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "getUserInfoFromUID", "cannot get user info from uid: " + JSON.stringify(error))
+        })
+}
+
+exports.checkThisAccountHasPermission = function(accountInfo, roleList, api, callbackFunc) {
+    var apiRequireRole = roleList[api["role"]]
+    var accountRole = roleList[accountInfo["role"]]
+
+    global.log.debug("AuthManager", "checkThisAccountHasPermission", "api role: " + JSON.stringify(apiRequireRole) + " account role: " + JSON.stringify(accountRole))
+
+    if(apiRequireRole && accountRole) {
+        if(apiRequireRole["level"] <= accountRole["level"]) {
+            callbackFunc(true)
+        }
+        else {
+            callbackFunc(false)
+        }
+    }
+    else {
+        callbackFunc(false)
+    }
 }
