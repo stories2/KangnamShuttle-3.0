@@ -61,6 +61,8 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 if(emailVerified) {
                     $scope.isUserSignedIn = true
                     KSAppService.showToast(displayName + FEEDBACK_SIGN_IN_SUCCESS, TOAST_SHOW_LONG)
+
+                    getMenuList()
                 }
                 else {
                     $scope.isUserSignedIn = false
@@ -76,6 +78,33 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 KSAppService.warn("ToolbarController", "listenAuthStatusChanged", "user not signed in")
             }
         });
+    }
+
+    function getMenuList() {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            // Send token to your backend via HTTPS
+            // ...
+            KSAppService.setToken(idToken)
+            var payload = {}
+            KSAppService.getReq(API_GET_MENU,
+                payload,
+                function (data) {
+                    KSAppService.debug("ToolbarController", "getMenuList", "menu list: " + JSON.stringify(data))
+                    if(data["status"] == HTTP_STATUS_OK) {
+                        initMenuList(data)
+                    }
+                },
+                function (error) {
+                    KSAppService.error("ToolbarController", "getMenuList", "failed get menu list: " + JSON.stringify(error))
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ToolbarController", "getMenuList", "failed generate token: " + JSON.stringify(error))
+        });
+    }
+
+    function initMenuList(data) {
+        $scope.menuList = data["data"]
     }
     
     function startSignIn(userData) {
