@@ -33,6 +33,7 @@ exports.DB_PATH_SYSTEM_VERSION = "/system/version"
 exports.DB_PATH_ACCOUNTS_UID = "/accounts/%s"
 exports.DB_PATH_ROLE = "/role"
 exports.DB_PATH_API = "/api"
+exports.DB_PATH_MENU = "/menu"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",

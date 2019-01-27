@@ -104,6 +104,8 @@ exports.authRoutine = function (request, response, next) {
                                                     checkThisAccountHasPermission(accountInfo, roleList, api, function (granted) {
                                                         if(granted) {
                                                             //----------------------------
+                                                            request.accountInfo = accountInfo
+                                                            request.roleList = roleList
                                                             global.log.info("AuthManager", "authRoutine", "permission granted")
                                                             next()
                                                             //----------------------------
