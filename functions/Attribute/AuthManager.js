@@ -60,7 +60,7 @@
 // }
 
 exports.authRoutine = function (request, response, next) {
-    const responseManager = require('../Utils/ResponseManager')
+    const responseManager = require('../Utils/responseManager')
     const authManager = require('./AuthManager')
 
     const requestUrl = request.url
