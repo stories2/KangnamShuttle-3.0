@@ -9,21 +9,47 @@
         </div>
     </md-toolbar>
 
-    <md-dialog-content md-theme="docs-dark">
-        <form name="accountForm">
-
+    <md-dialog-content md-theme="docs-dark" layout="row" class="md-padding">
+        <form name="accountForm" layout="column" flex="50" layout-align="center center">
+            <md-input-container>
+                <label>UID</label>
+                <input ng-model="user.uid" ng-readonly="true">
+            </md-input-container>
+            <md-input-container>
+                <label>Name</label>
+                <input ng-model="user.nameKor">
+            </md-input-container>
+            <md-input-container>
+                <label>Student ID</label>
+                <input ng-model="user.studentId">
+            </md-input-container>
+            <md-input-container>
+                <label>Separate</label>
+                <input ng-model="user.separate">
+            </md-input-container>
+            <md-input-container>
+                <label>Birthday</label>
+                <input ng-model="user.birthday">
+            </md-input-container>
+            <md-input-container>
+                <label>Email</label>
+                <input ng-model="user.email" ng-readonly="true">
+            </md-input-container>
         </form>
+        <div flex="50" layout="column">
+            <img style="width:200px; height: auto" ng-src="data:image/png;base64,{{ user['pic'] }}">
+        </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row">
+    <md-dialog-actions layout="row" layout-align="center center">
         <!--&lt;!&ndash;<md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>&ndash;&gt;-->
         <!--&lt;!&ndash;More on Wikipedia&ndash;&gt;-->
         <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
-        <!--<span flex></span>-->
-        <!--<md-button ng-click="hide()">-->
-        <!--Cancel-->
-        <!--</md-button>-->
+        <span flex></span>
         <md-button ng-click="cancel()">
-            Exit
+            Cancel
+        </md-button>
+        <md-button ng-click="submit()">
+            Submit
         </md-button>
     </md-dialog-actions>
 </md-dialog>

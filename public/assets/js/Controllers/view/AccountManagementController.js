@@ -23,13 +23,78 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
         })
             .then(function(accountData) {
                 KSAppService.debug("AccountManagementController", "edit", "user data: " + JSON.stringify(accountData))
+                patchAccount(accountData)
             }, function() {
                 KSAppService.info("AccountManagementController", "edit", "you just canceled dialog")
             });
     }
 
-    $scope.delete = function (item) {
+    $scope.delete = function (accountData) {
+        var confirm = $mdDialog.confirm()
+            .title('유저 삭제')
+            .textContent('유저 ' + accountData["nameKor"] + " #" + accountData["studentId"] + '를 삭제합니다')
+            // .targetEvent(ev)
+            .ok('확인')
+            .cancel('취소');
 
+        $mdDialog.show(confirm).then(function() {
+            KSAppService.info("AccountManagementController", "delete", "delete account confirmed")
+            deleteAccount(accountData)
+        }, function() {
+            KSAppService.info("AccountManagementController", "delete", "delete account canceled")
+        });
+    }
+
+    function deleteAccount(accountData) {
+        var payload = {
+            "uid": accountData["uid"]
+        }
+        KSAppService.deleteReq(
+            API_DELETE_ACCOUNT,
+            payload,
+            function (data) {
+                if(data["status"] == HTTP_STATUS_OK && data["data"]["success"]) {
+                    KSAppService.debug("AccountManagementController", "deleteAccount", "account deleted: " + JSON.stringify(data))
+                    KSAppService.showToast("Account deleted successfully", TOAST_SHOW_LONG)
+                    getAccountList()
+                }
+                else {
+                    throw null
+                }
+            },
+            function (error) {
+                KSAppService.error("AccountManagementController", "deleteAccount", "cannot delete account: " + JSON.stringify(error))
+                KSAppService.showToast("Failed to delete account", TOAST_SHOW_LONG)
+            })
+    }
+
+    function patchAccount(accountData) {
+        var payload = {
+            "birthday": accountData["birthday"],
+            "nameKor": accountData["nameKor"],
+            "role": accountData["role"],
+            "separate": accountData["separate"],
+            "sex": accountData["sex"],
+            "studentId": accountData["studentId"],
+            "uid": accountData["uid"]
+        }
+        KSAppService.patchReq(
+            API_PATCH_ACCOUNT,
+            payload,
+            function (data) {
+                if(data["status"] == HTTP_STATUS_OK && data["data"]["success"]) {
+                    KSAppService.debug("AccountManagementController", "patchAccount", "account patched: " + JSON.stringify(data))
+                    KSAppService.showToast("Account patched successfully", TOAST_SHOW_LONG)
+                    getAccountList()
+                }
+                else {
+                    throw null
+                }
+            },
+            function (error) {
+                KSAppService.error("AccountManagementController", "patchAccount", "cannot patch account: " + JSON.stringify(error))
+                KSAppService.showToast("Failed to patch account", TOAST_SHOW_LONG)
+            })
     }
 
     function getAccountList() {
@@ -41,17 +106,22 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
             KSAppService.getReq(API_GET_ACCOUNTS_LIST,
                 payload,
                 function (data) {
-                    KSAppService.debug("AccountManagementController", "getAccountList", "accounts list: " + JSON.stringify(data))
                     if(data["status"] == HTTP_STATUS_OK) {
+                        KSAppService.debug("AccountManagementController", "getAccountList", "accounts list: " + JSON.stringify(data))
                         initAccountList(data)
+                    }
+                    else{
+                        throw null
                     }
                 },
                 function (error) {
                     KSAppService.error("AccountManagementController", "getAccountList", "failed get accounts list: " + JSON.stringify(error))
+                    KSAppService.showToast("Failed to get account list", TOAST_SHOW_LONG)
                 })
         }).catch(function(error) {
             // Handle error
             KSAppService.error("AccountManagementController", "getAccountList", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
         });
     }
 
@@ -63,7 +133,7 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
 
         KSAppService.info("accountDetailDialogController", "accountDetailDialogController", "init")
 
-        var data = accountData
+        $scope.user = accountData
 
         $scope.hide = function() {
             $mdDialog.cancel();
@@ -74,8 +144,8 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
         };
 
         $scope.submit = function() {
-            KSAppService.debug("accountDetailDialogController", "submit", "user data: " + JSON.stringify(data))
-            $mdDialog.hide(data);
+            KSAppService.debug("accountDetailDialogController", "submit", "user data: " + JSON.stringify($scope.user))
+            $mdDialog.hide($scope.user);
         };
     }
 })
