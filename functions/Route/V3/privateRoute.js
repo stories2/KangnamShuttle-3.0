@@ -38,6 +38,48 @@ exports.deleteAccount = function (request, response) {
     })
 }
 
+exports.getRoutineList = function(request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.routineList(request, response, function (routineList) {
+        responseManager.ok(response, routineList)
+    })
+}
+
+exports.addRoutine = function(request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.addRoutine(request, response, function (status) {
+        responseManager.ok(response, {
+            "success": status
+        })
+    })
+}
+
+exports.patchRoutine = function(request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.patchRoutine(request, response, function (status) {
+        responseManager.ok(response, {
+            "success": status
+        })
+    })
+}
+
+exports.deleteRoutine = function(request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.deleteRoutine(request, response, function (status) {
+        responseManager.ok(response, {
+            "success": status
+        })
+    })
+}
+
 exports.getStationList = function (request, response) {
     var shuttleManager = require('../../Core/shuttleManager')
     var responseManager = request.responseManager

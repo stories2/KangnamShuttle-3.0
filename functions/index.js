@@ -43,18 +43,23 @@ v3PrivateApi.get('/accounts', privateRoute.getAllAccountList)
 v3PrivateApi.patch('/accounts', privateRoute.patchAccount)
 v3PrivateApi.delete('/accounts', privateRoute.deleteAccount)
 
-v3PrivateApi.get('/shuttle/station', privateRoute.getStationList)
-v3PrivateApi.post('/shuttle/station', privateRoute.addStation)
-v3PrivateApi.patch('/shuttle/station', privateRoute.patchStation)
-v3PrivateApi.delete('/shuttle/station', privateRoute.deleteStation)
+v3PrivateApi.get('/shuttle/routine', privateRoute.getRoutineList)
+v3PrivateApi.post('/shuttle/routine', privateRoute.addRoutine)
+v3PrivateApi.patch('/shuttle/routine', privateRoute.patchRoutine)
+v3PrivateApi.delete('/shuttle/routine', privateRoute.deleteRoutine)
 
-v3PrivateApi.get('/shuttle/station/schedule', privateRoute.getStationSchedule)
-v3PrivateApi.post('/shuttle/station/schedule', privateRoute.createStationSchedule)
-v3PrivateApi.patch('/shuttle/station/schedule', privateRoute.patchStationSchedule)
-v3PrivateApi.delete('/shuttle/station/schedule', privateRoute.deleteStationSchedule)
+v3PrivateApi.get('/shuttle/routine/station', privateRoute.getStationList)
+v3PrivateApi.post('/shuttle/routine/station', privateRoute.addStation)
+v3PrivateApi.patch('/shuttle/routine/station', privateRoute.patchStation)
+v3PrivateApi.delete('/shuttle/routine/station', privateRoute.deleteStation)
 
-v3PrivateApi.get('/shuttle/routine', privateRoute.getShuttleRoutine)
-v3PrivateApi.patch('/shuttle/routine', privateRoute.patchShuttleRoutine)
+v3PrivateApi.get('/shuttle/routine/station/schedule', privateRoute.getStationSchedule)
+v3PrivateApi.post('/shuttle/routine/station/schedule', privateRoute.createStationSchedule)
+v3PrivateApi.patch('/shuttle/routine/station/schedule', privateRoute.patchStationSchedule)
+v3PrivateApi.delete('/shuttle/routine/station/schedule', privateRoute.deleteStationSchedule)
+
+v3PrivateApi.get('/shuttle/routine/path', privateRoute.getShuttleRoutine)
+v3PrivateApi.patch('/shuttle/routine/path', privateRoute.patchShuttleRoutine)
 
 v3PrivateApi.get('/role', privateRoute.getAllRoleList)
 
