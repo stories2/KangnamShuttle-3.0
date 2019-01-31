@@ -56,6 +56,8 @@ v3PrivateApi.delete('/shuttle/station/schedule', privateRoute.deleteStationSched
 v3PrivateApi.get('/shuttle/routine', privateRoute.getShuttleRoutine)
 v3PrivateApi.patch('/shuttle/routine', privateRoute.patchShuttleRoutine)
 
+v3PrivateApi.get('/role', privateRoute.getAllRoleList)
+
 exports.v3PrivateApi = functions.https.onRequest(v3PrivateApi)
 
 v3KakaoApi.use(cors)

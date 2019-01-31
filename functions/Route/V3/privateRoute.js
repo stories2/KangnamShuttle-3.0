@@ -141,3 +141,12 @@ exports.patchShuttleRoutine = function (request, response) {
         })
     })
 }
+
+exports.getAllRoleList = function (request, response) {
+    var roleManager = require('../../Core/roleManager')
+    var responseManager = request.responseManager
+
+    roleManager.getAllRoleList(request, response, function (roleList) {
+        responseManager.ok(response, roleList)
+    })
+}
