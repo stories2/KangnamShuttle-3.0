@@ -86,7 +86,7 @@ exports.authRoutine = function (request, response, next) {
                     //----------------------------
                     global.log.debug("AuthManager", "authRoutine", "decodedToken: " + JSON.stringify(decodedToken))
                     getUserInfoFromUID(decodedToken.uid, function (userInfo) {
-                        if(userInfo) {
+                        if(userInfo && userInfo.emailVerified) {
                             //----------------------------
                             global.log.debug("AuthManager", "authRoutine", "userInfo: " + JSON.stringify(userInfo))
                             getUrlInfoFromDB(requestUrl, requestMethod, function (api) {
@@ -149,7 +149,7 @@ exports.authRoutine = function (request, response, next) {
                         else {
                             global.log.error("AuthManager", "authRoutine", "Undefined user")
                             responseManager.unauthorized(response, {
-                                "message": "Undefined user"
+                                "message": "Undefined user or Unverified user"
                             })
                         }
                     })
