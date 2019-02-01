@@ -23,6 +23,18 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         }
     }
 
+    $scope.addStation = function() {
+        if($scope.stationList.length >= MAXIMUM_OF_STATION_SIZE) {
+            KSAppService.showToast("Station limit = " + MAXIMUM_OF_STATION_SIZE, TOAST_SHOW_LONG)
+        }
+        else {
+            $scope.stationList.push({
+                "stationName": ""
+            })
+            KSAppService.showToast("New station!", TOAST_SHOW_LONG)
+        }
+    }
+
     $scope.submitRoutine = function (routine, index) {
         KSAppService.debug("ShuttleManagementController", "submitRoutine", "selected routine: " + "#" + index + JSON.stringify(routine))
     }
