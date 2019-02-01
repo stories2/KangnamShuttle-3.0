@@ -53,7 +53,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             $scope.scheduleList = []
         }
         $scope.scheduleList.push(
-            ZERO
+            ""
         )
         KSAppService.showToast("New schedule!", TOAST_SHOW_LONG)
     }
@@ -140,20 +140,26 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         }
     }
 
-    $scope.secondToTime = function (second) {
-        var sec_num = second
+    $scope.secondToTime = function (second, noSeperator = false) {
+        var sec_num = second * 1
         var hours   = Math.floor(sec_num / 3600);
+        // console.log("hour: " , Math.floor(second / 3600), Math.floor(sec_num / 3600))
         var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
         var seconds = sec_num - (hours * 3600) - (minutes * 60);
+        // console.log(hours, minutes, seconds)
 
         if (hours   < 10) {hours   = "0"+hours;}
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
+        if(noSeperator) {
+            // console.log(hours, minutes, seconds)
+            return hours+''+minutes+''+seconds;
+        }
         return hours+':'+minutes+':'+seconds;
     }
 
     $scope.timeToSecond = function (time) {
-        var a = time.split(':'); // split it at the colons
+        var a = time.match(/..?/g) // split it at the colons
 
 // minutes are worth 60 seconds. Hours are worth 60 minutes.
         var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
@@ -161,10 +167,18 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     function updateSchedule(routineKey, stationKey, scheduleList) {
+
+        KSAppService.debug("ShuttleManagementController", "updateSchedule", "origin schedule: " + JSON.stringify(scheduleList))
+        var convertedScheduleList = []
+        for(var index in scheduleList) {
+            convertedScheduleList.push($scope.timeToSecond(scheduleList[index]))
+        }
+        KSAppService.debug("ShuttleManagementController", "updateSchedule", "converted schedule: " + JSON.stringify(convertedScheduleList))
+
         var payload = {
             "routineKey": routineKey,
             "stationKey": stationKey,
-            "schedule": scheduleList
+            "schedule": convertedScheduleList
         }
 
         KSAppService.patchReq(
@@ -320,7 +334,11 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     function initScheduleList(data) {
-        $scope.scheduleList = data["data"]
+        $scope.scheduleList = []
+        for(var index in data["data"]) {
+            $scope.scheduleList.push($scope.secondToTime(data["data"][index], true))
+        }
+        KSAppService.debug("ShuttleManagementController", "initScheduleList", "converted schedule: " + JSON.stringify($scope.scheduleList))
     }
     
     function getStationList(routineKey) {
