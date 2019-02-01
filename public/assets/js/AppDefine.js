@@ -23,6 +23,8 @@ var API_GET_MENU = LIVE_SERVER_DOMAIN + "v3PrivateApi/menu"
 var API_GET_ACCOUNTS_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_PATCH_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_DELETE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
+//SHUTTLE
+var API_GET_ROUTINE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
 
 var FEEDBACK_SIGN_UP_SUCCESS = "계정 생성이 완료되었습니다."
 var FEEDBACK_SIGN_UP_FAILED = "계정 생성 중 문제가 발생되었습니다. 저런;"
@@ -31,3 +33,5 @@ var FEEDBACK_SIGN_IN_SUCCESS = "로 로그인 되었습니다."
 var FEEDBACK_SIGN_IN_FAILED = "로그인 하지 못 하였습니다."
 
 var HTTP_STATUS_OK = 200
+
+var MAXIMUM_OF_ROUTINE_SIZE = 3
