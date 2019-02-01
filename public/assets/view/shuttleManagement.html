@@ -68,7 +68,7 @@
                         <md-list-item ng-repeat="schedule in scheduleList track by $index"><!-- 노선 수 만큼 md-list 생성-->
 
                             <md-input-container>
-                                <p style="font-size: 0.5em">#{{ schedule }}</p>
+                                <p style="font-size: 0.5em">#{{ secondToTime(schedule) }}</p>
                                 <input ng-model="schedule">
                             </md-input-container>
 

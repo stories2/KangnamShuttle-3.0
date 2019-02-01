@@ -46,13 +46,24 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             $scope.scheduleList = []
         }
         $scope.scheduleList.push(
-            0
+            ZERO
         )
         KSAppService.showToast("New schedule!", TOAST_SHOW_LONG)
     }
 
+    $scope.deleteRoutine = function(routine, index) {
+        KSAppService.debug("ShuttleManagementController", "deleteRoutine", "selected routine: " + "#" + index + ": " + JSON.stringify(routine))
+        $scope.routineList.splice(index, 1)
+    }
+
+    $scope.deleteStation = function(station, index) {
+        KSAppService.debug("ShuttleManagementController", "deleteStation", "selected station: " + "#" + index + ": " + JSON.stringify(station))
+        $scope.stationList.splice(index, 1)
+    }
+
     $scope.deleteSchedule = function(schedule, index) {
         KSAppService.debug("ShuttleManagementController", "deleteSchedule", "selected schedule: " + "#" + index + ": " + schedule)
+        $scope.scheduleList.splice(index, 1)
     }
 
     $scope.submitRoutine = function (routine, index) {
@@ -73,6 +84,18 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.stationKey = station["stationKey"]
         KSAppService.debug("ShuttleManagementController", "expandSchedule", "selected station: " + "#" + index  + JSON.stringify(station))
         getScheduleList($scope.routineKey, station["stationKey"])
+    }
+
+    $scope.secondToTime = function (second) {
+        var sec_num = second
+        var hours   = Math.floor(sec_num / 3600);
+        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+        var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return hours+':'+minutes+':'+seconds;
     }
 
     function getScheduleList(routineKey, stationKey) {
