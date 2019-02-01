@@ -26,6 +26,64 @@ exports.routineList = function(request, response, callbackFunc) {
 
 exports.addRoutine = function(request, response, callbackFunc) {
     // /actions/101/quickReplies/2 ~ 4 <- routine selection for chat bot client
+    var admin = global.admin
+
+    var shuttleRutineRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_SCHEDULE)
+    shuttleRutineRef.once("value", function ( routineSnapshot ) {
+        var routineSnapshotData = routineSnapshot.val()
+        var routineKeyList = Object.keys(routineSnapshotData)
+
+        if(routineKeyList.length >= global.define.MAXIMUM_OF_ROUTINE_SIZE) {
+            global.log.warn("shuttleManager", "addRoutine", "routine already full")
+            callbackFunc(false)
+            return
+        }
+
+        var newRoutine = shuttleRutineRef.push()
+        global.log.debug("shuttleManager", "addRoutine", "new routine: " + JSON.stringify(newRoutine.key))
+        var routineName = request.body["name"]
+        var newRoutineData = {
+            name: routineName,
+            Order: [],
+            station: []
+        }
+
+        var newRoutineButton = {
+            action: "message",
+            key: newRoutine.key,
+            label: routineName,
+            messageText: routineName
+        }
+
+        global.log.debug("shuttleManager", "addRoutine", "new routine will add: " + JSON.stringify(newRoutineData))
+
+        newRoutine.set(newRoutineData, function (error) {
+            if(error) {
+                global.log.error("shuttleManager", "addRoutine", "error: " + JSON.stringify(error))
+                callbackFunc(false)
+            }
+            else {
+                global.log.info("shuttleManager", "addRoutine", "new routine generated")
+
+                var action101Ref = admin.database().ref(global.define.DB_PATH_ACTIONS_101_QUICK_REPLIES)
+                action101Ref.once("value", function (actionSnapshot) {
+                    var actionSnapshotData = actionSnapshot.val()
+                    actionSnapshotData.push(newRoutineButton)
+
+                    action101Ref.set(actionSnapshotData, function (error) {
+                        if(error) {
+                            global.log.error("shuttleManager", "addRoutine", "routine not linked to kakao button")
+                            callbackFunc(false)
+                        }
+                        else {
+                            global.log.info("shuttleManager", "addRoutine", "new routine linked to kakao button")
+                            callbackFunc(true)
+                        }
+                    })
+                })
+            }
+        })
+    })
 }
 
 exports.patchRoutine = function(request, response, callbackFunc) {

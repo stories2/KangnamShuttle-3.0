@@ -6,6 +6,8 @@ exports.LOGGING_STRING_FORMAT_ERROR = "%s E: [%s] {%s} (%s)"
 
 exports.MAXIMUM_OF_OUTPUTS_LENGTH = 3
 exports.MAXIMUM_OF_QUICK_REPLIES_LENGTH = 10
+exports.MAXIMUM_OF_ROUTINE_SIZE = 3
+exports.MAXIMUM_OF_STATION_SIZE = 5
 
 exports.HEADERS_CONTENT_TYPE = "Content-Type"
 exports.HEADERS_CONTENT_TYPE_APPLICATION_JSON = "application/json"
@@ -22,6 +24,7 @@ exports.ONE = 1
 exports.DB_PATH_ACTIONS_ACTION_INDEX = "/actions/%s"
 exports.DB_PATH_USERS_USER_KEY = "/users/%s"
 exports.DB_PATH_USERS_USER_KEY_UPDATE = "/users/%s/update"
+exports.DB_PATH_ACTIONS_101_QUICK_REPLIES = "/actions/101/quickReplies"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_DOWN = "/shuttle/schedule/directionDown"
 exports.DB_PATH_SHUTTLE_SCHEDULE_DIRECTION_UP = "/shuttle/schedule/directionUp"
 exports.DB_PATH_SHUTTLE_SCHEDULE = "/shuttle/schedule"
