@@ -210,7 +210,7 @@ exports.stationList = function (request, response, callbackFunc) {
     const util = require('util')
     var admin = global.admin
     var stationList = []
-    var routineKey = request.params["routineKey"]
+    var routineKey = request.query["routineKey"]
 
     var routineStationDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE, routineKey)
     global.log.debug("shuttleManager", "stationList", "routine db path: " + routineStationDBPath)
@@ -362,8 +362,8 @@ exports.getStationSchedule = function (request, response, callbackFunc) {
     const util = require('util')
     var admin = global.admin
     // var scheduleList = []
-    var routineKey = request.params["routineKey"]
-    var stationKey = request.params["stationKey"]
+    var routineKey = request.query["routineKey"]
+    var stationKey = request.query["stationKey"]
 
     var routineStationScheduleDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE_STATION, routineKey, stationKey)
     global.log.debug("shuttleManager", "getStationSchedule", "station db path: " + routineStationScheduleDBPath)
