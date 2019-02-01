@@ -235,7 +235,40 @@ exports.stationList = function (request, response, callbackFunc) {
 }
 
 exports.addStation = function (request, response, callbackFunc) {
+    const util = require('util')
+    const textGenerateManager = require('../Utils/textGenerateManager')
+    var admin = global.admin
 
+    var routineKey = request.body["routineKey"]
+    var stationName = request.body["name"]
+    var stationKey = textGenerateManager.makeid()
+    var routineStationDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE, routineKey)
+
+    var routineRef = admin.database().ref(routineStationDBPath)
+    routineRef.once("value", function (routineSnapshot) {
+        var routineSnapshotData = routineSnapshot.val()
+        if(routineSnapshotData["Order"] === undefined) {
+            routineSnapshotData["Order"] = []
+        }
+        if(routineSnapshotData["station"] === undefined) {
+            routineSnapshotData["station"] = []
+        }
+        routineSnapshotData["Order"].push(stationKey)
+        routineSnapshotData["station"].push(stationName)
+
+        global.log.debug("shuttleManager", "addStation", "station will add like this: " + JSON.stringify(routineSnapshotData))
+
+        routineRef.set(routineSnapshotData, function (error) {
+            if(error) {
+                global.log.error("shuttleManager", "addStation", "cannot add new station: " + JSON.stringify(error))
+                callbackFunc(false)
+            }
+            else {
+                global.log.info("shuttleManager", "addStation", "station added")
+                callbackFunc(true)
+            }
+        })
+    })
 }
 
 exports.patchStation = function (request, response, callbackFunc) {
