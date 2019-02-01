@@ -379,15 +379,36 @@ exports.getStationSchedule = function (request, response, callbackFunc) {
 }
 
 exports.createStationSchedule = function (request, response, callbackFunc) {
-
+    callbackFunc(false)
 }
 
 exports.patchStationSchedule = function (request, response, callbackFunc) {
+    const util = require('util')
+    var admin = global.admin
+    // var scheduleList = []
+    var routineKey = request.body["routineKey"]
+    var stationKey = request.body["stationKey"]
+    var schedule = request.body["schedule"]
+    var routineStationScheduleDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE_STATION, routineKey, stationKey)
+    global.log.debug("shuttleManager", "patchStationSchedule", "station db path: " + routineStationScheduleDBPath)
 
+    var scheduleRef = admin.database().ref(routineStationScheduleDBPath)
+    var scheduleSnapshotData = schedule
+    global.log.debug("shuttleManager", "patchStationSchedule", "schedule will update to: " + JSON.stringify(scheduleSnapshotData))
+    scheduleRef.set(scheduleSnapshotData, function (error) {
+        if(error) {
+            global.log.error("shuttleManager", "patchStationSchedule", "cannot update schedule: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.info("shuttleManager", "patchStationSchedule", "schedule updated")
+            callbackFunc(true)
+        }
+    })
 }
 
 exports.deleteStationSchedule = function (request, response, callbackFunc) {
-
+    callbackFunc(false)
 }
 
 exports.getShuttleRoutine = function (request, response, callbackFunc) {
