@@ -25,6 +25,7 @@ var API_PATCH_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_DELETE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 //SHUTTLE
 var API_GET_ROUTINE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
+var API_GET_ROUTINE_STATION_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/station"
 
 var FEEDBACK_SIGN_UP_SUCCESS = "계정 생성이 완료되었습니다."
 var FEEDBACK_SIGN_UP_FAILED = "계정 생성 중 문제가 발생되었습니다. 저런;"

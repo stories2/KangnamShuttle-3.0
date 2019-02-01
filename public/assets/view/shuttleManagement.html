@@ -9,24 +9,19 @@
                 <div>
                     <md-list ng-cloak >
 
-                        <md-subheader class="md-no-sticky">ROUTINE
+                        <md-subheader class="md-no-sticky">
+                            <h2>ROUTINE</h2>
                             <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                         </md-subheader>
                         <md-list-item ng-repeat="routine in routineList track by $index"><!-- 노선 수 만큼 md-list 생성-->
-                            <div layout="column">
-                                <div layout="row">
-                                    <md-input-container>
-                                        <p style="font-size: 0.5em">#{{ routine["routineKey"] }}</p>
-                                        <input ng-model="routine['routineName']">
-                                    </md-input-container>
 
-                                    <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
-                                    <md-button class="md-secondary" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
-                                </div>
-                                <div layout="row">
+                            <md-input-container>
+                                <p style="font-size: 0.5em">#{{ routine["routineKey"] }}</p>
+                                <input ng-model="routine['routineName']">
+                            </md-input-container>
 
-                                </div>
-                            </div>
+                            <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
                         <md-list-item >
@@ -36,6 +31,29 @@
                         <md-divider></md-divider>
                     </md-list>
 
+                    <md-list ng-cloak >
+
+                        <md-subheader class="md-no-sticky">
+                            <h2>STATION</h2>
+                            <!--<md-button class="md-secondary" ><div class="fa fa-2x fa-sync"></div></md-button>-->
+                        </md-subheader>
+                        <md-list-item ng-repeat="station in stationList track by $index"><!-- 노선 수 만큼 md-list 생성-->
+
+                            <md-input-container>
+                                <p style="font-size: 0.5em">#{{ station["stationKey"] }}</p>
+                                <input ng-model="station['stationName']">
+                            </md-input-container>
+
+                            <md-button class="md-secondary" ng-click="submitStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="expandSchedule(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                        </md-list-item>
+
+                        <md-list-item >
+                            <p>END OF STATION</p>
+                            <md-button class="md-secondary" ng-click="addStation()"><div class="fa fa-2x fa-plus"></div></md-button>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                    </md-list>
                 </div>
             </div>
         </div>
