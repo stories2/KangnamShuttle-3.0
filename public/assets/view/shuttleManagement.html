@@ -11,6 +11,7 @@
 
                         <md-subheader class="md-no-sticky">
                             <h2>ROUTINE</h2>
+                            <h4># {{ routineKey }}</h4>
                             <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                         </md-subheader>
                         <md-list-item ng-repeat="routine in routineList track by $index"><!-- 노선 수 만큼 md-list 생성-->
@@ -35,6 +36,7 @@
 
                         <md-subheader class="md-no-sticky">
                             <h2>STATION</h2>
+                            <h4>#{{ stationKey }}</h4>
                             <!--<md-button class="md-secondary" ><div class="fa fa-2x fa-sync"></div></md-button>-->
                         </md-subheader>
                         <md-list-item ng-repeat="station in stationList track by $index"><!-- 노선 수 만큼 md-list 생성-->
