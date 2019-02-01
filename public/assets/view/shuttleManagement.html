@@ -13,13 +13,20 @@
                             <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                         </md-subheader>
                         <md-list-item ng-repeat="routine in routineList track by $index"><!-- 노선 수 만큼 md-list 생성-->
-                            <md-input-container>
-                                <input ng-model="routine['routineName']">
-                            </md-input-container>
-                            #{{ routine["routineKey"] }}</p>
+                            <div layout="column">
+                                <div layout="row">
+                                    <md-input-container>
+                                        <p style="font-size: 0.5em">#{{ routine["routineKey"] }}</p>
+                                        <input ng-model="routine['routineName']">
+                                    </md-input-container>
 
-                            <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)"><div class="fa fa-2x fa-check"></div></md-button>
-                            <md-button class="md-secondary" ng-click="expandStation(routine, $index)"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                                    <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                                    <md-button class="md-secondary" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                                </div>
+                                <div layout="row">
+
+                                </div>
+                            </div>
                         </md-list-item>
 
                         <md-list-item >
