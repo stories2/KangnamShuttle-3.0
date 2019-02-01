@@ -68,8 +68,8 @@
                         <md-list-item ng-repeat="schedule in scheduleList track by $index"><!-- 노선 수 만큼 md-list 생성-->
 
                             <md-input-container>
-                                <p style="font-size: 0.5em">#{{ secondToTime(schedule) }}</p>
-                                <input ng-model="scheduleList[$index]">
+                                <p style="font-size: 0.5em">#{{ secondToTime(scheduleList[$index]) }}</p>
+                                <input cleave="options.time" ng-model="scheduleList[$index]">
                             </md-input-container>
 
                             <md-button class="md-secondary" ng-click="deleteSchedule(schedule, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>

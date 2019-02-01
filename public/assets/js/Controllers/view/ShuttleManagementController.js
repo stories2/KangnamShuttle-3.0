@@ -7,6 +7,13 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.routineKey = ""
     $scope.stationKey = ""
 
+    $scope.options = {
+        time: {
+            time: true,
+            timePattern: ['h', 'm', 's']
+        }
+    }
+
     $scope.onLoad = function() {
         getRoutineList()
     }
@@ -140,6 +147,14 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
         return hours+':'+minutes+':'+seconds;
+    }
+
+    $scope.timeToSecond = function (time) {
+        var a = time.split(':'); // split it at the colons
+
+// minutes are worth 60 seconds. Hours are worth 60 minutes.
+        var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+        return seconds
     }
 
     function updateSchedule(routineKey, stationKey, scheduleList) {
