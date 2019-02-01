@@ -278,11 +278,83 @@ exports.addStation = function (request, response, callbackFunc) {
 }
 
 exports.patchStation = function (request, response, callbackFunc) {
-    
+    const util = require('util')
+    var admin = global.admin
+
+    var routineKey = request.body["routineKey"]
+    var stationKey = request.body["stationKey"]
+    var stationName = request.body["name"]
+    var isStationAvailable = false
+
+    var routineStationDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE, routineKey)
+
+    var routineRef = admin.database().ref(routineStationDBPath)
+    routineRef.once("value", function (routineSnapshot) {
+        var routineSnapshotData = routineSnapshot.val()
+        for(var index in routineSnapshotData["Order"]) {
+            if(routineSnapshotData["Order"][index] === stationKey) {
+                routineSnapshotData["station"][index] = stationName
+
+                isStationAvailable = true
+                global.log.debug("shuttleManager", "patchStation", "data will update to: " + JSON.stringify(routineSnapshotData))
+                routineRef.set(routineSnapshotData, function (error) {
+                    if(error) {
+                        global.log.warn("shuttleManager", "patchStation", "cannot patch that station key: " + stationKey + " from routine: " + routineKey)
+                        callbackFunc(false)
+                    }
+                    else {
+                        global.log.info("shuttleManager", "patchStation", "station updated")
+                        callbackFunc(true)
+                    }
+                })
+                break;
+            }
+        }
+        if(isStationAvailable != true) {
+            global.log.warn("shuttleManager", "patchStation", "cannot find that station key: " + stationKey + " from routine: " + routineKey)
+            callbackFunc(false)
+        }
+    })
 }
 
 exports.deleteStation = function (request, response, callbackFunc) {
-    
+    const util = require('util')
+    var admin = global.admin
+
+    var routineKey = request.body["routineKey"]
+    var stationKey = request.body["stationKey"]
+    var isStationAvailable = false
+
+    var routineStationDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE, routineKey)
+
+    var routineRef = admin.database().ref(routineStationDBPath)
+    routineRef.once("value", function (routineSnapshot) {
+        var routineSnapshotData = routineSnapshot.val()
+        for(var index in routineSnapshotData["Order"]) {
+            if(routineSnapshotData["Order"][index] === stationKey) {
+                routineSnapshotData["Order"].splice(index, 1)
+                routineSnapshotData["station"].splice(index, 1)
+
+                isStationAvailable = true
+                global.log.debug("shuttleManager", "deleteStation", "data will update to: " + JSON.stringify(routineSnapshotData))
+                routineRef.set(routineSnapshotData, function (error) {
+                    if(error) {
+                        global.log.warn("shuttleManager", "deleteStation", "cannot patch that station key: " + stationKey + " from routine: " + routineKey)
+                        callbackFunc(false)
+                    }
+                    else {
+                        global.log.info("shuttleManager", "deleteStation", "station deleted")
+                        callbackFunc(true)
+                    }
+                })
+                break;
+            }
+        }
+        if(isStationAvailable != true) {
+            global.log.warn("shuttleManager", "deleteStation", "cannot find that station key: " + stationKey + " from routine: " + routineKey)
+            callbackFunc(false)
+        }
+    })
 }
 
 exports.getStationSchedule = function (request, response, callbackFunc) {
