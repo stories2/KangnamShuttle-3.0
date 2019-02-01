@@ -126,6 +126,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         }
         else {
             KSAppService.warn("ShuttleManagementController", "expandSchedule", "routine key and station key must not null")
+            KSAppService.showToast("You must select routine and station first", TOAST_SHOW_LONG)
         }
     }
 
@@ -153,9 +154,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             payload,
             function (data) {
                 KSAppService.debug("ShuttleManagementController", "updateSchedule", "update schedule result received: " + JSON.stringify(data))
+                getScheduleList(routineKey, stationKey)
+                KSAppService.showToast("Update schedule ok", TOAST_SHOW_LONG)
             },
             function (error) {
                 KSAppService.error("ShuttleManagementController", "updateSchedule", "update schedule failed: " + JSON.stringify(error))
+                KSAppService.showToast("Update schedule failed", TOAST_SHOW_LONG)
             })
     }
 
@@ -170,9 +174,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             payload,
             function (data) {
                 KSAppService.debug("ShuttleManagementController", "delStation", "delete station result received: " + JSON.stringify(data))
+                getStationList(routineKey)
+                KSAppService.showToast("Delete station ok", TOAST_SHOW_LONG)
             },
             function (error) {
                 KSAppService.error("ShuttleManagementController", "delStation", "delete station failed: " + JSON.stringify(error))
+                KSAppService.showToast("Delete station failed", TOAST_SHOW_LONG)
             }
         )
     }
@@ -190,9 +197,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
                 payload,
                 function (data) {
                     KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-update", "update result received: " + JSON.stringify(data))
+                    getStationList($scope.routineKey)
+                    KSAppService.showToast("Update station ok", TOAST_SHOW_LONG)
                 },
                 function (error) {
                     KSAppService.error("ShuttleManagementController", "createOrUpdateStation-update", "update failed: " + JSON.stringify(error))
+                    KSAppService.showToast("Update station Failed", TOAST_SHOW_LONG)
                 })
         }
         else {//create
@@ -201,9 +211,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
                 payload,
                 function (data) {
                     KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create result received: " + JSON.stringify(data))
+                    getStationList($scope.routineKey)
+                    KSAppService.showToast("Create station ok", TOAST_SHOW_LONG)
                 },
                 function (error) {
                     KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create failed: " + JSON.stringify(error))
+                    KSAppService.showToast("Create station Failed", TOAST_SHOW_LONG)
                 })
         }
     }
@@ -220,9 +233,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
                 payload,
                 function (data) {
                     KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-update", "update result received: " + JSON.stringify(data))
+                    getRoutineList()
+                    KSAppService.showToast("Update routine ok", TOAST_SHOW_LONG)
                 },
                 function (error) {
                     KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-update", "cannot update routine: " + JSON.stringify(error))
+                    KSAppService.showToast("Update routine failed", TOAST_SHOW_LONG)
                 })
         }
         else { //create
@@ -231,9 +247,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
                 payload,
                 function (data) {
                     KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-create", "create result received: " + JSON.stringify(data))
+                    getRoutineList()
+                    KSAppService.showToast("Create routine ok", TOAST_SHOW_LONG)
                 },
                 function (error) {
                     KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "cannot create routine: " + JSON.stringify(error))
+                    KSAppService.showToast("Create routine failed", TOAST_SHOW_LONG)
                 })
         }
     }
@@ -248,9 +267,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             payload,
             function (data) {
                 KSAppService.debug("ShuttleManagementController", "delRoutine", "delete result received: " + JSON.stringify(data))
+                getRoutineList()
+                KSAppService.showToast("Delete routine ok", TOAST_SHOW_LONG)
             },
             function (error) {
                 KSAppService.error("ShuttleManagementController", "delRoutine", "cannot delete routine: " + JSON.stringify(error))
+                KSAppService.showToast("Delete routine failed", TOAST_SHOW_LONG)
             })
     }
 
