@@ -148,6 +148,61 @@ exports.patchRoutine = function(request, response, callbackFunc) {
 
 exports.deleteRoutine = function(request, response, callbackFunc) {
     // /actions/101/quickReplies/2 ~ 4 <- routine selection for chat bot client
+    const util = require('util')
+    var admin = global.admin
+
+    var routineKey = request.body["routineKey"]
+
+    var routineDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE, routineKey)
+    global.log.debug("shuttleManager", "deleteRoutine", "routine path: " + routineDBPath)
+
+    var shuttleRutineRef = admin.database().ref(routineDBPath)
+    shuttleRutineRef.once("value", function ( routineSnapshot ) {
+        var routineSnapshotData = routineSnapshot.val()
+        if(routineSnapshotData === undefined) {
+            global.log.warn("shuttleManager", "deleteRoutine", "undefined routine accepted: " + routineKey)
+            callbackFunc(false)
+        }
+
+        routineSnapshotData = null
+
+        global.log.debug("shuttleManager", "deleteRoutine", "routine will delete: " + routineKey)
+
+        shuttleRutineRef.set(routineSnapshotData, function (error) {
+            if(error) {
+                global.log.error("shuttleManager", "deleteRoutine", "cannot update routine: " + JSON.stringify(error))
+                callbackFunc(false)
+            }
+            else {
+                var action101Ref = admin.database().ref(global.define.DB_PATH_ACTIONS_101_QUICK_REPLIES)
+                action101Ref.once("value", function (actionSnapshot) {
+                    var actionSnapshotData = actionSnapshot.val()
+                    for(var index in actionSnapshotData) {
+                        var quickReply = actionSnapshotData[index]
+                        if(quickReply["key"] === routineKey) {
+
+                            actionSnapshotData[index] = quickReply
+
+                            actionSnapshotData.splice(index, 1)
+                            global.log.debug("shuttleManager", "deleteRoutine", "kako quick reply will update to: " + JSON.stringify(actionSnapshotData))
+
+                            action101Ref.set(actionSnapshotData, function (error) {
+                                if(error) {
+                                    global.log.error("shuttleManager", "deleteRoutine", "cannot link updated routine to kakao button: " + JSON.stringify(error))
+                                    callbackFunc(false)
+                                }
+                                else {
+                                    global.log.info("shuttleManager", "deleteRoutine", "linked updated routine to kakao button: " + JSON.stringify(error))
+                                    callbackFunc(true)
+                                }
+                            })
+                            break
+                        }
+                    }
+                })
+            }
+        })
+    })
 }
 
 exports.stationList = function (request, response, callbackFunc) {
