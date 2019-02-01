@@ -159,7 +159,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.timeToSecond = function (time) {
-        var a = time.match(/..?/g) // split it at the colons
+        var a = time.split(":")//.match(/..?/g) // split it at the colons
 
 // minutes are worth 60 seconds. Hours are worth 60 minutes.
         var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
@@ -336,7 +336,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     function initScheduleList(data) {
         $scope.scheduleList = []
         for(var index in data["data"]) {
-            $scope.scheduleList.push($scope.secondToTime(data["data"][index], true))
+            $scope.scheduleList.push($scope.secondToTime(data["data"][index]))
         }
         KSAppService.debug("ShuttleManagementController", "initScheduleList", "converted schedule: " + JSON.stringify($scope.scheduleList))
     }

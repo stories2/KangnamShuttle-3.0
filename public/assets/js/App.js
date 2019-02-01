@@ -6,7 +6,7 @@ var app = angular.module('KSApp', ['ngCookies',
     'ngAria',
     'ngMaterial',
     'ngFileUpload',
-    'cleave.js']);
+    ]);//'cleave.js'
 
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($q, $rootScope) {
