@@ -104,6 +104,9 @@ app.service("KSAppService", function ($log, $http, $window, $mdToast) {
             contentType: 'application/json',
             data: data,
             crossDomain: true,
+            headers: {
+                'Content-type': 'application/json;charset=utf-8'
+            },
             // headers: {
             //     "Authorization": token
             // },

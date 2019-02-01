@@ -1,4 +1,4 @@
-app.controller("ShuttleManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, KSAppService) {
+app.controller("ShuttleManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, $mdDialog, KSAppService) {
     KSAppService.info("ShuttleManagementController", "ShuttleManagementController", "init");
 
     $scope.routineList = []
@@ -53,7 +53,21 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
     $scope.deleteRoutine = function(routine, index) {
         KSAppService.debug("ShuttleManagementController", "deleteRoutine", "selected routine: " + "#" + index + ": " + JSON.stringify(routine))
-        $scope.routineList.splice(index, 1)
+
+        var confirm = $mdDialog.confirm()
+            .title('Routine 삭제')
+            .textContent("Routine" + routine["routineName"] + " #" + routine["routineKey"] + '를 삭제합니다')
+            // .targetEvent(ev)
+            .ok('확인')
+            .cancel('취소');
+
+        $mdDialog.show(confirm).then(function() {
+            KSAppService.info("ShuttleManagementController", "delete", "delete routine confirmed")
+            delRoutine(routine)
+            $scope.routineList.splice(index, 1)
+        }, function() {
+            KSAppService.info("ShuttleManagementController", "delete", "delete routine canceled")
+        });
     }
 
     $scope.deleteStation = function(station, index) {
@@ -127,6 +141,22 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
                     KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "cannot create routine: " + JSON.stringify(error))
                 })
         }
+    }
+
+    function delRoutine(routine) {
+        var payload = {
+            "routineKey": routine["routineKey"]
+        }
+
+        KSAppService.deleteReq(
+            API_DELETE_ROUTINE,
+            payload,
+            function (data) {
+                KSAppService.debug("ShuttleManagementController", "delRoutine", "delete result received: " + JSON.stringify(data))
+            },
+            function (error) {
+                KSAppService.error("ShuttleManagementController", "delRoutine", "cannot delete routine: " + JSON.stringify(error))
+            })
     }
 
     function getScheduleList(routineKey, stationKey) {
