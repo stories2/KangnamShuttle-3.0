@@ -120,6 +120,15 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         getScheduleList($scope.routineKey, station["stationKey"])
     }
 
+    $scope.submitSchedule = function(scheduleList) {
+        if($scope.routineKey != null && $scope.stationKey != null) {
+            updateSchedule($scope.routineKey, $scope.stationKey, scheduleList)
+        }
+        else {
+            KSAppService.warn("ShuttleManagementController", "expandSchedule", "routine key and station key must not null")
+        }
+    }
+
     $scope.secondToTime = function (second) {
         var sec_num = second
         var hours   = Math.floor(sec_num / 3600);
@@ -130,6 +139,24 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
         return hours+':'+minutes+':'+seconds;
+    }
+
+    function updateSchedule(routineKey, stationKey, scheduleList) {
+        var payload = {
+            "routineKey": routineKey,
+            "stationKey": stationKey,
+            "schedule": scheduleList
+        }
+
+        KSAppService.patchReq(
+            API_PATCH_ROUTINE_STATION_SCHEDULE,
+            payload,
+            function (data) {
+                KSAppService.debug("ShuttleManagementController", "updateSchedule", "update schedule result received: " + JSON.stringify(data))
+            },
+            function (error) {
+                KSAppService.error("ShuttleManagementController", "updateSchedule", "update schedule failed: " + JSON.stringify(error))
+            })
     }
 
     function delStation(routineKey, stationKey) {
