@@ -44,13 +44,35 @@
                                 <input ng-model="station['stationName']">
                             </md-input-container>
 
-                            <md-button class="md-secondary" ng-click="submitStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
-                            <md-button class="md-secondary" ng-click="expandSchedule(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                            <md-button class="md-secondary" ng-click="submitStation(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="expandSchedule(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
                         <md-list-item >
                             <p>END OF STATION</p>
                             <md-button class="md-secondary" ng-click="addStation()"><div class="fa fa-2x fa-plus"></div></md-button>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                    </md-list>
+
+                    <md-list ng-cloak >
+
+                        <md-subheader class="md-no-sticky">
+                            <h2>SCHEDULE</h2>
+                            <!--<md-button class="md-secondary" ><div class="fa fa-2x fa-sync"></div></md-button>-->
+                        </md-subheader>
+                        <md-list-item ng-repeat="schedule in scheduleList track by $index"><!-- 노선 수 만큼 md-list 생성-->
+
+                            <md-input-container>
+                                <p style="font-size: 0.5em">#{{ schedule }}</p>
+                                <input ng-model="schedule">
+                            </md-input-container>
+                        </md-list-item>
+
+                        <md-list-item >
+                            <p>END OF STATION</p>
+                            <md-button class="md-secondary" ng-click="submitSchedule(routine, $index)"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="addSchedule()"><div class="fa fa-2x fa-plus"></div></md-button>
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>

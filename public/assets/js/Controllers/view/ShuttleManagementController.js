@@ -3,6 +3,9 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
     $scope.routineList = []
     $scope.stationList = []
+    $scope.scheduleList = []
+    $scope.routineKey = ""
+    $scope.stationKey = ""
 
     $scope.onLoad = function() {
         getRoutineList()
@@ -25,8 +28,48 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.expandStation = function (routine, index) {
+        $scope.routineKey = routine["routineKey"]
         KSAppService.debug("ShuttleManagementController", "expandStation", "selected routine: " + "#" + index  + JSON.stringify(routine))
-        getStationList(routine["routineKey"])
+        getStationList($scope.routineKey)
+    }
+
+    $scope.submitStation = function(station, index) {
+        KSAppService.debug("ShuttleManagementController", "submitStation", "selected routine: " + "#" + index  + JSON.stringify(station))
+    }
+
+    $scope.expandSchedule = function (station, index) {
+        $scope.stationKey = station["stationKey"]
+        KSAppService.debug("ShuttleManagementController", "expandSchedule", "selected routine: " + "#" + index  + JSON.stringify(station))
+        getScheduleList($scope.routineKey, station["stationKey"])
+    }
+
+    function getScheduleList(routineKey, stationKey) {
+        var payload = {
+            "routineKey": routineKey,
+            "stationKey": stationKey
+        }
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            KSAppService.getReq(
+                API_GET_ROUTINE_STATION_SCHEDULE_LIST,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "getScheduleList", "data received: " + JSON.stringify(data))
+                    initScheduleList(data)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "getScheduleList", "cannot get routine station's schedule list: " + JSON.stringify(error))
+                    KSAppService.showToast("Failed to get shuttle routine station' schedule list", TOAST_SHOW_LONG)
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "getScheduleList", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
+    }
+
+    function initScheduleList(data) {
+        $scope.scheduleList = data["data"]
     }
     
     function getStationList(routineKey) {
