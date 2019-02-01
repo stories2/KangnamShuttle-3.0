@@ -69,7 +69,7 @@
 
                             <md-input-container>
                                 <p style="font-size: 0.5em">#{{ secondToTime(schedule) }}</p>
-                                <input ng-model="schedule">
+                                <input ng-model="scheduleList[$index]">
                             </md-input-container>
 
                             <md-button class="md-secondary" ng-click="deleteSchedule(schedule, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>
