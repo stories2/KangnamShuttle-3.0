@@ -63,7 +63,9 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
         $mdDialog.show(confirm).then(function() {
             KSAppService.info("ShuttleManagementController", "delete", "delete routine confirmed")
-            delRoutine(routine)
+            if(routine["routineKey"] != null) {
+                delRoutine(routine)
+            }
             $scope.routineList.splice(index, 1)
         }, function() {
             KSAppService.info("ShuttleManagementController", "delete", "delete routine canceled")
@@ -93,6 +95,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
     $scope.submitStation = function(station, index) {
         KSAppService.debug("ShuttleManagementController", "submitStation", "selected station: " + "#" + index  + JSON.stringify(station))
+        createOrUpdateStation(station)
     }
 
     $scope.expandSchedule = function (station, index) {
@@ -111,6 +114,29 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
         return hours+':'+minutes+':'+seconds;
+    }
+
+    function createOrUpdateStation(station) {
+        var payload = {
+            "routineKey": $scope.routineKey,
+            "name": station["stationName"]
+        }
+        if(station.hasOwnProperty("stationKey")) {//update
+            payload["stationKey"] = station["stationKey"]
+
+            KSAppService.patchReq(
+                API_PATCH_ROUTINE_STATION,
+                payload,
+                
+            )
+        }
+        else {//create
+            KSAppService.postReq(
+                API_POST_ROUTINE_STATION,
+                payload,
+
+            )
+        }
     }
 
     function createOrUpdateRoutine(routine) {
