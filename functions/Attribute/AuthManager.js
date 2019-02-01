@@ -182,7 +182,7 @@ exports.getUrlInfoFromDB = function (url, method, callbackFunc) {
         for(var index in apiSnapshotData) {
             var api = apiSnapshotData[index]
             // global.log.debug("AuthManager", "getUrlInfoFromDB", "api: " + JSON.stringify(api) + " index: " + index)
-            if(api["endpoint"] == url && api["method"] == method) {
+            if(api["endpoint"].includes(url) && api["method"] == method) {
                 callbackFunc(api)
                 return
             }
