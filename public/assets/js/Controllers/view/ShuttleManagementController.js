@@ -74,7 +74,23 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
     $scope.deleteStation = function(station, index) {
         KSAppService.debug("ShuttleManagementController", "deleteStation", "selected station: " + "#" + index + ": " + JSON.stringify(station))
-        $scope.stationList.splice(index, 1)
+
+        var confirm = $mdDialog.confirm()
+            .title('Station 삭제')
+            .textContent("Station" + station["stationName"] + " #" + station["stationKey"] + '를 삭제합니다')
+            // .targetEvent(ev)
+            .ok('확인')
+            .cancel('취소');
+
+        $mdDialog.show(confirm).then(function() {
+            KSAppService.info("ShuttleManagementController", "delete", "delete station confirmed")
+            if($scope.routineKey != null && station["stationKey"]) {
+                delStation($scope.routineKey, station["stationKey"])
+            }
+            $scope.stationList.splice(index, 1)
+        }, function() {
+            KSAppService.info("ShuttleManagementController", "delete", "delete station canceled")
+        });
     }
 
     $scope.deleteSchedule = function(schedule, index) {
@@ -116,6 +132,24 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         return hours+':'+minutes+':'+seconds;
     }
 
+    function delStation(routineKey, stationKey) {
+        var payload = {
+            "routineKey": routineKey,
+            "stationKey": stationKey
+        }
+
+        KSAppService.deleteReq(
+            API_DELETE_ROUTINE_STATION,
+            payload,
+            function (data) {
+                KSAppService.debug("ShuttleManagementController", "delStation", "delete station result received: " + JSON.stringify(data))
+            },
+            function (error) {
+                KSAppService.error("ShuttleManagementController", "delStation", "delete station failed: " + JSON.stringify(error))
+            }
+        )
+    }
+
     function createOrUpdateStation(station) {
         var payload = {
             "routineKey": $scope.routineKey,
@@ -127,15 +161,23 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             KSAppService.patchReq(
                 API_PATCH_ROUTINE_STATION,
                 payload,
-                
-            )
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-update", "update result received: " + JSON.stringify(data))
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "createOrUpdateStation-update", "update failed: " + JSON.stringify(error))
+                })
         }
         else {//create
             KSAppService.postReq(
                 API_POST_ROUTINE_STATION,
                 payload,
-
-            )
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create result received: " + JSON.stringify(data))
+                },
+                function (error) {
+                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create failed: " + JSON.stringify(error))
+                })
         }
     }
 
