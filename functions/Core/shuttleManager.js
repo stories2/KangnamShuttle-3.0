@@ -425,5 +425,19 @@ exports.getShuttleRoutine = function (request, response, callbackFunc) {
 }
 
 exports.patchShuttleRoutine = function (request, response, callbackFunc) {
-    
+    var admin = global.admin
+    var routineRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_ROUTE)
+
+    var routinePath = request.body["routine"]
+    global.log.debug("shuttleManager", "patchShuttleRoutine", "path will update to: " + routinePath)
+    routineRef.set(routinePath, function (error) {
+        if(error) {
+            global.log.error("shuttleManager", "patchShuttleRoutine", "cannot update path: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.info("shuttleManager", "patchShuttleRoutine", "path updated")
+            callbackFunc(true)
+        }
+    })
 }
