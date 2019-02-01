@@ -159,7 +159,7 @@ exports.deleteRoutine = function(request, response, callbackFunc) {
     var shuttleRutineRef = admin.database().ref(routineDBPath)
     shuttleRutineRef.once("value", function ( routineSnapshot ) {
         var routineSnapshotData = routineSnapshot.val()
-        if(routineSnapshotData === undefined) {
+        if(routineSnapshotData === undefined || routineKey === undefined) {
             global.log.warn("shuttleManager", "deleteRoutine", "undefined routine accepted: " + routineKey)
             callbackFunc(false)
         }
