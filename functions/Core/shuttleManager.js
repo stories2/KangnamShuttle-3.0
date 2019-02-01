@@ -253,6 +253,12 @@ exports.addStation = function (request, response, callbackFunc) {
         if(routineSnapshotData["station"] === undefined) {
             routineSnapshotData["station"] = []
         }
+        if(routineSnapshotData["Order"].length >= global.define.MAXIMUM_OF_STATION_SIZE) {
+            global.log.warn("shuttleManager", "addStation", "station already full")
+            callbackFunc(false)
+            return
+        }
+
         routineSnapshotData["Order"].push(stationKey)
         routineSnapshotData["station"].push(stationName)
 
