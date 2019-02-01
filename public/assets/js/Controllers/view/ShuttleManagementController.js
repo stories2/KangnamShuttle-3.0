@@ -68,6 +68,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 
     $scope.submitRoutine = function (routine, index) {
         KSAppService.debug("ShuttleManagementController", "submitRoutine", "selected routine: " + "#" + index + JSON.stringify(routine))
+        createOrUpdateRoutine(routine)
     }
 
     $scope.expandStation = function (routine, index) {
@@ -96,6 +97,36 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
         return hours+':'+minutes+':'+seconds;
+    }
+
+    function createOrUpdateRoutine(routine) {
+        var payload = {
+            "name": routine["routineName"]
+        }
+        if(routine.hasOwnProperty("routineKey")) {//update
+            payload["routineKey"] = routine["routineKey"]
+
+            KSAppService.patchReq(
+                API_PATCH_ROUTINE,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-update", "update result received: " + JSON.stringify(data))
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-update", "cannot update routine: " + JSON.stringify(error))
+                })
+        }
+        else { //create
+            KSAppService.postReq(
+                API_POST_ROUTINE,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-create", "create result received: " + JSON.stringify(data))
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "cannot create routine: " + JSON.stringify(error))
+                })
+        }
     }
 
     function getScheduleList(routineKey, stationKey) {

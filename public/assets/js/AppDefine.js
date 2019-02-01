@@ -25,6 +25,8 @@ var API_PATCH_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_DELETE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 //SHUTTLE
 var API_GET_ROUTINE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
+var API_POST_ROUTINE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
+var API_PATCH_ROUTINE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
 var API_GET_ROUTINE_STATION_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/station"
 var API_GET_ROUTINE_STATION_SCHEDULE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/station/schedule"
 
