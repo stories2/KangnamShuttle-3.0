@@ -12,6 +12,9 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.addRoutine = function() {
+        if($scope.routineList === undefined || $scope.routineList == null) {
+            $scope.routineList = []
+        }
         if($scope.routineList.length >= MAXIMUM_OF_ROUTINE_SIZE) {
             KSAppService.showToast("Routine limit = " + MAXIMUM_OF_ROUTINE_SIZE, TOAST_SHOW_LONG)
         }
@@ -24,6 +27,9 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.addStation = function() {
+        if($scope.stationList === undefined || $scope.stationList == null) {
+            $scope.stationList = []
+        }
         if($scope.stationList.length >= MAXIMUM_OF_STATION_SIZE) {
             KSAppService.showToast("Station limit = " + MAXIMUM_OF_STATION_SIZE, TOAST_SHOW_LONG)
         }
@@ -33,6 +39,20 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             })
             KSAppService.showToast("New station!", TOAST_SHOW_LONG)
         }
+    }
+
+    $scope.addSchedule = function() {
+        if($scope.scheduleList === undefined || $scope.scheduleList == null) {
+            $scope.scheduleList = []
+        }
+        $scope.scheduleList.push(
+            0
+        )
+        KSAppService.showToast("New schedule!", TOAST_SHOW_LONG)
+    }
+
+    $scope.deleteSchedule = function(schedule, index) {
+        KSAppService.debug("ShuttleManagementController", "deleteSchedule", "selected schedule: " + "#" + index + ": " + schedule)
     }
 
     $scope.submitRoutine = function (routine, index) {
@@ -46,12 +66,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.submitStation = function(station, index) {
-        KSAppService.debug("ShuttleManagementController", "submitStation", "selected routine: " + "#" + index  + JSON.stringify(station))
+        KSAppService.debug("ShuttleManagementController", "submitStation", "selected station: " + "#" + index  + JSON.stringify(station))
     }
 
     $scope.expandSchedule = function (station, index) {
         $scope.stationKey = station["stationKey"]
-        KSAppService.debug("ShuttleManagementController", "expandSchedule", "selected routine: " + "#" + index  + JSON.stringify(station))
+        KSAppService.debug("ShuttleManagementController", "expandSchedule", "selected station: " + "#" + index  + JSON.stringify(station))
         getScheduleList($scope.routineKey, station["stationKey"])
     }
 
