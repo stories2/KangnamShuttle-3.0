@@ -80,6 +80,6 @@ exports.response = function(response, type, code, msgStr) {
 }
 
 exports.binary = function (response, binary) {
-    response.setHeader(global.define.HEADERS_CONTENT_TYPE, 'image/png')
+    response.setHeader(global.define.HEADERS_CONTENT_TYPE, 'image/jpeg')
     response.end(binary, 'binary')
 }
