@@ -72,7 +72,7 @@ exports.getShuttleSchedulePic = function (request, response) {
     var responseManager = require('../../Utils/responseManager')
     var shuttleManager = require('../../Core/shuttleManager')
 
-    shuttleManager.getShuttleSchedulePic(request, response, function (imageBase64) {
-        responseManager.ok(response, imageBase64)
+    shuttleManager.getShuttleSchedulePic(request, response, function (imageBinary) {
+        responseManager.binary(response, imageBinary)
     })
 }

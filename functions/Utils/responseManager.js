@@ -78,3 +78,8 @@ exports.response = function(response, type, code, msgStr) {
     response.setHeader(global.define.HEADERS_CONTENT_TYPE, type)
     response.status(code).send(msgStr)
 }
+
+exports.binary = function (response, binary) {
+    response.setHeader(global.define.HEADERS_CONTENT_TYPE, 'image/png')
+    response.end(binary, 'binary')
+}

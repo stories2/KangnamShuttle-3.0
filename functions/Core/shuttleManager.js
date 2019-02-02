@@ -482,10 +482,11 @@ exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
             global.log.info("shuttleManager", "getShuttleSchedulePic", "file saved locally: " + tempFilePath)
 
             var image = fs.readFileSync(tempFilePath)
-            var imageBase64 = new Buffer(image).toString('base64')
-            global.log.debug("shuttleManager", "getShuttleSchedulePic", "file read as base64 len: " + imageBase64.length)
-
-            callbackFunc(imageBase64)
+            callbackFunc(image)
+            // var imageBase64 = new Buffer(image).toString('base64')
+            // global.log.debug("shuttleManager", "getShuttleSchedulePic", "file read as base64 len: " + imageBase64.length)
+            //
+            // callbackFunc(imageBase64)
         })
             .catch(function (error) {
                 if(error) {
