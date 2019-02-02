@@ -37,8 +37,10 @@
                 <div class="box alt" layout="row">
                     <form flex name="uploadPicForm">
                         <md-input-container flex="60">
-                            <label>전체 시간표 이미지</label>
-                            <input type="file" ng-model="shuttleScheduleImage" accept="image/png" required>
+                            <!--<label>전체 시간표 이미지</label>-->
+                            <!--<input type="file" ng-model="shuttleScheduleImage" accept="image/png" required>-->
+                            <div class="button" ngf-select ng-model="shuttleScheduleImage" name="file" ngf-pattern="'image/png'"
+                                 ngf-accept="'image/png'" ngf-max-size="5MB">전체 시간표 이미지</div>
                         </md-input-container>
                         <md-input-container flex>
                             <!--<label>업로드</label>-->
