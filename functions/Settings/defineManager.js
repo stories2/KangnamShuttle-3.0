@@ -4,6 +4,8 @@ exports.LOGGING_STRING_FORMAT_DEBUG = "%s D: [%s] {%s} (%s)"
 exports.LOGGING_STRING_FORMAT_WARN = "%s W: [%s] {%s} (%s)"
 exports.LOGGING_STRING_FORMAT_ERROR = "%s E: [%s] {%s} (%s)"
 
+exports.LOGGING_TYPE_SHUTTLE_IMAGE = "ShuttlePicture"
+
 exports.MAXIMUM_OF_OUTPUTS_LENGTH = 3
 exports.MAXIMUM_OF_QUICK_REPLIES_LENGTH = 10
 exports.MAXIMUM_OF_ROUTINE_SIZE = 3
@@ -40,6 +42,7 @@ exports.DB_PATH_ACCOUNT = "/accounts"
 exports.DB_PATH_ROLE = "/role"
 exports.DB_PATH_API = "/api"
 exports.DB_PATH_MENU = "/menu"
+exports.DB_PATH_SYSTEM_LOG = "/system/log"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",
@@ -77,3 +80,5 @@ exports.PROMISE_FILE_UPLOAD_REJECT_SAVE_FILE_ERROR = 'save file error'
 exports.PROMISE_FILE_UPLOAD_REJECT_DOWNLOAD_URL_ERROR = 'url crashed'
 
 exports.FORMAT_DATE_TIME_YYYY_MM_DD = "yyyy-mm-dd"
+
+exports.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR = "BusSchedule/"

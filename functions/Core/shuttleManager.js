@@ -441,3 +441,26 @@ exports.patchShuttleRoutine = function (request, response, callbackFunc) {
         }
     })
 }
+
+exports.registerShuttleSchedulePic = function(uploadInfo, callbackFunc) {
+    var admin = global.admin
+    var shuttleSchedulePicRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_SCHEDULE_PIC)
+
+    global.log.debug("shuttleManager", "registerShuttleSchedulePic", "register file info: " + JSON.stringify(uploadInfo))
+
+    shuttleSchedulePicRef.set(uploadInfo["uuid"], function (error) {
+        if(error) {
+            global.log.error("shuttleManager", "registerShuttleSchedulePic", "cannot register shuttle schedule pic: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.info("shuttleManager", "registerShuttleSchedulePic", "shuttle schedule pic registered")
+            global.log.pushLogMsg(uploadInfo, global.define.LOGGING_TYPE_SHUTTLE_IMAGE)
+            callbackFunc(true)
+        }
+    })
+}
+
+exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
+
+}

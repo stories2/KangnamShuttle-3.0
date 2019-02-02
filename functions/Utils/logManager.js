@@ -48,3 +48,25 @@ exports.GetCurrentTime = function () {
 
     return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
 }
+
+exports.pushLogMsg = function (data, type) {
+    var admin = global.admin
+    const datetimeManager = require('./datetimeManager')
+    var currentDateTime = datetimeManager.getCurrentTime()
+    var log = {
+        datetime: currentDateTime.toISOString(),
+        sec: currentDateTime.getTime(),
+        type: type,
+        data: JSON.stringify(data)
+    }
+    global.log.debug("logManager", "pushLogMsg", "log msg: " + JSON.stringify(log))
+    var systemLogRef = admin.database().ref(global.define.DB_PATH_SYSTEM_LOG)
+    systemLogRef.push().set(log, function (error) {
+        if(error) {
+            global.log.error("logManager", "pushLogMsg", "cannot save log to db: " + JSON.stringify(error))
+        }
+        else {
+            global.log.info("logManager", "pushLogMsg", "new log added")
+        }
+    })
+}
