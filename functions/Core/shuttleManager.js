@@ -473,7 +473,7 @@ exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
     shuttleSchedulePicRef.once("value", function (shuttleSchedulePicUUID) {
         var picUUID = shuttleSchedulePicUUID.val()
         const tempFilePath = path.join(tmpdir, picUUID);
-        var fileSavedPath = global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR + "/" + picUUID
+        var fileSavedPath = global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR + picUUID
         global.log.debug("shuttleManager", "getShuttleSchedulePic", "file full path: " + fileSavedPath)
 
         bucketManager.file(fileSavedPath).download({
@@ -497,6 +497,7 @@ exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
                 else {
                     global.log.error("shuttleManager", "getShuttleSchedulePic", "error with no msg. shit")
                 }
+                callbackFunc(undefined)
             })
     })
 }

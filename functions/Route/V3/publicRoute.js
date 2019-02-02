@@ -73,6 +73,11 @@ exports.getShuttleSchedulePic = function (request, response) {
     var shuttleManager = require('../../Core/shuttleManager')
 
     shuttleManager.getShuttleSchedulePic(request, response, function (imageBinary) {
-        responseManager.binary(response, imageBinary)
+        if(imageBinary) {
+            responseManager.binary(response, imageBinary)
+        }
+        else {
+            responseManager.internalServerError(response, {})
+        }
     })
 }
