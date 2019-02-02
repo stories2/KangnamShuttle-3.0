@@ -42,6 +42,7 @@
                             <div class="button" ngf-select ng-model="shuttleScheduleImage" name="file" ngf-pattern="'image/png'"
                                  ngf-accept="'image/png'" ngf-max-size="5MB">전체 시간표 이미지</div>
                         </md-input-container>
+                        <p>{{ shuttleScheduleImage.name }}</p>
                         <md-input-container flex>
                             <!--<label>업로드</label>-->
                             <input type="submit" ng-click="uploadShuttleSchedule()">
