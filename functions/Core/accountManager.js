@@ -311,3 +311,64 @@ exports.deleteAccount = function (request, response, callbackFunc) {
             callbackFunc(false)
         });
 }
+
+exports.registerGoogleAccount = function (request, response, callbackFunc) {
+    var admin = global.admin
+    const util = require('util')
+    var uid = request.body["uid"]
+
+    admin.auth().getUser(uid)
+        .then(function (userRecord) {
+            global.log.debug("accountManager", "registerGoogleAccount", "this is user's info: " + JSON.stringify(userRecord))
+
+            var payload = {
+                email: userRecord.email,
+                nameKor: userRecord.displayName,
+                picUrl: userRecord.photoURL,
+                role: global.define.ROLE_NORMAL,
+                uid: userRecord.uid,
+                phone: userRecord.phoneNumber | ""
+            }
+
+            var accountDbPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
+
+            global.log.debug("accountManager", "registerGoogleAccount", "save user info to: " + accountDbPath)
+            global.log.debug("accountManager", "registerGoogleAccount", "save user info data: " + JSON.stringify(payload))
+
+            var accountDBRef = admin.database().ref(accountDbPath)
+            accountDBRef.once("value", function (accountSnapshot) {
+                var accountSnapshotData = accountSnapshot.val()
+                if(accountSnapshotData == null || accountSnapshotData === undefined) {
+                    global.log.info("accountManager", "registerGoogleAccount", "current user is newbie")
+
+                    accountDBRef.set(payload, function (error) {
+                        if(error) {
+                            global.log.error("accountManager", "registerGoogleAccount", "cannot register user#" + uid + ": " + JSON.stringify(error))
+                            admin.auth().deleteUser(uid)
+                                .then(function() {
+                                    global.log.debug("accountManager", "registerGoogleAccount", "write user info is failed, so i delete user too: " + uid)
+
+                                    callbackFunc(false)
+                                })
+                                .catch(function(error) {
+                                    global.log.error("accountManager", "registerGoogleAccount", "write user info is failed, and cannot delete user: " + JSON.stringify(error) + " #" + uid)
+
+                                    callbackFunc(false)
+                                });
+                        }
+                        else {
+                            global.log.info(("accountManager", "registerGoogleAccount", "ok user registered")
+                            callbackFunc(true)
+                        }
+                    })
+                }
+                else {
+                    global.log.info("AuthManager", "registerGoogleAccount", "already registered")
+                    callbackFunc(true)
+                }
+            })
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "registerGoogleAccount", "cannot get user info from uid: " + JSON.stringify(error))
+        })
+}

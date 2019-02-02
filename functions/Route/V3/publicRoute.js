@@ -81,3 +81,14 @@ exports.getShuttleSchedulePic = function (request, response) {
         }
     })
 }
+
+exports.registerGoogleAccount = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var accountManager = require('../../Core/accountManager')
+
+    accountManager.registerGoogleAccount(request, response, function (status) {
+        responseManager.ok(response, {
+            "success": status
+        })
+    })
+}
