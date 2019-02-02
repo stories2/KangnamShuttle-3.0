@@ -35,6 +35,7 @@ var API_DELETE_ROUTINE_STATION = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/rout
 var API_GET_ROUTINE_STATION_SCHEDULE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/station/schedule"
 var API_PATCH_ROUTINE_STATION_SCHEDULE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/station/schedule"
 var API_GET_ROUTE_PATH = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/path"
+var API_PATCH_ROUTE_PATH = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/path"
 //ROLE
 var API_GET_ROLE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/role"
 

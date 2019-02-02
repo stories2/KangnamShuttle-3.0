@@ -173,6 +173,24 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         return seconds
     }
 
+    $scope.submitRoutePath = function (routePath) {
+        var payload = {
+            "routine": routePath
+        }
+        KSAppService.patchReq(
+            API_PATCH_ROUTE_PATH,
+            payload,
+            function (data) {
+                KSAppService.debug("ShuttleManagementController", "submitRoutePath", "patch route path result received: " + JSON.stringify(data))
+                getRoutePath()
+                KSAppService.showToast("Patch route ok", TOAST_SHOW_LONG)
+            },
+            function (error) {
+                KSAppService.error("ShuttleManagementController", "submitRoutePath", "cannot patch route: " + JSON.stringify(error))
+                KSAppService.showToast("Cannot patch route", TOAST_SHOW_LONG)
+            })
+    }
+
     function getRoutePath() {
         var payload = {}
         KSAppService.getReq(

@@ -21,7 +21,7 @@
                         <label>전체 달구지 경로</label>
                         <textarea ng-model="shuttleRoutePath" type="text" rows="4"></textarea>
                     </md-input-container>
-                    <md-button ><div class="fa fa-2x fa-check"></div></md-button>
+                    <md-button ng-click="submitRoutePath(shuttleRoutePath)"><div class="fa fa-2x fa-check"></div></md-button>
                     <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                 </div>
                 <div class="box alt">
