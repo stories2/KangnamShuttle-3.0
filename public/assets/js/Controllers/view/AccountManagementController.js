@@ -2,9 +2,11 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
     KSAppService.info("AccountManagementController", "AccountManagementController", "init");
 
     $scope.accountList = {}
+    $scope.roleList = {}
 
     $scope.onLoad = function () {
         getAccountList()
+        getRoleList()
     }
 
     $scope.edit = function (item) {
@@ -18,7 +20,8 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
             // targetEvent: ev,
             clickOutsideToClose:true,
             locals: {
-                accountData: item
+                accountData: item,
+                roleList: $scope.roleList
             }
         })
             .then(function(accountData) {
@@ -43,6 +46,34 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
         }, function() {
             KSAppService.info("AccountManagementController", "delete", "delete account canceled")
         });
+    }
+
+    function getRoleList() {
+        var payload = {}
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            // Send token to your backend via HTTPS
+            // ...
+            KSAppService.setToken(idToken)
+            KSAppService.getReq(
+                API_GET_ROLE_LIST,
+                payload,
+                function (data) {
+                    KSAppService.debug("AccountManagementController", "getRoleList", "role received: " + JSON.stringify(data))
+                    initRoleList(data)
+                },
+                function (error) {
+                    KSAppService.error("AccountManagementController", "getRoleList", "cannot get role: " + JSON.stringify(error))
+                    KSAppService.showToast("Cannot get role", TOAST_SHOW_LONG)
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("AccountManagementController", "getRoleList", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
+    }
+
+    function initRoleList(data) {
+        $scope.roleList = data["data"]
     }
 
     function deleteAccount(accountData) {
@@ -129,11 +160,12 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
         $scope.accountList = data["data"]
     }
 
-    function accountDetailDialogController($scope, $mdDialog, accountData) {
+    function accountDetailDialogController($scope, $mdDialog, accountData, roleList) {
 
         KSAppService.info("accountDetailDialogController", "accountDetailDialogController", "init")
 
         $scope.user = accountData
+        $scope.roleList = roleList
 
         $scope.hide = function() {
             $mdDialog.cancel();

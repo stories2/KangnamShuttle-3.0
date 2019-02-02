@@ -38,6 +38,14 @@
         </form>
         <div flex="50" layout="column">
             <img style="width:200px; height: auto" ng-src="data:image/png;base64,{{ user['pic'] }}">
+            <md-input-container>
+                <label>Role</label>
+                <md-select ng-model="user.role">
+                    <md-option ng-repeat="(roleKey, roleValue) in roleList" ng-value="roleKey">
+                        {{roleValue.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="center center">
