@@ -1,4 +1,4 @@
-exports.preprocessUploader = function (request, response, callbackFunc) {
+exports.preprocessUploader = function (request, response, savePath, callbackFunc) {
     const admin = global.admin
     const os = require('os')
     const Busboy = require('busboy')
@@ -13,7 +13,6 @@ exports.preprocessUploader = function (request, response, callbackFunc) {
     const fields = []
     const uploads = {}
     var saveFile2GoogleStorageFunc = this.saveFile2GoogleStorage
-    var userRecordData = request.userRecordData
 
     busboy.on('field', function (fieldname, val) {
         global.log.debug("FileManager", "preprocessUploader<file>", "processed field: " + fieldname + " / " + val)
@@ -59,7 +58,7 @@ exports.preprocessUploader = function (request, response, callbackFunc) {
                 uploadDateTimeStr: currentDate.toISOString()
             }
 
-            saveFile2GoogleStorageFunc(fileObject, bucketManager, request.userRecordData)
+            saveFile2GoogleStorageFunc(fileObject, bucketManager, savePath)
                 .then(function (signedDownloadUrl) {
                     global.log.debug("FileManager", "preprocessUploader<end>", "file saved and url generated: " + signedDownloadUrl)
                 })
@@ -90,7 +89,7 @@ exports.preprocessUploader = function (request, response, callbackFunc) {
     request.pipe(busboy)
 }
 
-exports.saveFile2GoogleStorage = function (fileObject, bucketManager, userRecordData) {
+exports.saveFile2GoogleStorage = function (fileObject, bucketManager, savePath) {
     var util = require('util')
     var convertManager = require('../Utils/ConvertManager')
 
@@ -102,7 +101,7 @@ exports.saveFile2GoogleStorage = function (fileObject, bucketManager, userRecord
 
         global.log.debug("FileManager", "saveFile2GoogleStorage", "file will save as: " + fileObject.uuid)
 
-        var fileSavePath = util.format(global.define.FORMAT_FILE_SAVE_PATH, userRecordData.uid, fileObject.uuid)
+        var fileSavePath = savePath
         global.log.debug("FileManager", "saveFile2GoogleStorage", "file save path: " + fileSavePath + " mimetype: " + fileObject.mimetype)
 
         var fileUploader = bucketManager.file(fileSavePath)
@@ -120,17 +119,17 @@ exports.saveFile2GoogleStorage = function (fileObject, bucketManager, userRecord
         blobStream.on('finish', function () {
             global.log.info("FileManager", "saveFile2GoogleStorage", "file saved")
 
-            var tomorrowDate = new Date()
-            tomorrowDate.setDate(tomorrowDate.getDate() + 1)
-            var tomorrowDateTimeStr = convertManager.date2FormattedDateTimeStr(tomorrowDate, global.define.FORMAT_DATE_TIME_YYYY_MM_DD)
-            global.log.debug("FileManager", "saveFile2GoogleStorage", "formatted datetime: " + tomorrowDateTimeStr)
+            var longDate = new Date()
+            longDate.setDate(longDate.getDate() + 2000)
+            var longDateTimeStr = convertManager.date2FormattedDateTimeStr(longDate, global.define.FORMAT_DATE_TIME_YYYY_MM_DD)
+            global.log.debug("FileManager", "saveFile2GoogleStorage", "formatted datetime: " + longDateTimeStr)
 
             fileUploader.getSignedUrl({
                 action: 'read',
-                expires: tomorrowDateTimeStr
+                expires: longDateTimeStr
             })
                 .then(function (signedDownloadUrl) {
-                    global.log.debug("FileManager", "saveFile2GoogleStorage", "download link: " + signedDownloadUrl + " until: " + tomorrowDateTimeStr)
+                    global.log.debug("FileManager", "saveFile2GoogleStorage", "download link: " + signedDownloadUrl + " until: " + longDateTimeStr)
 
                     resolve(signedDownloadUrl)
                 })

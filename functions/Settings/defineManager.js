@@ -71,3 +71,9 @@ exports.ROLE_ADMIN = "Admin"
 exports.ROLE_DEVELOPER = "Developer"
 
 exports.UPLOAD_FILE_SIZE_LIMIT_5MB = "5mb"
+
+exports.PROMISE_FILE_UPLOAD_REJECT_EMPTY_FILE = 'empty file'
+exports.PROMISE_FILE_UPLOAD_REJECT_SAVE_FILE_ERROR = 'save file error'
+exports.PROMISE_FILE_UPLOAD_REJECT_DOWNLOAD_URL_ERROR = 'url crashed'
+
+exports.FORMAT_DATE_TIME_YYYY_MM_DD = "yyyy-mm-dd"
