@@ -17,7 +17,7 @@ exports.getRawBodyManager = function (request, response, next) {
                 request,
                 {
                     length: request.headers['content-length'],
-                    limit: global.define.UPLOAD_FILE_SIZE_LIMIT_1GB,
+                    limit: global.define.UPLOAD_FILE_SIZE_LIMIT_5MB,
                     encoding: contentType.parse(request).parameters.charset,
                 },
                 function(err, string) {

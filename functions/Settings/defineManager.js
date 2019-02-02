@@ -69,3 +69,5 @@ exports.API_SCHOOL_PROFILE_PIC = "/school/profile/img"
 exports.ROLE_NORMAL = "Normal"
 exports.ROLE_ADMIN = "Admin"
 exports.ROLE_DEVELOPER = "Developer"
+
+exports.UPLOAD_FILE_SIZE_LIMIT_5MB = "5mb"
