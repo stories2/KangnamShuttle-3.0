@@ -11,10 +11,10 @@
 
     <md-dialog-content md-theme="docs-dark">
         <form name="signInForm">
-            <div class="md-dialog-content" layout="column">
-                <div layout="row" layout-align="start center">
-                    <h2>로그인</h2>
-                </div>
+                <div class="md-dialog-content" layout="column">
+                    <div layout="row" layout-align="start center">
+                        <h2>로그인</h2>
+                    </div>
                 <div layout="row" layout-align="center center">
                     <md-input-container flex="100" flex-gt-md="70">
                         <label>강남대학교 이메일</label>
@@ -33,6 +33,22 @@
                     </md-button>
                     <md-button ng-click="submit(true)" ng-disabled="signInForm.$invalid">
                         Submit
+                    </md-button>
+                </div>
+            </div>
+        </form>
+
+        <form>
+            <div class="md-dialog-content" layout="column">
+                <div layout="row" layout-align="start center">
+                    <h2>구글계정을 이용하여 로그인</h2>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <h4>학교 계정연동 중 문제가 지속적으로 발생될 시</h4>
+                </div>
+                <div layout="row" layout-align="center center">
+                    <md-button ng-click="googleSignIn()" flex>
+                        <div class="fa fa-2x fa-google"></div>- Account
                     </md-button>
                 </div>
             </div>
