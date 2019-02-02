@@ -38,7 +38,7 @@
             </div>
         </form>
 
-        <form>
+        <form name="googleSignInForm">
             <div class="md-dialog-content" layout="column">
                 <div layout="row" layout-align="start center">
                     <h2>구글계정을 이용하여 로그인</h2>
@@ -46,8 +46,26 @@
                 <div layout="row" layout-align="start center">
                     <h4>학교 계정연동 중 문제가 지속적으로 발생될 시</h4>
                 </div>
+                <div layout="row" layout-align="start center">
+                    <md-input-container flex="100" flex-gt-md="70">
+                        <md-checkbox name="accept" ng-model="googleSignInAccept" required>
+                            개인정보 수집 및 제공에 동의합니다.
+                        </md-checkbox>
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <md-input-container flex="100" flex-gt-md="70">
+                        <h3>수집되는 개인정보</h3>
+                        <ol>
+                            <li>이름</li>
+                            <li>프로필 사진</li>
+                            <li>이메일 주소</li>
+                            <li>핸드폰 번호</li>
+                        </ol>
+                    </md-input-container>
+                </div>
                 <div layout="row" layout-align="center center">
-                    <md-button ng-click="googleSignIn()" flex>
+                    <md-button ng-click="googleSignIn()" flex ng-disabled="googleSignInForm.$invalid">
                         <div class="fa fa-2x fa-google"></div>- Account
                     </md-button>
                 </div>
