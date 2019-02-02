@@ -1,7 +1,7 @@
 exports.uploadShuttlePic = function (request, response) {
     const fileManager = require('../../Core/fileManager')
     const shuttleManager = require('../../Core/shuttleManager')
-    var responseManager = require('../../Utils/ResponseManager')
+    var responseManager = require('../../Utils/responseManager')
 
     fileManager.preprocessUploader(request, response, global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR,
         function (fileSignedDownloadUrl, uploads, fields) {
