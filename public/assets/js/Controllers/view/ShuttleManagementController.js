@@ -1,4 +1,4 @@
-app.controller("ShuttleManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, $mdDialog, KSAppService) {
+app.controller("ShuttleManagementController", function ($scope, $http, $mdToast, $mdSidenav, $window, $timeout, $rootScope, $mdDialog, Upload, KSAppService) {
     KSAppService.info("ShuttleManagementController", "ShuttleManagementController", "init");
 
     $scope.routineList = []
@@ -7,6 +7,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.routineKey = ""
     $scope.stationKey = ""
     $scope.shuttleRoutePath = ""
+    $scope.shuttleScheduleImage = ""
 
     $scope.options = {
         time: {
@@ -23,6 +24,23 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.stationKey = ""
         getRoutineList()
         getRoutePath()
+    }
+
+    $scope.uploadShuttleSchedule = function() {
+        Upload.upload({
+            url: API_POST_SHUTTLE_SCHEDULE_PIC,
+            data: {file: $scope.shuttleScheduleImage},
+            headers: {'Authorization': KSAppService.getToken()}
+        }).then(function (resp) {
+            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received: " + JSON.stringify(resp))
+            KSAppService.showToast("Shuttle schedule uploaded", TOAST_SHOW_LONG)
+        }, function (resp) {
+            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received: " + JSON.stringify(resp))
+            KSAppService.showToast("Shuttle schedule upload failed", TOAST_SHOW_LONG)
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", 'progress: ' + progressPercentage + '% ')
+        });
     }
 
     $scope.addRoutine = function() {
