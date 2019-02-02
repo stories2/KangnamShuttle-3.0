@@ -263,12 +263,12 @@ exports.patchAccount = function (request, response, callbackFunc) {
     accountsRef.once("value", function ( accountSnapshot ) {
         var accountSnapshotData = accountSnapshot.val()
 
-        accountSnapshotData["birthday"] = bodyData["birthday"] | ""
-        accountSnapshotData["nameKor"] = bodyData["nameKor"] | ""
-        accountSnapshotData["role"] = bodyData["role"] | global.define.ROLE_NORMAL
-        accountSnapshotData["separate"] = bodyData["separate"] | ""
-        accountSnapshotData["sex"] = bodyData["sex"] | ""
-        accountSnapshotData["studentId"] = bodyData["studentId"] | ""
+        accountSnapshotData["birthday"] = bodyData["birthday"] || ""
+        accountSnapshotData["nameKor"] = bodyData["nameKor"] || ""
+        accountSnapshotData["role"] = bodyData["role"] || global.define.ROLE_NORMAL
+        accountSnapshotData["separate"] = bodyData["separate"] || ""
+        accountSnapshotData["sex"] = bodyData["sex"] || ""
+        accountSnapshotData["studentId"] = bodyData["studentId"] || ""
 
         global.log.debug("accountManager", "patchAccount", "patch user: " + JSON.stringify(accountSnapshotData))
 
@@ -327,7 +327,7 @@ exports.registerGoogleAccount = function (request, response, callbackFunc) {
                 picUrl: userRecord.photoURL,
                 role: global.define.ROLE_NORMAL,
                 uid: userRecord.uid,
-                phone: userRecord.phoneNumber | ""
+                phone: userRecord.phoneNumber || ""
             }
 
             var accountDbPath = util.format(global.define.DB_PATH_ACCOUNTS_UID, uid)
