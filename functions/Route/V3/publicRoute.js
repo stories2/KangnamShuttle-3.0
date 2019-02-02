@@ -67,3 +67,12 @@ exports.authSignUp = function (request, response) {
             responseManager.ok(response, responseData) : responseManager.unauthorized(response, responseData)
     })
 }
+
+exports.getShuttleSchedulePic = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var shuttleManager = require('../../Core/shuttleManager')
+
+    shuttleManager.getShuttleSchedulePic(request, response, function (imageBase64) {
+        responseManager.ok(response, imageBase64)
+    })
+}

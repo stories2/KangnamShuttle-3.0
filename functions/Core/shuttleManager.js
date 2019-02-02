@@ -462,5 +462,38 @@ exports.registerShuttleSchedulePic = function(uploadInfo, callbackFunc) {
 }
 
 exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
+    var admin = global.admin
+    const bucketManager = admin.storage().bucket()
+    const os = require('os')
+    const tmpdir = os.tmpdir()
+    var fs = require('fs');
+    const path = require('path')
+    var shuttleSchedulePicRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_SCHEDULE_PIC)
 
+    shuttleSchedulePicRef.once("value", function (shuttleSchedulePicUUID) {
+        var picUUID = shuttleSchedulePicUUID.val()
+        const tempFilePath = path.join(tmpdir, picUUID);
+        var fileSavedPath = global.define.DB_PATH_SHUTTLE_SCHEDULE_PIC + "/" + picUUID
+        global.log.debug("shuttleManager", "getShuttleSchedulePic", "file full path: " + fileSavedPath)
+
+        bucketManager.file(global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR).download({
+            destination: tempFilePath
+        }).then(function () {
+            global.log.info("shuttleManager", "getShuttleSchedulePic", "file saved locally: " + tempFilePath)
+
+            var image = fs.readFileSync(tempFilePath)
+            var imageBase64 = new Buffer(image).toString('base64')
+            global.log.debug("shuttleManager", "getShuttleSchedulePic", "file read as base64 len: " + imageBase64.length)
+
+            callbackFunc(imageBase64)
+        })
+            .catch(function (error) {
+                if(error) {
+                    global.log.error("shuttleManager", "getShuttleSchedulePic", "error!: " + JSON.stringify(error))
+                }
+                else {
+                    global.log.error("shuttleManager", "getShuttleSchedulePic", "error with no msg. shit")
+                }
+            })
+    })
 }

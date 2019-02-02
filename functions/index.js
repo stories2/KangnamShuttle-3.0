@@ -44,6 +44,7 @@ v3PublicApi.get('/test/:param', publicRoute.paramTest)
 v3PublicApi.get('/realtimeShuttleLocation', publicRoute.realtimeShuttleLocation)
 v3PublicApi.patch('/realtimeShuttleLocation', publicRoute.updateRealtimeShuttleLocation)
 v3PublicApi.post('/auth', publicRoute.authSignUp)
+v3PublicApi.get('/shuttleSchedulePic', publicRoute.getShuttleSchedulePic)
 exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
 
 v3PrivateApi.use(cors)
