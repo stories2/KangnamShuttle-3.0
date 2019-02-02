@@ -194,6 +194,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 KSAppService.setToken(token)
                 registerGoogleAccount(user)
                 KSAppService.showToast(user.displayName + "님 안녕하세요", TOAST_SHOW_LONG)
+                $mdDialog.cancel();
             }).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -204,6 +205,7 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 var credential = error.credential;
                 // ...
                 KSAppService.showToast("이런, 계정 연동 중 문제가 발생해버렸군요. " + errorMessage, TOAST_SHOW_LONG)
+                $mdDialog.cancel();
             });
         }
     }
