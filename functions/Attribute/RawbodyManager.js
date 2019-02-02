@@ -1,5 +1,6 @@
 exports.getRawBodyManager = function (request, response, next) {
-    var responseManager = require('../Utils/ResponseManager')
+    // var responseManager = require('../Utils/ResponseManager')
+    var responseManager = require('../Utils/responseManager')
     const getRawBody = require('raw-body')
     const contentType = require('content-type')
     try {
