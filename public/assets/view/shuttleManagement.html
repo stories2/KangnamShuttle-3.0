@@ -9,6 +9,45 @@
                 <div class="box alt">
                     <div class="row gtr-50 gtr-uniform">
                         <div class="col-6 col-12-medium">
+                            전체 달구지 경로 안내는 텍스트로 응답을 합니다.
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <img style="width:300px;height: auto" src="images/allShuttleRoute.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="box alt" layout="row">
+                    <md-input-container flex="60">
+                        <label>전체 달구지 경로</label>
+                        <textarea ng-model="shuttleRoute" type="text" rows="4"></textarea>
+                    </md-input-container>
+                    <md-button ><div class="fa fa-2x fa-check"></div></md-button>
+                </div>
+                <div class="box alt">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-medium">
+                            전체 시간표 이미지는 5MB 이하의 png 이미지를 사용할 것을 권장합니다.
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <img style="width:300px;height: auto" src="images/shuttleSchedulePic.png" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="box alt" layout="row">
+                    <form flex name="uploadPicForm">
+                        <md-input-container flex="60">
+                            <label>전체 시간표 이미지</label>
+                            <input type="file" ng-model="shuttleScheduleImage" accept="image/png" required>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <!--<label>업로드</label>-->
+                            <input type="submit">
+                        </md-input-container>
+                    </form>
+                </div>
+                <div class="box alt">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-medium">
                             <p>
                                 ROUTINE - 셔틀버스의 노선을 말합니다. 최대 3개 까지 추가 할 수 있습니다.<br>
                                 가까운 시간의 셔틀버스에서 어디로 진행할 지 결정할 시에 사용자에게 보여집니다.
