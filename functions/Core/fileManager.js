@@ -94,7 +94,7 @@ exports.preprocessUploader = function (request, response, savePath, callbackFunc
 
 exports.saveFile2GoogleStorage = function (fileObject, bucketManager, savePath) {
     var util = require('util')
-    var convertManager = require('../Utils/ConvertManager')
+    var convertManager = require('../Utils/convertManager')
 
     var processPromise = new Promise(function (resolve, reject) {
         if(fileObject == null) {
