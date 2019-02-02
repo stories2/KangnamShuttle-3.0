@@ -13,6 +13,7 @@ exports.preprocessUploader = function (request, response, savePath, callbackFunc
     const fields = []
     const uploads = {}
     var saveFile2GoogleStorageFunc = this.saveFile2GoogleStorage
+    var userRecordData = request.accountInfo
 
     busboy.on('field', function (fieldname, val) {
         global.log.debug("FileManager", "preprocessUploader<file>", "processed field: " + fieldname + " / " + val)
@@ -61,9 +62,18 @@ exports.preprocessUploader = function (request, response, savePath, callbackFunc
             saveFile2GoogleStorageFunc(fileObject, bucketManager, savePath)
                 .then(function (signedDownloadUrl) {
                     global.log.debug("FileManager", "preprocessUploader<end>", "file saved and url generated: " + signedDownloadUrl)
+
+
+                    if(callbackFunc !== undefined) {
+                        callbackFunc(signedDownloadUrl, uploads, fields)
+                    }
+                    else {
+                        global.log.warn("FileManager", "preprocessUploader<finish>", "callback func is undefined")
+                    }
                 })
                 .catch(function (error) {
                     global.log.error("FileManager", "preprocessUploader<end>", "cannot save to google storage")
+                    callbackFunc(undefined)
                 })
             request.file = fileObject
         })
@@ -75,13 +85,6 @@ exports.preprocessUploader = function (request, response, savePath, callbackFunc
         for(const name in uploads) {
             const file = uploads[name]
             global.log.debug("FileManager", "preprocessUploader<finish>", "file " + file + " upload finished")
-        }
-
-        if(callbackFunc !== undefined) {
-            callbackFunc(uploads, fields)
-        }
-        else {
-            global.log.warn("FileManager", "preprocessUploader<finish>", "callback func is undefined")
         }
     })
 
@@ -101,7 +104,7 @@ exports.saveFile2GoogleStorage = function (fileObject, bucketManager, savePath) 
 
         global.log.debug("FileManager", "saveFile2GoogleStorage", "file will save as: " + fileObject.uuid)
 
-        var fileSavePath = savePath
+        var fileSavePath = savePath + fileObject.uuid
         global.log.debug("FileManager", "saveFile2GoogleStorage", "file save path: " + fileSavePath + " mimetype: " + fileObject.mimetype)
 
         var fileUploader = bucketManager.file(fileSavePath)
