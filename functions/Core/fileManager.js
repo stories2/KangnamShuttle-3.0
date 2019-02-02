@@ -5,7 +5,7 @@ exports.preprocessUploader = function (request, response, savePath, callbackFunc
     const path = require('path')
     const fs = require('fs')
     const bucketManager = admin.storage().bucket()
-    const uniqueManager = require('../Utils/UniqueManager')
+    const uniqueManager = require('../Utils/uniqueManager')
 
     const busboy = new Busboy({headers: request.headers})
     const tmpdir = os.tmpdir()
