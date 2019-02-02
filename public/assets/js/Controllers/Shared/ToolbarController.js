@@ -191,6 +191,8 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 // The signed-in user info.
                 var user = result.user;
                 // ...
+                KSAppService.setToken(token)
+                registerGoogleAccount(user)
                 KSAppService.showToast(user.displayName + "님 안녕하세요", TOAST_SHOW_LONG)
             }).catch(function(error) {
                 // Handle Errors here.
@@ -204,6 +206,23 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
                 KSAppService.showToast("이런, 계정 연동 중 문제가 발생해버렸군요. " + errorMessage, TOAST_SHOW_LONG)
             });
         }
+    }
+
+    function registerGoogleAccount(userData) {
+        var payload = {
+            "uid": userData.uid
+        }
+        KSAppService.postReq(
+            API_REGISTER_GOOGLE_ACCOUNT,
+            payload,
+            function (data) {
+                KSAppService.debug("ToolbarController", "registerGoogleAccount", "account register result received: " + JSON.stringify(data))
+            },
+            function (error) {
+                KSAppService.error("ToolbarController", "registerGoogleAccount", "cannot register user info: " + JSON.stringify(error))
+                KSAppService.showToast("Cannot register user info", TOAST_SHOW_LONG)
+            }
+        )
     }
 
     listenAuthStatusChanged()

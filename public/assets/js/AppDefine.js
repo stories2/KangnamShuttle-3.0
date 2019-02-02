@@ -24,6 +24,7 @@ var API_GET_ACCOUNTS_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_PATCH_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_DELETE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_IS_ACCOUNT_VERIFIED = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts/isVerified"
+var API_REGISTER_GOOGLE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PublicApi/register/google"
 //SHUTTLE
 var API_GET_ROUTINE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
 var API_POST_ROUTINE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"

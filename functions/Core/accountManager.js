@@ -357,7 +357,7 @@ exports.registerGoogleAccount = function (request, response, callbackFunc) {
                                 });
                         }
                         else {
-                            global.log.info(("accountManager", "registerGoogleAccount", "ok user registered")
+                            global.log.info("accountManager", "registerGoogleAccount", "ok user registered")
                             callbackFunc(true)
                         }
                     })
