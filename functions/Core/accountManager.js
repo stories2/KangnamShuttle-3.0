@@ -219,6 +219,29 @@ exports.registerUser = function (userData, callbackFunc) {
         });
 }
 
+exports.checkUserIsVerified = function(request, response, callbackFunc) {
+    var admin = global.admin
+    var uid = request.query["uid"]
+
+    global.log.debug("AuthManager", "checkUserIsVerified", "check user info using: " + uid)
+
+    admin.auth().getUser(uid)
+        .then(function (userRecord) {
+            global.log.debug("AuthManager", "checkUserIsVerified", "this is user's info: " + JSON.stringify(userRecord))
+            if(userRecord["emailVerified"]) {
+                global.log.debug("AuthManager", "checkUserIsVerified", "this user #" + uid + " verified")
+                callbackFunc(true)
+            }
+            else {
+                global.log.debug("AuthManager", "checkUserIsVerified", "this user #" + uid + " not verified")
+                callbackFunc(false)
+            }
+        })
+        .catch(function (error) {
+            global.log.error("AuthManager", "checkUserIsVerified", "cannot get user info from uid: " + JSON.stringify(error))
+        })
+}
+
 exports.getAllAccountList = function (request, response, callbackFunc) {
     var admin = global.admin
 

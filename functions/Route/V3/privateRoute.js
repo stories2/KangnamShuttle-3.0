@@ -7,6 +7,17 @@ exports.getMenuListBasedOnRole = function (request, response) {
     })
 }
 
+exports.isAccountVerified = function(request, response) {
+    var accountManager = require('../../Core/accountManager')
+    var responseManager = request.responseManager
+
+    accountManager.checkUserIsVerified(request, response, function (status) {
+        responseManager.ok(response, {
+            "status": status
+        })
+    })
+}
+
 exports.getAllAccountList = function (request, response) {
     var accountManager = require('../../Core/accountManager')
     var responseManager = request.responseManager

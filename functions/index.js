@@ -55,6 +55,7 @@ v3PrivateApi.get('/menu', privateRoute.getMenuListBasedOnRole)
 v3PrivateApi.get('/accounts', privateRoute.getAllAccountList)
 v3PrivateApi.patch('/accounts', privateRoute.patchAccount)
 v3PrivateApi.delete('/accounts', privateRoute.deleteAccount)
+v3PrivateApi.get('/accounts/isVerified', privateRoute.isAccountVerified)
 
 v3PrivateApi.get('/shuttle/routine', privateRoute.getRoutineList)
 v3PrivateApi.post('/shuttle/routine', privateRoute.addRoutine)
