@@ -473,15 +473,17 @@ exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
     shuttleSchedulePicRef.once("value", function (shuttleSchedulePicUUID) {
         var picUUID = shuttleSchedulePicUUID.val()
         const tempFilePath = path.join(tmpdir, picUUID);
-        var fileSavedPath = global.define.DB_PATH_SHUTTLE_SCHEDULE_PIC + "/" + picUUID
+        var fileSavedPath = global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR + "/" + picUUID
         global.log.debug("shuttleManager", "getShuttleSchedulePic", "file full path: " + fileSavedPath)
 
-        bucketManager.file(global.define.SHUTTLE_SCHEDULE_PIC_BUCKET_DIR).download({
+        bucketManager.file(fileSavedPath).download({
             destination: tempFilePath
         }).then(function () {
             global.log.info("shuttleManager", "getShuttleSchedulePic", "file saved locally: " + tempFilePath)
 
             var image = fs.readFileSync(tempFilePath)
+            fs.unlinkSync(tempFilePath)
+            global.log.info("shuttleManager", "getShuttleSchedulePic", "file read ok, unlink sync")
             callbackFunc(image)
             // var imageBase64 = new Buffer(image).toString('base64')
             // global.log.debug("shuttleManager", "getShuttleSchedulePic", "file read as base64 len: " + imageBase64.length)
