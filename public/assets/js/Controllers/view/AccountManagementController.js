@@ -166,6 +166,9 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
 
         $scope.user = accountData
         $scope.roleList = roleList
+        $scope.emailVerified = false
+
+        isAccountVerified($scope.user["uid"])
 
         $scope.hide = function() {
             $mdDialog.cancel();
@@ -179,5 +182,27 @@ app.controller("AccountManagementController", function ($scope, $http, $mdToast,
             KSAppService.debug("accountDetailDialogController", "submit", "user data: " + JSON.stringify($scope.user))
             $mdDialog.hide($scope.user);
         };
+
+        function isAccountVerified(uid) {
+            var payload = {
+                uid: uid
+            }
+
+            KSAppService.getReq(
+                API_IS_ACCOUNT_VERIFIED,
+                payload,
+                function (data) {
+                    KSAppService.debug("accountDetailDialogController", "isAccountVerified", "verified result received: " + JSON.stringify(data))
+                    initAccountVerified(data)
+                },
+                function (error) {
+                    KSAppService.error("accountDetailDialogController", "isAccountVerified", "cannot check user verified: " + JSON.stringify(error))
+                    KSAppService.showToast("Cannot check user is verified", TOAST_SHOW_LONG)
+                })
+        }
+
+        function initAccountVerified(data) {
+            $scope.emailVerified = data["data"]["status"]
+        }
     }
 })

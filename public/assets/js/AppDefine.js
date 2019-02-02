@@ -23,6 +23,7 @@ var API_GET_MENU = LIVE_SERVER_DOMAIN + "v3PrivateApi/menu"
 var API_GET_ACCOUNTS_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_PATCH_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
 var API_DELETE_ACCOUNT = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts"
+var API_IS_ACCOUNT_VERIFIED = LIVE_SERVER_DOMAIN + "v3PrivateApi/accounts/isVerified"
 //SHUTTLE
 var API_GET_ROUTINE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
 var API_POST_ROUTINE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine"
