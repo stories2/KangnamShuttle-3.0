@@ -6,9 +6,35 @@
                     <h2>셔틀버스 시간표 관리</h2>
                     <h4>셔틀버스의 경로, 정류소, 시간표를 편집할 수 있는 관리 페이지입니다.</h4>
                 </header>
-                <div>
+                <div class="box alt">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-medium">
+                            <p>
+                                ROUTINE - 셔틀버스의 노선을 말합니다. 최대 3개 까지 추가 할 수 있습니다.<br>
+                                가까운 시간의 셔틀버스에서 어디로 진행할 지 결정할 시에 사용자에게 보여집니다.
+                            </p>
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <img style="width:300px;height: auto" src="images/nearestShuttleRouteSelection.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="box alt">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-medium">
+                            <p>
+                                STATION - 셔틀버스의 정류소를 말합니다. 셔틀버스 노선에 종속되며 최대 5개 까지 추가 할 수 있습니다.<br>
+                                SCHEDULE - 셔틀버스의 시간을 말합니다. 셔틀버스 정류소에 종속되며 최소 3개 이상 추가 해야 정상동작 합니다.<br>
+                                가까운 시간의 셔틀버스에서 어디로 진행할 지 결정한 후에 사용자에게 보여집니다.
+                            </p>
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <img style="width:300px;height: auto" src="images/nearestShuttleSchedule.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="box alt">
                     <md-list ng-cloak >
-
                         <md-subheader class="md-no-sticky">
                             <h2>ROUTINE</h2>
                             <h4># {{ routineKey }}</h4>
