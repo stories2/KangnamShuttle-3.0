@@ -15,6 +15,11 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.onLoad = function() {
+        $scope.routineList = []
+        $scope.stationList = []
+        $scope.scheduleList = []
+        $scope.routineKey = ""
+        $scope.stationKey = ""
         getRoutineList()
     }
 
