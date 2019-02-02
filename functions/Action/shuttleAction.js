@@ -347,7 +347,7 @@ exports.shuttleSchedulePic = function (request, response, callbackFunc) {
 
         global.log.debug("shuttleAction", "shuttleSchedulePic", "current formatted schedule pic url: " + schedulePicFormat)
 
-        action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleImage"]["imageUrl"] = schedulePicFormat
+        action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleImage"]["imageUrl"] = global.define.API_SHUTTLE_SCHEDULE_PIC_DOWNLOAD
         responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
         for(var index in action["quickReplies"]) {
             responseManager.pushQuickReply(action["quickReplies"][index])
