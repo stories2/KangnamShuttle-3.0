@@ -19,9 +19,10 @@
                 <div class="box alt" layout="row">
                     <md-input-container flex="60">
                         <label>전체 달구지 경로</label>
-                        <textarea ng-model="shuttleRoute" type="text" rows="4"></textarea>
+                        <textarea ng-model="shuttleRoutePath" type="text" rows="4"></textarea>
                     </md-input-container>
                     <md-button ><div class="fa fa-2x fa-check"></div></md-button>
+                    <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                 </div>
                 <div class="box alt">
                     <div class="row gtr-50 gtr-uniform">

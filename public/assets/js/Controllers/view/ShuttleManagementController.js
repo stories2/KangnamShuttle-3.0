@@ -6,6 +6,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.scheduleList = []
     $scope.routineKey = ""
     $scope.stationKey = ""
+    $scope.shuttleRoutePath = ""
 
     $scope.options = {
         time: {
@@ -21,6 +22,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.routineKey = ""
         $scope.stationKey = ""
         getRoutineList()
+        getRoutePath()
     }
 
     $scope.addRoutine = function() {
@@ -169,6 +171,25 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
 // minutes are worth 60 seconds. Hours are worth 60 minutes.
         var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
         return seconds
+    }
+
+    function getRoutePath() {
+        var payload = {}
+        KSAppService.getReq(
+            API_GET_ROUTE_PATH,
+            payload,
+            function (data) {
+                KSAppService.debug("ShuttleManagementController", "getRoute", "route path result received: " + JSON.stringify(data))
+                initRoutePath(data)
+            },
+            function (error) {
+                KSAppService.error("ShuttleManagementController", "getRoute", "cannot get route path: " + JSON.stringify(error))
+                KSAppService.showToast("Cannot get route path", TOAST_SHOW_LONG)
+            })
+    }
+
+    function initRoutePath(data) {
+        $scope.shuttleRoutePath = data["data"]["routine"]
     }
 
     function updateSchedule(routineKey, stationKey, scheduleList) {
