@@ -31,9 +31,10 @@ exports.patchCurrentWeather = function (apiParams, callbackFunc) {
         var weatherData = JSON.parse(weatherResultStr)
         if(weatherData["cod"] == global.define.HTTP_STATUS_CODE_OK) {
             global.log.debug("weatherManager", "patchCurrentWeather", "weather req result received: " + weatherResultStr)
-            setWeatherData2DB(weatherData, function (status) {
-                callbackFunc(status)
-            })
+            // setWeatherData2DB(weatherData, function (status) {
+            //     callbackFunc(status)
+            // })
+            callbackFunc(true)
         }
         else {
             global.log.warn("weatherManager", "patchCurrentWeather", "weather api server returns wrong code: " + weatherResultStr)
@@ -62,5 +63,16 @@ exports.setWeatherData2DB = function (weatherData, callbackFunc) {
             global.log.info("weatherManager", "setWeatherData2DB", "weather data saved")
             callbackFunc(true)
         }
+    })
+}
+
+exports.getWeatherDataFromDB = function (callbackFunc) {
+    var admin = global.admin
+
+    var weatherRef = admin.database().ref(global.define.DB_PATH_OPEN_API_WEATHER)
+    weatherRef.once("value", function (weatherSnapshot) {
+        var weatherData = weatherSnapshot.val()
+        global.log.debug("weatherManager", "getWeatherDataFromDB", "ok this is saved weather info: " + JSON.stringify(weatherData))
+        callbackFunc(weatherData)
     })
 }
