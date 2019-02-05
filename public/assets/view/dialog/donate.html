@@ -1,0 +1,78 @@
+<md-dialog flex="90" flex-gt-md="50">
+    <md-toolbar class="toolbar-black">
+        <div class="md-toolbar-tools">
+            <h2>와! 도네!</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class="fa fa-2x fa-close" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content md-theme="docs-dark" class="md-padding">
+        <form name="donateForm" class="md-padding">
+            <div layout>
+                <div flex="10" layout layout-align="center center">
+                    <span class="md-body-1">기부 금액</span>
+                </div>
+                <md-slider flex class="md-warn" md-discrete ng-model="donateMoney" step="1" min="5" max="20"
+                           aria-label="rating">
+                </md-slider>
+            </div>
+            <div layout class="md-padding">
+                <div flex layout layout-align="center center">
+                    <span class="md-body-1">기부 금액 ${{donateMoney}}</span>
+                </div>
+            </div>
+            <div layout class="md-padding">
+                <div flex layout layout-align="center center" ng-switch="donateMoney">
+                    <span class="md-body-1" ng-switch-when="5">이거면 서버운영 하는데 보름은 버틸 수 있겠군요.</span>
+                    <span class="md-body-1" ng-switch-when="6">이거면 서버운영 하는데 보름을 버티고 까까를 사먹을 수 있겠군요.</span>
+                    <span class="md-body-1" ng-switch-when="7">이거면 서버운영 하는데 보름을 버티고 까까를 사먹을 수 있겠군요.</span>
+                    <span class="md-body-1" ng-switch-when="8">이거면 서버운영 하는데 보름을 버티고 까까를 사먹을 수 있겠군요.</span>
+                    <span class="md-body-1" ng-switch-when="9">이거면 서버운영 하는데 보름을 버티고 까까를 사먹을 수 있겠군요.</span>
+                    <span class="md-body-1" ng-switch-when="10">이거면 서버운영 하는데 한달을 버틸 수 있어요!</span>
+                    <span class="md-body-1" ng-switch-when="11">이거면 서버운영 하는데 한달을 버틸 수 있어요!</span>
+                    <span class="md-body-1" ng-switch-when="12">이거면 서버운영 하는데 한달을 버틸 수 있어요!</span>
+                    <span class="md-body-1" ng-switch-when="13">이거면 서버운영 하는데 한달을 버틸 수 있어요! 어쩌면 밥 한끼도 가능할 지도</span>
+                    <span class="md-body-1" ng-switch-when="14">이거면 서버운영 하는데 한달을 버틸 수 있어요! 어쩌면 밥 한끼도 가능할 지도</span>
+                    <span class="md-body-1" ng-switch-when="15">지금 당장 치킨을 시켜볼까요?</span>
+                    <span class="md-body-1" ng-switch-when="16">지금 당장 치킨을 시켜볼까요?</span>
+                    <span class="md-body-1" ng-switch-when="17">지금 당장 치킨을 시켜볼까요? 콜라도 같이요.</span>
+                    <span class="md-body-1" ng-switch-when="18">지금 당장 치킨을 시켜볼까요? 콜라도 같이요.</span>
+                    <span class="md-body-1" ng-switch-when="19">반반. 무 많이</span>
+                    <span class="md-body-1" ng-switch-when="20">엄마! 당장 카메라 가져와! 우오와</span>
+
+                    <span class="md-body-1" ng-switch-default>이 금액은 대체 뭐죠?</span>
+                </div>
+            </div>
+            <div layout class="md-padding">
+                <ul class="actions">
+                    <li><a ng-href="https://www.paypal.me/stories282/{{donateMoney}}" class="button primary"><div>도네이션 하기</div></a></li>
+                </ul>
+            </div>
+        </form>
+        <div class="md-dialog-content" layout="column">
+            <h3>도움말</h3>
+            <ol>
+                <li>이 개발자를 전적으로 믿으셔야 합니다.</li>
+                <li>기부금은 서버 운영과 치킨으로 사용됩니다.</li>
+                <li>Paypal을 이용하여 결제가 됩니다.</li>
+            </ol>
+        </div>
+
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <!--&lt;!&ndash;<md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>&ndash;&gt;-->
+        <!--&lt;!&ndash;More on Wikipedia&ndash;&gt;-->
+        <!--&lt;!&ndash;</md-button>&ndash;&gt;-->
+        <!--<span flex></span>-->
+        <!--<md-button ng-click="hide()">-->
+        <!--Cancel-->
+        <!--</md-button>-->
+        <md-button ng-click="hide()">
+            나갈꺼야? 정말루?
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

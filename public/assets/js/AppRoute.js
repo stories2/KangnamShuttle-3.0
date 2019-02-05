@@ -2,13 +2,13 @@ app.config(function($routeProvider) {
     $routeProvider
         .when("/", {
             templateUrl : "assets/view/default.html",
-            controller : null,
+            controller : "DefaultPageController",
             cache: false,
             disableCache: true,
         })
         .when("/home", {
             templateUrl : "assets/view/default.html",
-            controller : null,
+            controller : "DefaultPageController",
             cache: false,
             disableCache: true,
         })
