@@ -1,6 +1,7 @@
 exports.patchCurrentWeather = function (apiParams, callbackFunc) {
     const util = require('util')
     var httpReqManager = require('../Utils/httpRequestManager')
+    var setWeatherData2DB = this.setWeatherData2DB
     global.log.debug("weatherManager", "patchCurrentWeather", "api data: " + JSON.stringify(apiParams))
 
     var httpHeadersOptions = {
@@ -27,10 +28,39 @@ exports.patchCurrentWeather = function (apiParams, callbackFunc) {
     global.log.debug("weatherManager", "patchCurrentWeather", "fake header option: " + JSON.stringify(httpHeadersOptions))
 
     httpReqManager.request(httpHeadersOptions, function (weatherResult, weatherResultStr) {
-        global.log.debug("weatherManager", "patchCurrentWeather", "weather req result received: " + weatherResultStr)
-        callbackFunc(true)
+        var weatherData = JSON.parse(weatherResultStr)
+        if(weatherData["cod"] == global.define.HTTP_STATUS_CODE_OK) {
+            global.log.debug("weatherManager", "patchCurrentWeather", "weather req result received: " + weatherResultStr)
+            setWeatherData2DB(weatherData, function (status) {
+                callbackFunc(status)
+            })
+        }
+        else {
+            global.log.warn("weatherManager", "patchCurrentWeather", "weather api server returns wrong code: " + weatherResultStr)
+            callbackFunc(false)
+        }
     }, function (error) {
         global.log.error("weatherManager", "patchCurrentWeather", "cannot get weather req result: " + JSON.stringify(error))
         callbackFunc(false)
     }, null)
+}
+
+exports.setWeatherData2DB = function (weatherData, callbackFunc) {
+    var admin = global.admin
+    var datetimeManager = require('../Utils/datetimeManager')
+    var currentDateTime = datetimeManager.getCurrentTime()
+    weatherData["updateDateTime"] = currentDateTime.toISOString()
+    weatherData["updateDateTimeSec"] = currentDateTime.getTime()
+
+    var weatherRef = admin.database().ref(global.define.DB_PATH_OPEN_API_WEATHER)
+    weatherRef.set(weatherData, function (error) {
+        if(error) {
+            global.log.error("weatherManager", "setWeatherData2DB", "cannot save weather info: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.info("weatherManager", "setWeatherData2DB", "weather data saved")
+            callbackFunc(true)
+        }
+    })
 }
