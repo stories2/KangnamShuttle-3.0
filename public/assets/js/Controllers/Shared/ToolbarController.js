@@ -44,6 +44,44 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
             KSAppService.error("ToolbarController", "onBtnSignOutClicked", "cannot sign out: " + error);
         });
     }
+
+    $scope.onDonateBtnClicked = function () {
+        KSAppService.info("ToolbarController", "onDonateBtnClicked", "yea! donate!")
+
+
+        $mdDialog.show({
+            controller: donateDialogController,
+            templateUrl: 'assets/view/dialog/donate.html',
+            parent: angular.element(document.body),
+            // targetEvent: ev,
+            clickOutsideToClose:true
+        })
+            .then(function() {
+                KSAppService.debug("ToolbarController", "onDonateBtnClicked", "donate ok")
+            }, function() {
+                KSAppService.info("ToolbarController", "onDonateBtnClicked", "you just canceled donate dialog")
+            });
+    }
+
+    function donateDialogController($scope, $mdDialog) {
+
+        $scope.data = {}
+        $scope.donateMoney = 5
+
+        $scope.hide = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.submit = function() {
+            // $scope.data["signIn"] = isSignIn
+            // KSAppService.debug("ToolbarController", "signInDialogController-submit", "user data: " + JSON.stringify($scope.data))
+            $mdDialog.hide();
+        };
+    }
     
     function listenAuthStatusChanged() {
         firebase.auth().onAuthStateChanged(function(user) {
