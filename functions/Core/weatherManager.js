@@ -1,7 +1,8 @@
 exports.patchCurrentWeather = function (apiParams, callbackFunc) {
     const util = require('util')
     var httpReqManager = require('../Utils/httpRequestManager')
-    var setWeatherData2DB = this.setWeatherData2DB
+    const weatherManager = require('./weatherManager')
+    const setWeatherData2DB = weatherManager.setWeatherData2DB
     global.log.debug("weatherManager", "patchCurrentWeather", "api data: " + JSON.stringify(apiParams))
 
     var httpHeadersOptions = {
@@ -31,10 +32,10 @@ exports.patchCurrentWeather = function (apiParams, callbackFunc) {
         var weatherData = JSON.parse(weatherResultStr)
         if(weatherData["cod"] == global.define.HTTP_STATUS_CODE_OK) {
             global.log.debug("weatherManager", "patchCurrentWeather", "weather req result received: " + weatherResultStr)
-            // setWeatherData2DB(weatherData, function (status) {
-            //     callbackFunc(status)
-            // })
-            callbackFunc(true)
+            setWeatherData2DB(weatherData, function (status) {
+                callbackFunc(status)
+            })
+            // callbackFunc(true)
         }
         else {
             global.log.warn("weatherManager", "patchCurrentWeather", "weather api server returns wrong code: " + weatherResultStr)
