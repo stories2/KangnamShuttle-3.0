@@ -106,7 +106,27 @@ sudo firebase serve --only functions
 
 ## OpenAPI
 
-### Bus
+### Weather
+
+- Endpoint: `https://openweathermap.org/`
+
+### Ubikhan
+
+- Endpoint: `https://new.ubikhan.com/`
+
+### Public Subway
+
+- Reference: `https://data.seoul.go.kr/dataList/datasetView.do?infId=OA-111&srvType=A&serviceKind=1&currentPageNo=null`
+- Station Code: `http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-118&srvType=S&serviceKind=1`
+
+
+| 노선 명 | 역사 명 | 역사 코드 |
+|:-:|:-:|:-:|
+| E  | 강남대  | 4502  |
+| E  | 기흥  | 4501  |
+| B  | 기흥  | 1865  |
+
+### Public Bus
 
 - 강남대역 정류소 번호 -> `228000694`
 - 강남대역 건너편 정류소 번호 -> `228000684`
