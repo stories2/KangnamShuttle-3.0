@@ -79,6 +79,8 @@ v3PrivateApi.patch('/shuttle/routine/path', privateRoute.patchShuttleRoutine)
 
 v3PrivateApi.get('/role', privateRoute.getAllRoleList)
 
+v3PrivateApi.get('/api', privateRoute.getApiList)
+
 exports.v3PrivateApi = functions.https.onRequest(v3PrivateApi)
 
 v3KakaoApi.use(cors)

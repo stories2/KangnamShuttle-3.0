@@ -203,3 +203,12 @@ exports.getAllRoleList = function (request, response) {
         responseManager.ok(response, roleList)
     })
 }
+
+exports.getApiList = function (request, response) {
+    var apiManager = require('../../Core/apiManager')
+    var responseManager = request.responseManager
+
+    apiManager.getApiList(function (apiList) {
+        responseManager.ok(response, apiList)
+    })
+}
