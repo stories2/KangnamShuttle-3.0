@@ -1,1 +1,33 @@
-<h1>It Works!</h1>
+<div layout-fill layout="row" layout-align="center center" ng-init="onLoad()">
+    <section id="main" class="wrapper">
+        <div class="inner">
+            <div class="content">
+                <header>
+                    <h2>API 관리</h2>
+                    <h4>서버에 등록된 API 관리</h4>
+                </header>
+                <md-button ng-click="onLoad()">Refresh</md-button>
+                <div class="table-wrapper" style="max-height: 500px;overflow-y: auto">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="api in apiList">
+                            <td>{{ api["endpoint"] }}</td>
+                            <td>{{ api["method"] }}</td>
+                            <td>{{ api["name"] }}</td>
+                            <td>{{ api["role"] }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

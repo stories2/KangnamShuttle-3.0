@@ -41,6 +41,8 @@ var API_PATCH_ROUTE_PATH = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/pa
 var API_POST_SHUTTLE_SCHEDULE_PIC = LIVE_SERVER_DOMAIN + "v3FileApi/upload/shuttleSchedulePic"
 //ROLE
 var API_GET_ROLE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/role"
+//API
+var API_GET_API_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/api"
 
 var FEEDBACK_SIGN_UP_SUCCESS = "계정 생성이 완료되었습니다."
 var FEEDBACK_SIGN_UP_FAILED = "계정 생성 중 문제가 발생되었습니다. 저런;"
