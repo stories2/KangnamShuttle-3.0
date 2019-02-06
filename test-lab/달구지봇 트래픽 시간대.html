@@ -1,0 +1,74 @@
+
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+    $.getScript( "https://www.gstatic.com/charts/loader.js", function() {
+      if ((typeof google === 'undefined') || (typeof google.visualization === 'undefined')) 
+      {
+         google.charts.load('current', {'packages':['corechart']});
+      }
+
+      google.charts.setOnLoadCallback(drawChart_달구지봇_트래픽_시간대);
+    });
+    
+    function drawChart_달구지봇_트래픽_시간대() {
+        var dataArr = [['', 'data1'], [0, 237], [1, 178], [2, 112], [3, 37], [4, 39], [5, 46], [6, 50], [7, 554], [8, 6818], [9, 4131], [10, 4623], [11, 6641], [12, 3702], [13, 5520], [14, 6403], [15, 3909], [16, 4187], [17, 4857], [18, 2649], [19, 661], [20, 247], [21, 192], [22, 444], [23, 456]];
+        var grTitle = '달구지봇 트래픽 시간대';
+        var height = 600;
+        var width = 1000;
+        var logScaleFlag = false;
+        var vAxisTitle = '';
+        var vAxisOpt;
+        if(logScaleFlag)
+        {
+            vAxisOpt = { title: vAxisTitle, logScale: true, format: 'scientific'};
+        }
+        else
+        {
+            vAxisOpt = { title: vAxisTitle };
+        }
+
+        var options = {
+            width: width,
+            height: height,
+            explorer: { actions: ['dragToZoom', 'rightClickToReset'], maxZoomIn: 0.01 },
+            curveType: 'function',
+            title: grTitle,
+            titleTextStyle: { fontSize: 18, bold: true },
+            hAxis: { title: dataArr[0][0] },
+            vAxis: vAxisOpt,
+            
+        };
+
+        var data = new google.visualization.DataTable();
+        var csvOut = "data:text/csv;charset=utf-8";
+        // Add column headers
+        for (var j = 0; j < dataArr[0].length; j++)
+        {
+            data.addColumn('number',dataArr[0][j]);
+            csvOut += ',' + dataArr[0][j];
+        }
+        csvOut += '\n';
+
+        // Add columns
+        for (var i = 1; i < dataArr.length; i++)
+        {
+            data.addRow(dataArr[i]);
+            csvOut += dataArr[i].join(",") + '\n';
+        }
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_달구지봇_트래픽_시간대'));
+
+        chart.draw(data, options);
+        document.getElementById('pic_div_달구지봇_트래픽_시간대').innerHTML = '<a href="' + chart.getImageURI() + '" download="'+grTitle+'.png">Download Figure</a>'
+        document.getElementById('csvFileDl_달구지봇_트래픽_시간대').innerHTML = '<a href="' + encodeURI(csvOut) + '" download="'+grTitle+'.csv">Download CSV</a>'
+    }
+    </script>
+</head>
+<body>
+    <div id="chart_div_달구지봇_트래픽_시간대"></div>
+    <div id="pic_div_달구지봇_트래픽_시간대"></div>
+    <div id="csvFileDl_달구지봇_트래픽_시간대"></div>
+</body>
+</html>
