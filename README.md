@@ -120,11 +120,11 @@ sudo firebase serve --only functions
 - Station Code: `http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-118&srvType=S&serviceKind=1`
 
 
-| 노선 명 | 역사 명 | 역사 코드 |
-|:-:|:-:|:-:|
-| E  | 강남대  | 4502  |
-| E  | 기흥  | 4501  |
-| B  | 기흥  | 1865  |
+| 노선 코드 | 노선 명 | 역사 명 | 역사 코드 |
+|:-:|:-:|:-:|:-:|
+| E  | 용인경전철 | 강남대  | 4502  |
+| E  | 용인경전철 | 기흥  | 4501  |
+| B  | 분당선 | 기흥  | 1865  |
 
 ### Public Bus
 
