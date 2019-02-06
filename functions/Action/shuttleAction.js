@@ -1,13 +1,30 @@
 exports.shuttleOrderMenu = function (request, response, callbackFunc) { // 달구지라, 어떤걸 알려줄까요 #100
+    const datetimeManager = require('../Utils/datetimeManager')
+    const util = require('util')
+    const admin = global.admin
     const action = JSON.parse(JSON.stringify(request.action))
     const responseManager = request.responseManager
     global.log.debug("shuttleAction", "shuttleOrderMenu", "user data: " + JSON.stringify(request.user) + " action data: " + JSON.stringify(request.action))
 
-    responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
-    for(var index in action["quickReplies"]) {
-        responseManager.pushQuickReply(action["quickReplies"][index])
-    }
-    callbackFunc()
+    var noticeTimelineRef = admin.database().ref(global.define.DB_PATH_SHUTTLE_NOTICE_TIMELINE)
+    noticeTimelineRef.once("value", function (noticeTimelineSnapshot) {
+        var noticeTimeline = noticeTimelineSnapshot.val()
+        var currentDate = datetimeManager.getCurrentTime()
+        var currentHour = currentDate.getHours()
+        var currentNotice = noticeTimeline[currentHour]
+
+        global.log.debug("shuttleAction", "shuttleOrderMenu", "hour: " + currentHour + " notice: " + currentNotice)
+
+        var text = action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"]
+        text = util.format(text, currentNotice)
+
+        action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"] = text
+        responseManager.pushTemplate(action["response"][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+        for(var index in action["quickReplies"]) {
+            responseManager.pushQuickReply(action["quickReplies"][index])
+        }
+        callbackFunc()
+    })
 }
 
 exports.shuttleSelectDirection = function (request, response, callbackFunc) { // 어디로 갈껀가요 #101
