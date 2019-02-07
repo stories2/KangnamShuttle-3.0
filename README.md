@@ -108,6 +108,10 @@ sudo firebase serve --only functions
 
 ## OpenAPI
 
+### Paypal in-app purchase
+
+- Reference [Link](https://www.nodejsera.com/paypal-payment-integration-using-nodejs-part1.html)
+
 ### Weather
 
 - Endpoint: `https://openweathermap.org/`
