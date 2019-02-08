@@ -74,6 +74,7 @@ exports.getShuttleSchedulePic = function (request, response) {
 
     shuttleManager.getShuttleSchedulePic(request, response, function (imageBinary) {
         if(imageBinary) {
+            response.set('Cache-Control', 'public, max-age=600, s-maxage=600')
             responseManager.binary(response, imageBinary)
         }
         else {
