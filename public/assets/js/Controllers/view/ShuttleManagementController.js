@@ -27,19 +27,27 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.uploadShuttleSchedule = function() {
-        Upload.upload({
-            url: API_POST_SHUTTLE_SCHEDULE_PIC,
-            data: {file: $scope.shuttleScheduleImage},
-            headers: {'Authorization': KSAppService.getToken()}
-        }).then(function (resp) {
-            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received")
-            KSAppService.showToast("Shuttle schedule uploaded", TOAST_SHOW_LONG)
-        }, function (resp) {
-            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received")
-            KSAppService.showToast("Shuttle schedule upload failed", TOAST_SHOW_LONG)
-        }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", 'progress: ' + progressPercentage + '% ')
+
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            Upload.upload({
+                url: API_POST_SHUTTLE_SCHEDULE_PIC,
+                data: {file: $scope.shuttleScheduleImage},
+                headers: {'Authorization': KSAppService.getToken()}
+            }).then(function (resp) {
+                KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received")
+                KSAppService.showToast("Shuttle schedule uploaded", TOAST_SHOW_LONG)
+            }, function (resp) {
+                KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", "uploade result received")
+                KSAppService.showToast("Shuttle schedule upload failed", TOAST_SHOW_LONG)
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                KSAppService.debug("ShuttleManagementController", "uploadShuttleSchedule", 'progress: ' + progressPercentage + '% ')
+            });
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "uploadShuttleSchedule", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
         });
     }
 
@@ -192,36 +200,52 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     }
 
     $scope.submitRoutePath = function (routePath) {
-        var payload = {
-            "routine": routePath
-        }
-        KSAppService.patchReq(
-            API_PATCH_ROUTE_PATH,
-            payload,
-            function (data) {
-                KSAppService.debug("ShuttleManagementController", "submitRoutePath", "patch route path result received: " + JSON.stringify(data))
-                getRoutePath()
-                KSAppService.showToast("Patch route ok", TOAST_SHOW_LONG)
-            },
-            function (error) {
-                KSAppService.error("ShuttleManagementController", "submitRoutePath", "cannot patch route: " + JSON.stringify(error))
-                KSAppService.showToast("Cannot patch route", TOAST_SHOW_LONG)
-            })
+
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            var payload = {
+                "routine": routePath
+            }
+            KSAppService.patchReq(
+                API_PATCH_ROUTE_PATH,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "submitRoutePath", "patch route path result received: " + JSON.stringify(data))
+                    getRoutePath()
+                    KSAppService.showToast("Patch route ok", TOAST_SHOW_LONG)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "submitRoutePath", "cannot patch route: " + JSON.stringify(error))
+                    KSAppService.showToast("Cannot patch route", TOAST_SHOW_LONG)
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "submitRoutePath", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
     }
 
     function getRoutePath() {
-        var payload = {}
-        KSAppService.getReq(
-            API_GET_ROUTE_PATH,
-            payload,
-            function (data) {
-                KSAppService.debug("ShuttleManagementController", "getRoute", "route path result received: " + JSON.stringify(data))
-                initRoutePath(data)
-            },
-            function (error) {
-                KSAppService.error("ShuttleManagementController", "getRoute", "cannot get route path: " + JSON.stringify(error))
-                KSAppService.showToast("Cannot get route path", TOAST_SHOW_LONG)
-            })
+
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            var payload = {}
+            KSAppService.getReq(
+                API_GET_ROUTE_PATH,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "getRoute", "route path result received: " + JSON.stringify(data))
+                    initRoutePath(data)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "getRoute", "cannot get route path: " + JSON.stringify(error))
+                    KSAppService.showToast("Cannot get route path", TOAST_SHOW_LONG)
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "getRoutePath", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
     }
 
     function initRoutePath(data) {
@@ -237,45 +261,61 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         }
         KSAppService.debug("ShuttleManagementController", "updateSchedule", "converted schedule: " + JSON.stringify(convertedScheduleList))
 
-        var payload = {
-            "routineKey": routineKey,
-            "stationKey": stationKey,
-            "schedule": convertedScheduleList
-        }
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
 
-        KSAppService.patchReq(
-            API_PATCH_ROUTINE_STATION_SCHEDULE,
-            payload,
-            function (data) {
-                KSAppService.debug("ShuttleManagementController", "updateSchedule", "update schedule result received: " + JSON.stringify(data))
-                getScheduleList(routineKey, stationKey)
-                KSAppService.showToast("Update schedule ok", TOAST_SHOW_LONG)
-            },
-            function (error) {
-                KSAppService.error("ShuttleManagementController", "updateSchedule", "update schedule failed: " + JSON.stringify(error))
-                KSAppService.showToast("Update schedule failed", TOAST_SHOW_LONG)
-            })
+            var payload = {
+                "routineKey": routineKey,
+                "stationKey": stationKey,
+                "schedule": convertedScheduleList
+            }
+
+            KSAppService.patchReq(
+                API_PATCH_ROUTINE_STATION_SCHEDULE,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "updateSchedule", "update schedule result received: " + JSON.stringify(data))
+                    getScheduleList(routineKey, stationKey)
+                    KSAppService.showToast("Update schedule ok", TOAST_SHOW_LONG)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "updateSchedule", "update schedule failed: " + JSON.stringify(error))
+                    KSAppService.showToast("Update schedule failed", TOAST_SHOW_LONG)
+                })
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "updateSchedule", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
     }
 
     function delStation(routineKey, stationKey) {
-        var payload = {
-            "routineKey": routineKey,
-            "stationKey": stationKey
-        }
 
-        KSAppService.deleteReq(
-            API_DELETE_ROUTINE_STATION,
-            payload,
-            function (data) {
-                KSAppService.debug("ShuttleManagementController", "delStation", "delete station result received: " + JSON.stringify(data))
-                getStationList(routineKey)
-                KSAppService.showToast("Delete station ok", TOAST_SHOW_LONG)
-            },
-            function (error) {
-                KSAppService.error("ShuttleManagementController", "delStation", "delete station failed: " + JSON.stringify(error))
-                KSAppService.showToast("Delete station failed", TOAST_SHOW_LONG)
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            var payload = {
+                "routineKey": routineKey,
+                "stationKey": stationKey
             }
-        )
+
+            KSAppService.deleteReq(
+                API_DELETE_ROUTINE_STATION,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "delStation", "delete station result received: " + JSON.stringify(data))
+                    getStationList(routineKey)
+                    KSAppService.showToast("Delete station ok", TOAST_SHOW_LONG)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "delStation", "delete station failed: " + JSON.stringify(error))
+                    KSAppService.showToast("Delete station failed", TOAST_SHOW_LONG)
+                }
+            )
+        }).catch(function(error) {
+            // Handle error
+            KSAppService.error("ShuttleManagementController", "delStation", "failed generate token: " + JSON.stringify(error))
+            KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+        });
     }
 
     function createOrUpdateStation(station) {
@@ -284,34 +324,50 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             "name": station["stationName"]
         }
         if(station.hasOwnProperty("stationKey")) {//update
-            payload["stationKey"] = station["stationKey"]
 
-            KSAppService.patchReq(
-                API_PATCH_ROUTINE_STATION,
-                payload,
-                function (data) {
-                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-update", "update result received: " + JSON.stringify(data))
-                    getStationList($scope.routineKey)
-                    KSAppService.showToast("Update station ok", TOAST_SHOW_LONG)
-                },
-                function (error) {
-                    KSAppService.error("ShuttleManagementController", "createOrUpdateStation-update", "update failed: " + JSON.stringify(error))
-                    KSAppService.showToast("Update station Failed", TOAST_SHOW_LONG)
-                })
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                KSAppService.setToken(idToken)
+                payload["stationKey"] = station["stationKey"]
+
+                KSAppService.patchReq(
+                    API_PATCH_ROUTINE_STATION,
+                    payload,
+                    function (data) {
+                        KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-update", "update result received: " + JSON.stringify(data))
+                        getStationList($scope.routineKey)
+                        KSAppService.showToast("Update station ok", TOAST_SHOW_LONG)
+                    },
+                    function (error) {
+                        KSAppService.error("ShuttleManagementController", "createOrUpdateStation-update", "update failed: " + JSON.stringify(error))
+                        KSAppService.showToast("Update station Failed", TOAST_SHOW_LONG)
+                    })
+            }).catch(function(error) {
+                // Handle error
+                KSAppService.error("ShuttleManagementController", "createOrUpdateStation", "failed generate token: " + JSON.stringify(error))
+                KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+            });
         }
         else {//create
-            KSAppService.postReq(
-                API_POST_ROUTINE_STATION,
-                payload,
-                function (data) {
-                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create result received: " + JSON.stringify(data))
-                    getStationList($scope.routineKey)
-                    KSAppService.showToast("Create station ok", TOAST_SHOW_LONG)
-                },
-                function (error) {
-                    KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create failed: " + JSON.stringify(error))
-                    KSAppService.showToast("Create station Failed", TOAST_SHOW_LONG)
-                })
+
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                KSAppService.setToken(idToken)
+                KSAppService.postReq(
+                    API_POST_ROUTINE_STATION,
+                    payload,
+                    function (data) {
+                        KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create result received: " + JSON.stringify(data))
+                        getStationList($scope.routineKey)
+                        KSAppService.showToast("Create station ok", TOAST_SHOW_LONG)
+                    },
+                    function (error) {
+                        KSAppService.debug("ShuttleManagementController", "createOrUpdateStation-create", "create failed: " + JSON.stringify(error))
+                        KSAppService.showToast("Create station Failed", TOAST_SHOW_LONG)
+                    })
+            }).catch(function(error) {
+                // Handle error
+                KSAppService.error("ShuttleManagementController", "createOrUpdateStation-create", "failed generate token: " + JSON.stringify(error))
+                KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+            });
         }
     }
 
@@ -320,34 +376,50 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             "name": routine["routineName"]
         }
         if(routine.hasOwnProperty("routineKey")) {//update
-            payload["routineKey"] = routine["routineKey"]
 
-            KSAppService.patchReq(
-                API_PATCH_ROUTINE,
-                payload,
-                function (data) {
-                    KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-update", "update result received: " + JSON.stringify(data))
-                    getRoutineList()
-                    KSAppService.showToast("Update routine ok", TOAST_SHOW_LONG)
-                },
-                function (error) {
-                    KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-update", "cannot update routine: " + JSON.stringify(error))
-                    KSAppService.showToast("Update routine failed", TOAST_SHOW_LONG)
-                })
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                KSAppService.setToken(idToken)
+                payload["routineKey"] = routine["routineKey"]
+
+                KSAppService.patchReq(
+                    API_PATCH_ROUTINE,
+                    payload,
+                    function (data) {
+                        KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-update", "update result received: " + JSON.stringify(data))
+                        getRoutineList()
+                        KSAppService.showToast("Update routine ok", TOAST_SHOW_LONG)
+                    },
+                    function (error) {
+                        KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-update", "cannot update routine: " + JSON.stringify(error))
+                        KSAppService.showToast("Update routine failed", TOAST_SHOW_LONG)
+                    })
+            }).catch(function(error) {
+                // Handle error
+                KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-update", "failed generate token: " + JSON.stringify(error))
+                KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+            });
         }
         else { //create
-            KSAppService.postReq(
-                API_POST_ROUTINE,
-                payload,
-                function (data) {
-                    KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-create", "create result received: " + JSON.stringify(data))
-                    getRoutineList()
-                    KSAppService.showToast("Create routine ok", TOAST_SHOW_LONG)
-                },
-                function (error) {
-                    KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "cannot create routine: " + JSON.stringify(error))
-                    KSAppService.showToast("Create routine failed", TOAST_SHOW_LONG)
-                })
+
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                KSAppService.setToken(idToken)
+                KSAppService.postReq(
+                    API_POST_ROUTINE,
+                    payload,
+                    function (data) {
+                        KSAppService.debug("ShuttleManagementController", "createOrUpdateRoutine-create", "create result received: " + JSON.stringify(data))
+                        getRoutineList()
+                        KSAppService.showToast("Create routine ok", TOAST_SHOW_LONG)
+                    },
+                    function (error) {
+                        KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "cannot create routine: " + JSON.stringify(error))
+                        KSAppService.showToast("Create routine failed", TOAST_SHOW_LONG)
+                    })
+            }).catch(function(error) {
+                // Handle error
+                KSAppService.error("ShuttleManagementController", "createOrUpdateRoutine-create", "failed generate token: " + JSON.stringify(error))
+                KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
+            });
         }
     }
 
