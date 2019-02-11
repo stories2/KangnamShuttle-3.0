@@ -109,6 +109,7 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                     global.log.debug("shuttleAction", "shuttleDirectionDynamic", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
 
                     var scheduleTimeSecBak = global.define.ZERO
+                    var isFounded = false
 
                     for(var scheduleIndex in scheduleSnapshotData[station]) {
                         var scheduleTimeSec = scheduleSnapshotData[station][scheduleIndex]
@@ -117,7 +118,7 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                         if(scheduleIndex == global.define.ZERO) {
                             var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
                             if(currentTimeSec < scheduleTimeSec) { // first schedule action["response"][1]
-
+                                isFounded = true
                                 templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_FIRST],
                                     global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
                                     global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
@@ -129,13 +130,14 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                         }
                         else if(scheduleIndex == scheduleSize - 1) {
                             if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
-
+                                isFounded = true
                                 templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
                                 templateItems.push(templateItem)
                                 global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found missed #" + scheduleIndex + " -> " + scheduleTimeSec)
                                 break;
                             }
                             else { // same as currentTimeSec <= scheduleTimeSec : last schedule action["response"][3]
+                                isFounded = true
                                 templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_LAST],
                                     global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec))
                                 templateItems.push(templateItem)
@@ -146,7 +148,7 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                         else { // normal schedule action["response"][2]
                             var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
                             if(scheduleTimeSecBak <= currentTimeSec && currentTimeSec < scheduleTimeSec) {
-
+                                isFounded = true
                                 templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_NORMAL],
                                     global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
                                     global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
@@ -156,6 +158,11 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                             }
                         }
                         scheduleTimeSecBak = scheduleTimeSec
+                    }
+
+                    if(isFounded == false) {
+                        templateItem["description"] = "시간표 계산중 문제가 발생되었습니다."
+                        templateItems.push(templateItem)
                     }
                 }
             }
