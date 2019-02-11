@@ -100,57 +100,63 @@ exports.shuttleDirectionDynamic = function(request, response, callbackFunc) {
                 }
 
                 var station = scheduleSnapshotData["Order"][index]
-                var scheduleSize = Object.keys(scheduleSnapshotData[station]).length
-                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
+                if(scheduleSnapshotData[station] == null || scheduleSnapshotData[station] == undefined) {
+                    templateItem["description"] = "잘못된 시간표가 감지되었습니다."
+                    templateItems.push(templateItem)
+                }
+                else {
+                    var scheduleSize = Object.keys(scheduleSnapshotData[station]).length
+                    global.log.debug("shuttleAction", "shuttleDirectionDynamic", "search nearest shuttle, station: " + station + " current time sec: " + currentTimeSec + " schedule length: " + scheduleSize)
 
-                var scheduleTimeSecBak = global.define.ZERO
+                    var scheduleTimeSecBak = global.define.ZERO
 
-                for(var scheduleIndex in scheduleSnapshotData[station]) {
-                    var scheduleTimeSec = scheduleSnapshotData[station][scheduleIndex]
+                    for(var scheduleIndex in scheduleSnapshotData[station]) {
+                        var scheduleTimeSec = scheduleSnapshotData[station][scheduleIndex]
 
-                    global.log.debug("shuttleAction", "shuttleDirectionDynamic", "#" + scheduleIndex + ": " + scheduleTimeSec)
-                    if(scheduleIndex == global.define.ZERO) {
-                        var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
-                        if(currentTimeSec < scheduleTimeSec) { // first schedule action["response"][1]
+                        global.log.debug("shuttleAction", "shuttleDirectionDynamic", "#" + scheduleIndex + ": " + scheduleTimeSec)
+                        if(scheduleIndex == global.define.ZERO) {
+                            var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
+                            if(currentTimeSec < scheduleTimeSec) { // first schedule action["response"][1]
 
-                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_FIRST],
-                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
-                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
-                            templateItems.push(templateItem)
+                                templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_FIRST],
+                                    global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
+                                    global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
+                                templateItems.push(templateItem)
 
-                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found first #" + scheduleIndex + " -> " + scheduleTimeSec)
-                            break;
+                                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found first #" + scheduleIndex + " -> " + scheduleTimeSec)
+                                break;
+                            }
                         }
+                        else if(scheduleIndex == scheduleSize - 1) {
+                            if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
+
+                                templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
+                                templateItems.push(templateItem)
+                                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found missed #" + scheduleIndex + " -> " + scheduleTimeSec)
+                                break;
+                            }
+                            else { // same as currentTimeSec <= scheduleTimeSec : last schedule action["response"][3]
+                                templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_LAST],
+                                    global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec))
+                                templateItems.push(templateItem)
+                                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found last #" + scheduleIndex + " -> " + scheduleTimeSec)
+                                break;
+                            }
+                        }
+                        else { // normal schedule action["response"][2]
+                            var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
+                            if(scheduleTimeSecBak <= currentTimeSec && currentTimeSec < scheduleTimeSec) {
+
+                                templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_NORMAL],
+                                    global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
+                                    global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
+                                templateItems.push(templateItem)
+                                global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found normal #" + scheduleIndex + " -> " + scheduleTimeSec)
+                                break;
+                            }
+                        }
+                        scheduleTimeSecBak = scheduleTimeSec
                     }
-                    else if(scheduleIndex == scheduleSize - 1) {
-                        if(scheduleTimeSec < currentTimeSec) { // missed schedule action["response"][4]
-
-                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_MISSED])
-                            templateItems.push(templateItem)
-                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found missed #" + scheduleIndex + " -> " + scheduleTimeSec)
-                            break;
-                        }
-                        else { // same as currentTimeSec <= scheduleTimeSec : last schedule action["response"][3]
-                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_LAST],
-                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec))
-                            templateItems.push(templateItem)
-                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found last #" + scheduleIndex + " -> " + scheduleTimeSec)
-                            break;
-                        }
-                    }
-                    else { // normal schedule action["response"][2]
-                        var nextScheduleTimeSec = scheduleSnapshotData[station][scheduleIndex * 1 + 1]
-                        if(scheduleTimeSecBak <= currentTimeSec && currentTimeSec < scheduleTimeSec) {
-
-                            templateItem["description"] = util.format(action["response"][global.define.RESPONSE_SHUTTLE_SCHEDULE_NORMAL],
-                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, scheduleTimeSec),
-                                global.datetime.convertSecToTimeOrMin(global.define.TIME_SEC_10MIN, currentTimeSec, nextScheduleTimeSec))
-                            templateItems.push(templateItem)
-                            global.log.debug("shuttleAction", "shuttleDirectionDynamic", "found normal #" + scheduleIndex + " -> " + scheduleTimeSec)
-                            break;
-                        }
-                    }
-                    scheduleTimeSecBak = scheduleTimeSec
                 }
             }
             template["listCard"]["items"] = templateItems
