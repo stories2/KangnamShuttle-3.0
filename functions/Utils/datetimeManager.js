@@ -24,6 +24,16 @@ exports.convertSecToTimeOrMin = function (comparison, sec1, sec2) { // must sec 
         sec2 = sec2 - min * 60
         var sec = sec2
 
+        if(Number(hour) < 10) {
+            hour = "0" + hour
+        }
+        if(Number(min) < 10) {
+            min = "0" + min
+        }
+        if(Number(sec) < 10) {
+            sec = "0" + sec
+        }
+
         return "" + hour + ":" + min + ":" + sec
     }
     else {
