@@ -20,3 +20,24 @@ exports.getWeatherOpenApiInfo = function (functions) {
         local_name: functions.config().weather_open_api.local_name
     }
 }
+
+exports.getPublicSubwayOpenApiInfo = function (functions) {
+    return {
+        "platform_e_4501": functions.config().subway_open_api.platform_e_4501,
+        "endpoint_path": functions.config().subway_open_api.endpoint_path,
+        "endpoint": functions.config().subway_open_api.endpoint,
+        "platform_e_4502": functions.config().subway_open_api.platform_e_4502,
+        "key": functions.config().subway_open_api.key,
+        "platform_b_1865": functions.config().subway_open_api.platform_b_1865
+    }
+}
+
+exports.getPublicBusOpenApiInfo = function (functions) {
+    return {
+        "endpoint": functions.config().bus_open_api.endpoint,
+        "endpoint_path": functions.config().bus_open_api.endpoint_path,
+        "station_id_next_to_kangnam_univ_platform": functions.config().bus_open_api.station_id_next_to_kangnam_univ_platform,
+        "key": functions.config().bus_open_api.key,
+        "station_id_kangnam_univ_platform": functions.config().bus_open_api.station_id_kangnam_univ_platform
+    }
+}
