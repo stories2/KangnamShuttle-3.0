@@ -108,7 +108,7 @@
 
                         <md-subheader class="md-no-sticky">
                             <h2>STATION</h2>
-                            <h4>#{{ stationKey }}</h4>
+                            <h4>현재 [{{ routineName }}]에 속한 정류소를 편집하고 있습니다.</h4>
                             <!--<md-button class="md-secondary" ><div class="fa fa-2x fa-sync"></div></md-button>-->
                         </md-subheader>
                         <md-list-item ng-repeat="station in stationList track by $index"><!-- 노선 수 만큼 md-list 생성-->
@@ -135,6 +135,7 @@
                         <md-subheader class="md-no-sticky">
                             <h2>SCHEDULE</h2>
                             <!--<md-button class="md-secondary" ><div class="fa fa-2x fa-sync"></div></md-button>-->
+                            <h4>현재 [{{ routineName }}]에 속한 [{{ stationName }}]정류소의 시간표를 편집하고 있습니다.</h4>
                         </md-subheader>
                         <md-list-item ng-repeat="schedule in scheduleList track by $index"><!-- 노선 수 만큼 md-list 생성-->
 

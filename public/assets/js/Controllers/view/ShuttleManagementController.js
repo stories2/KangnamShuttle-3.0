@@ -6,6 +6,8 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.scheduleList = []
     $scope.routineKey = ""
     $scope.stationKey = ""
+    $scope.routineName = ""
+    $scope.stationName = ""
     $scope.shuttleRoutePath = ""
     $scope.shuttleScheduleImage = ""
 
@@ -22,6 +24,8 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.scheduleList = []
         $scope.routineKey = ""
         $scope.stationKey = ""
+        $scope.routineName = ""
+        $scope.stationName = ""
         getRoutineList()
         getRoutePath()
     }
@@ -147,6 +151,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.scheduleList = []
         $scope.stationList = []
         $scope.routineKey = routine["routineKey"]
+        $scope.routineName = routine["routineName"]
         KSAppService.debug("ShuttleManagementController", "expandStation", "selected routine: " + "#" + index  + JSON.stringify(routine))
         getStationList($scope.routineKey)
     }
@@ -159,6 +164,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.expandSchedule = function (station, index) {
         $scope.scheduleList = []
         $scope.stationKey = station["stationKey"]
+        $scope.stationName = station["stationName"]
         KSAppService.debug("ShuttleManagementController", "expandSchedule", "selected station: " + "#" + index  + JSON.stringify(station))
         getScheduleList($scope.routineKey, station["stationKey"])
     }
