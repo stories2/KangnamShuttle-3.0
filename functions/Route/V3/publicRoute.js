@@ -101,7 +101,7 @@ exports.patchPublicSubway = function (request, response) {
     var platformID = request.query["platform"]
     var direction = request.query["direction"]
     
-    publicTransportManager.updateSubway(platformID, direction, function () {
+    publicTransportManager.updateSubway(platformID, direction, function (status) {
         
     })
 }
