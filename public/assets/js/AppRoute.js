@@ -18,6 +18,18 @@ app.config(function($routeProvider) {
             cache: false,
             disableCache: true,
         })
+        .when("/transport/subway", {
+            templateUrl : "assets/view/publicTransportSubway.html",
+            controller : "PublicTransportSubwayController",
+            cache: false,
+            disableCache: true,
+        })
+        .when("/transport/bus", {
+            templateUrl : "assets/view/publicTransportBus.html",
+            controller : "PublicTransportBusController",
+            cache: false,
+            disableCache: true,
+        })
         .when("/accounts", {
             templateUrl : "assets/view/accountManagement.html",
             controller : "AccountManagementController",

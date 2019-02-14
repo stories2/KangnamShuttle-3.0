@@ -11,6 +11,14 @@ app.controller("ToolbarController", function ($scope, $http, $mdToast, $mdSidena
         {
             "name": "실시간 달구지 위치",
             "url": "#!/shuttleLocation"
+        },
+        {
+            "name": "주변 지하철 도착 정보",
+            "url": "#!/transport/subway"
+        },
+        {
+            "name": "주변 버스 도착 정보",
+            "url": "#!/transport/bus"
         }
     ]
     $scope.isUserSignedIn = false
