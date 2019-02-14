@@ -110,8 +110,8 @@ exports.patchPublicSubway = function (request, response) {
     var responseManager = require('../../Utils/responseManager')
     var publicTransportManager = require('../../Core/publicTransportManager')
 
-    var platformID = request.query["platform"]
-    var direction = request.query["direction"]
+    var platformID = request.body["platform"]
+    var direction = request.body["direction"]
     
     publicTransportManager.updateSubway(platformID, direction, function (status) {
         responseManager.ok(response, {
@@ -136,8 +136,8 @@ exports.patchPublicBus = function (request, response) {
     var responseManager = require('../../Utils/responseManager')
     var publicTransportManager = require('../../Core/publicTransportManager')
 
-    var routeID = request.query["route"]
-    var platformID = request.query["platform"]
+    var routeID = request.body["route"]
+    var platformID = request.body["platform"]
 
     publicTransportManager.updateBus(routeID, platformID, function (status) {
         responseManager.ok(response, {
