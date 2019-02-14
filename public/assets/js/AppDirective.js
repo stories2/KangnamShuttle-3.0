@@ -270,6 +270,31 @@ app.directive('bus', function($window, $timeout, KSAppService) {
                 isDestroy = true
             });
 
+            function patchLatestArriveInfo() {
+                for(var platformID in platformAndRoute) {
+                    var platformData = platformAndRoute[platformID]
+                    for(var route in platformData["routeList"]) {
+
+                        const payload = {
+                            route: route,
+                            platform: platformID
+                        }
+
+                        KSAppService.debug("AppDirective-bus", "patchLatestArriveInfo", "payload: " + JSON.stringify(payload))
+
+                        KSAppService.patchReq(
+                            API_PATCH_PUBLIC_BUS,
+                            payload,
+                            function (data) {
+                                KSAppService.debug("AppDirective-bus", "patchLatestArriveInfo", "data: " + JSON.stringify(data))
+                            },
+                            function (error) {
+                                KSAppService.error("AppDirective-bus", "patchLatestArriveInfo", "cannot patch bus data: " + JSON.stringify(error))
+                            })
+                    }
+                }
+            }
+
             function getLatestArriveInfo() {
                 for(var platformID in platformAndRoute) {
                     var platformData = platformAndRoute[platformID]
@@ -307,7 +332,15 @@ app.directive('bus', function($window, $timeout, KSAppService) {
 
             function init() {
                 KSAppService.info("AppDirective-bus", "init", "init")
-                getLatestArriveInfo()
+                publicBusRefreshRoutine()
+            }
+
+            function publicBusRefreshRoutine() {
+                if(!isDestroy) {
+                    getLatestArriveInfo()
+                    patchLatestArriveInfo()
+                    $timeout(publicBusRefreshRoutine, PUBLIC_TRANSPORT_BUS_REFRESH_TIME)
+                }
             }
 
             init()

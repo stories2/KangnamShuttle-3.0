@@ -12,6 +12,7 @@ var TOAST_SHOW_LONG = 3000
 var ZERO = 0
 
 var SHUTTLE_LOCATION_REFRESH_TIME = 30000
+var PUBLIC_TRANSPORT_BUS_REFRESH_TIME = 60000
 
 var LIVE_SERVER_DOMAIN = "https://us-central1-kangnamshuttle3.cloudfunctions.net/"
 
