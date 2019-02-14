@@ -10,6 +10,7 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
     $scope.stationName = ""
     $scope.shuttleRoutePath = ""
     $scope.shuttleScheduleImage = ""
+    $scope.noticeList = []
 
     $scope.options = {
         time: {
@@ -28,6 +29,10 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.stationName = ""
         getRoutineList()
         getRoutePath()
+    }
+
+    $scope.submitNotice = function() {
+        KSAppService.debug("ShuttleManagementController", "submitNotice", "notice will patch as: " + JSON.stringify($scope.noticeList))
     }
 
     $scope.uploadShuttleSchedule = function() {

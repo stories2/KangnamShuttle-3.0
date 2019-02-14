@@ -3,9 +3,32 @@
         <div class="inner">
             <div class="content">
                 <header>
-                    <h2>셔틀버스 시간표 관리</h2>
-                    <h4>셔틀버스의 경로, 정류소, 시간표를 편집할 수 있는 관리 페이지입니다. <a href="https://github.com/stories2/KangnamShuttle-3.0/wiki/%EC%85%94%ED%8B%80%EB%B2%84%EC%8A%A4-%EC%8B%9C%EA%B0%84%ED%91%9C-%EA%B4%80%EB%A6%AC-%EB%A7%A4%EB%89%B4%EC%96%BC">매뉴얼 링크</a></h4>
+                    <h2>셔틀버스 관리</h2>
+                    <h4>셔틀버스의 공지 메시지, 경로, 정류소, 시간표를 편집할 수 있는 관리 페이지입니다. <a href="https://github.com/stories2/KangnamShuttle-3.0/wiki/%EC%85%94%ED%8B%80%EB%B2%84%EC%8A%A4-%EC%8B%9C%EA%B0%84%ED%91%9C-%EA%B4%80%EB%A6%AC-%EB%A7%A4%EB%89%B4%EC%96%BC">매뉴얼 링크</a></h4>
                 </header>
+                <div class="box alt">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-medium">
+                            사용자가 달구지안내를 선택하였을 시 공지 메시지가 하단에 기존 문구와 함께 텍스트 출력됩니다.<br>
+                            공지 메시지는 시간대별로 설정할 수 있습니다.
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <img style="width:300px;height: auto" src="images/shuttleNotice.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div layout-gt-md="row" layout="column">
+                    <md-button ng-click="submitNotice()"><div class="fa fa-2x fa-check"></div></md-button>
+                    <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
+                </div>
+                <div class="box alt">
+                    <div layout="column">
+                        <md-list-item ng-repeat="notice in noticeList track by $index">
+                            <p flex="100" flex-gt-md="30"> {{ $index }} 시</p>
+                            <input ng-model="noticeList[$index]">
+                        </md-list-item>
+                    </div>
+                </div>
                 <div class="box alt">
                     <div class="row gtr-50 gtr-uniform">
                         <div class="col-6 col-12-medium">
