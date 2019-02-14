@@ -501,3 +501,34 @@ exports.getShuttleSchedulePic = function(request, response, callbackFunc) {
             })
     })
 }
+
+exports.getShuttleNoticeList = function (request, response, callbackFunc) {
+    var admin = global.admin
+    var shuttleNoticeTimeline = admin.database().ref(global.define.DB_PATH_SHUTTLE_NOTICE_TIMELINE)
+    shuttleNoticeTimeline.once("value", function (shuttleNoticeTimeLineSnapshot) {
+        var shuttleNoticeTimeLineData = shuttleNoticeTimeLineSnapshot.val()
+        global.log.debug("shuttleManager", "getShuttleNoticeList", "time line: " + JSON.stringify(shuttleNoticeTimeLineData))
+        callbackFunc(shuttleNoticeTimeLineData)
+    })
+}
+
+exports.patchShuttleNoticeList = function (request, response, callbackFunc) {
+    var admin = global.admin
+    var shuttleNoticeList = request.body["timeline"]
+    var shuttleNoticeTimeline = admin.database().ref(global.define.DB_PATH_SHUTTLE_NOTICE_TIMELINE)
+    if(shuttleNoticeList == null || shuttleNoticeList == undefined) {
+        global.log.warn("shuttleManager", "patchShuttleNoticeList", "time line is null")
+        callbackFunc(false)
+    }
+    global.log.debug("shuttleManager", "patchShuttleNoticeList", "time line will patch to: " + JSON.stringify(shuttleNoticeList))
+    shuttleNoticeTimeline.set(shuttleNoticeList, function (error) {
+        if(error) {
+            global.log.error("shuttleManager", "patchShuttleNoticeList", "time line patch failed: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.debug("shuttleManager", "patchShuttleNoticeList", "time line patched")
+            callbackFunc(true)
+        }
+    })
+}

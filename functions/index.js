@@ -77,6 +77,9 @@ v3PrivateApi.delete('/shuttle/routine/station/schedule', privateRoute.deleteStat
 v3PrivateApi.get('/shuttle/routine/path', privateRoute.getShuttleRoutine)
 v3PrivateApi.patch('/shuttle/routine/path', privateRoute.patchShuttleRoutine)
 
+v3PrivateApi.get('/shuttle/notice', privateRoute.getShuttleNoticeList)
+v3PrivateApi.patch('/shuttle/notice', privateRoute.getShuttleNoticeList)
+
 v3PrivateApi.get('/role', privateRoute.getAllRoleList)
 
 v3PrivateApi.get('/api', privateRoute.getApiList)

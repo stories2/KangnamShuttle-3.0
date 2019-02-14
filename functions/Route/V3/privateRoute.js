@@ -195,6 +195,28 @@ exports.patchShuttleRoutine = function (request, response) {
     })
 }
 
+exports.getShuttleNoticeList = function (request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.getShuttleNoticeList(request, response, function (shuttleNoticeList) {
+        responseManager.ok(response, {
+            "timeline": shuttleNoticeList
+        })
+    })
+}
+
+exports.patchShuttleNoticeList = function (request, response) {
+    var shuttleManager = require('../../Core/shuttleManager')
+    var responseManager = request.responseManager
+
+    shuttleManager.patchShuttleNoticeList(request, response, function (status) {
+        responseManager.ok(response, {
+            "success": status
+        })
+    })
+}
+
 exports.getAllRoleList = function (request, response) {
     var roleManager = require('../../Core/roleManager')
     var responseManager = request.responseManager
