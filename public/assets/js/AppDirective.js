@@ -145,3 +145,180 @@ app.directive('map', function($window, $timeout, KSAppService) {
         }
     }
 })
+
+app.directive('bus', function($window, $timeout, KSAppService) {
+    return {
+        restrict: 'A',
+        scope: {
+            'shareObject': '=',
+            'stream': '='
+        },
+        link: function (scope, element, attrs) {
+
+            var platformAndRoute = {
+                "228000694": {
+                    "name": "강남대역 정류소",
+                    "routeList": {
+                        "228000388": {
+                            "name": "5000A용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000174": {
+                            "name": "5000B용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000176": {
+                            "name": "5001용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000389": {
+                            "name": "5003A용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000182": {
+                            "name": "5003B용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000175": {
+                            "name": "5005용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000184": {
+                            "name": "5600용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "241004890": {
+                            "name": "8165고양",
+                            "type": "공항",
+                            "arriveInfo": ""
+                        }
+                    }
+                },
+                "228000684": {
+                    "name": "강남대역 건너편 정류소",
+                    "routeList": {
+                        "228000388": {
+                            "name": "5000A용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000174": {
+                            "name": "5000B용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000176": {
+                            "name": "5001용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000389": {
+                            "name": "5003A용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000182": {
+                            "name": "5003B용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000175": {
+                            "name": "5005용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "228000184": {
+                            "name": "5600용인",
+                            "type": "직행",
+                            "arriveInfo": ""
+                        },
+                        "241004890": {
+                            "name": "8165고양",
+                            "type": "공항",
+                            "arriveInfo": ""
+                        }
+                    }
+                }
+            }
+            var isDestroy = false
+
+            scope.$on('$destroy', function() {
+                KSAppService.info("AppDirective-bus", "$destroy", "element destroyed")
+                isDestroy = true
+            });
+
+            function getLatestArriveInfo() {
+                for(var platformID in platformAndRoute) {
+                    var platformData = platformAndRoute[platformID]
+                    for(var route in platformData["routeList"]) {
+
+                        const payload = {
+                            route: route,
+                            platform: platformID
+                        }
+
+                        var setData = function(data) {
+                            const payloadBak = payload
+                            KSAppService.debug("AppDirective-bus", "getLatestArriveInfo", "payload bak: " + JSON.stringify(payloadBak) + " data: " + JSON.stringify(data))
+
+                            var arriveInfo = "이번 " + data["data"]["arrmsg1"] + ", 다음 " + data["data"]["arrmsg2"]
+
+                            platformAndRoute[payloadBak["platform"]]["routeList"][payloadBak["route"]]["arriveInfo"] = arriveInfo
+
+                            scope.stream(platformAndRoute)
+                        }
+
+                        KSAppService.debug("AppDirective-bus", "getLatestArriveInfo", "payload: " + JSON.stringify(payload))
+
+                        KSAppService.getReq(
+                            API_GET_PUBLIC_BUS,
+                            payload,
+                            setData,
+                            function (error) {
+                                KSAppService.error("AppDirective-bus", "getLatestArriveInfo", "cannot get bus data: " + JSON.stringify(error))
+                            })
+                    }
+                }
+            }
+
+            function init() {
+                KSAppService.info("AppDirective-bus", "init", "init")
+                getLatestArriveInfo()
+            }
+
+            init()
+        }
+    }
+})
+
+app.directive('subway', function($window, $timeout, KSAppService) {
+    return {
+        restrict: 'A',
+        scope: {
+            'shareObject': '=',
+            'stream': '='
+        },
+        link: function (scope, element, attrs) {
+
+            var isDestroy = false
+
+            scope.$on('$destroy', function() {
+                KSAppService.info("AppDirective-subway", "$destroy", "element destroyed")
+                isDestroy = true
+            });
+
+            function init() {
+                KSAppService.info("AppDirective-subway", "init", "init")
+            }
+
+            init()
+        }
+    }
+})

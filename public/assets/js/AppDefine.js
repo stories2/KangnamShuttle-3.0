@@ -45,6 +45,11 @@ var API_PATCH_SHUTTLE_NOTICE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/n
 var API_GET_ROLE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/role"
 //API
 var API_GET_API_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/api"
+//PUBLIC TRANSPORT
+var API_GET_PUBLIC_SUBWAY = LIVE_SERVER_DOMAIN + "v3PublicApi/public/subway"
+var API_PATCH_PUBLIC_SUBWAY = LIVE_SERVER_DOMAIN + "v3PublicApi/public/subway"
+var API_GET_PUBLIC_BUS = LIVE_SERVER_DOMAIN + "v3PublicApi/public/bus"
+var API_PATCH_PUBLIC_BUS = LIVE_SERVER_DOMAIN + "v3PublicApi/public/bus"
 
 var FEEDBACK_SIGN_UP_SUCCESS = "계정 생성이 완료되었습니다."
 var FEEDBACK_SIGN_UP_FAILED = "계정 생성 중 문제가 발생되었습니다. 저런;"
