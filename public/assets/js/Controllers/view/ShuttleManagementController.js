@@ -152,6 +152,8 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.stationList = []
         $scope.routineKey = routine["routineKey"]
         $scope.routineName = routine["routineName"]
+        $scope.stationKey = ""
+        $scope.stationName = ""
         KSAppService.debug("ShuttleManagementController", "expandStation", "selected routine: " + "#" + index  + JSON.stringify(routine))
         getStationList($scope.routineKey)
     }
