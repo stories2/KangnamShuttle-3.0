@@ -172,6 +172,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     const shuttleAction = require('../Action/shuttleAction')
     const systemAction = require('../Action/systemAction')
     const weatherAction = require('../Action/weatherAction')
+    const publicTransportAction = require('../Action/publicTransportAction')
 
     const actionTable = {
         "1": basicAction.hello,
@@ -186,6 +187,8 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
         "140": shuttleAction.shuttleRoute,
 
         "1000": weatherAction.getLatestWeatherInfo,
+
+        "2000": publicTransportAction.selectPublicTransport,
 
         "9000": systemAction.showSystemInfo,
 
