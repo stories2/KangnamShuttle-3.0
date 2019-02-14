@@ -125,7 +125,7 @@
 
                         <md-list-item >
                             <p>END OF STATION</p>
-                            <md-button class="md-secondary" ng-click="addStation()"><div class="fa fa-2x fa-plus"></div></md-button>
+                            <md-button class="md-secondary" ng-disabled="routineKey == '' || routineKey == undefined" ng-click="addStation()"><div class="fa fa-2x fa-plus"></div></md-button>
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
@@ -148,8 +148,8 @@
 
                         <md-list-item >
                             <p>END OF SCHEDULE</p>
-                            <md-button class="md-secondary" ng-click="submitSchedule(scheduleList)"><div class="fa fa-2x fa-check"></div></md-button>
-                            <md-button class="md-secondary" ng-click="addSchedule()"><div class="fa fa-2x fa-plus"></div></md-button>
+                            <md-button ng-disabled="stationKey == '' || stationKey == undefined || routineKey == '' || routineKey == undefined" class="md-secondary" ng-click="submitSchedule(scheduleList)"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button ng-disabled="stationKey == '' || stationKey == undefined || routineKey == '' || routineKey == undefined" class="md-secondary" ng-click="addSchedule()"><div class="fa fa-2x fa-plus"></div></md-button>
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
