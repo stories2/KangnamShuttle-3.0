@@ -45,6 +45,7 @@ exports.DB_PATH_API = "/api"
 exports.DB_PATH_MENU = "/menu"
 exports.DB_PATH_SYSTEM_LOG = "/system/log"
 exports.DB_PATH_OPEN_API_WEATHER = "/openAPI/weather"
+exports.DB_PATH_OPEN_API_PUBLIC_SUBWAY_PLATFORM_DIR = "/openAPI/subway/%s/%s"
 
 exports.DEFAULT_USER_DATA = {
     "action": "1",

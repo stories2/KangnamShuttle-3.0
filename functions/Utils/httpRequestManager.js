@@ -18,6 +18,7 @@ exports.request = function (headerOptions, successFunc, errorFunc, data) {
 
         response.on("error", function (error) {
             global.log.error("httpRequestManager", "callbackController-error", "error accepted: " + JSON.stringify(error))
+            errorFunc(error)
         })
     }
 

@@ -28,7 +28,8 @@ exports.getPublicSubwayOpenApiInfo = function (functions) {
         "endpoint": functions.config().subway_open_api.endpoint,
         "platform_e_4502": functions.config().subway_open_api.platform_e_4502,
         "key": functions.config().subway_open_api.key,
-        "platform_b_1865": functions.config().subway_open_api.platform_b_1865
+        "platform_b_1865": functions.config().subway_open_api.platform_b_1865,
+        "port": functions.config().subway_open_api.port
     }
 }
 

@@ -93,3 +93,15 @@ exports.registerGoogleAccount = function (request, response) {
         })
     })
 }
+
+exports.patchPublicSubway = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var publicTransportManager = require('../../Core/publicTransportManager')
+
+    var platformID = request.query["platform"]
+    var direction = request.query["direction"]
+    
+    publicTransportManager.updateSubway(platformID, direction, function () {
+        
+    })
+}
