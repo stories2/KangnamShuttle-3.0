@@ -20,7 +20,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="(uid, account) in accountList">
-                                <td class="md-avatar"><img style="height: 64px" ng-src="data:image/png;base64,{{ account['pic'] }}"></td>
+                                <td class="md-avatar"><img style="height: 64px" ng-src="data:image/png;base64,{{ account['pic'] }}" ng-if="account['pic']"><img style="height: 64px" ng-src="{{account['picUrl']}}" ng-if="account['picUrl']"></td>
                                 <td>{{ account["studentId"] }}</td>
                                 <td>{{ account["nameKor"] }}</td>
                                 <td><md-button class="fa fa-edit" ng-click="edit(account)"></md-button></td>
