@@ -46,7 +46,9 @@ v3PublicApi.patch('/realtimeShuttleLocation', publicRoute.updateRealtimeShuttleL
 v3PublicApi.post('/auth', publicRoute.authSignUp)
 v3PublicApi.get('/shuttleSchedulePic', publicRoute.getShuttleSchedulePic)
 v3PublicApi.post('/register/google', publicRoute.registerGoogleAccount)
+v3PublicApi.get('/public/subway', publicRoute.getPublicSubway)
 v3PublicApi.patch('/public/subway', publicRoute.patchPublicSubway)
+v3PublicApi.get('/public/bus', publicRoute.getPublicBus)
 v3PublicApi.patch('/public/bus', publicRoute.patchPublicBus)
 exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
 

@@ -94,6 +94,18 @@ exports.registerGoogleAccount = function (request, response) {
     })
 }
 
+exports.getPublicSubway = function(request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var publicTransportManager = require('../../Core/publicTransportManager')
+
+    var platformID = request.query["platform"]
+    var direction = request.query["direction"]
+
+    publicTransportManager.getSubway(platformID, direction, function (subwayArriveData) {
+        responseManager.ok(response, subwayArriveData)
+    })
+}
+
 exports.patchPublicSubway = function (request, response) {
     var responseManager = require('../../Utils/responseManager')
     var publicTransportManager = require('../../Core/publicTransportManager')
@@ -102,9 +114,21 @@ exports.patchPublicSubway = function (request, response) {
     var direction = request.query["direction"]
     
     publicTransportManager.updateSubway(platformID, direction, function (status) {
-        publicTransportManager.getSubway(platformID, direction, function (subwayArriveData) {
-            responseManager.ok(response, subwayArriveData)
+        responseManager.ok(response, {
+            "success": status
         })
+    })
+}
+
+exports.getPublicBus = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var publicTransportManager = require('../../Core/publicTransportManager')
+
+    var routeID = request.query["route"]
+    var platformID = request.query["platform"]
+
+    publicTransportManager.getBus(routeID, platformID, function (busArriveData) {
+        responseManager.ok(response, busArriveData)
     })
 }
 
@@ -116,8 +140,8 @@ exports.patchPublicBus = function (request, response) {
     var platformID = request.query["platform"]
 
     publicTransportManager.updateBus(routeID, platformID, function (status) {
-        publicTransportManager.getBus(routeID, platformID, function (busArriveData) {
-            responseManager.ok(response, busArriveData)
+        responseManager.ok(response, {
+            "success": status
         })
     })
 }
