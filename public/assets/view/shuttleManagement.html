@@ -94,7 +94,7 @@
 
                             <md-button class="md-secondary" ng-click="deleteRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>
                             <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
-                            <md-button class="md-secondary" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                            <md-button class="md-secondary" ng-disabled="routine['routineKey'] == '' || routine['routineKey'] == undefined" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
                         <md-list-item >
@@ -120,7 +120,7 @@
 
                             <md-button class="md-secondary" ng-click="deleteStation(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>
                             <md-button class="md-secondary" ng-click="submitStation(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
-                            <md-button class="md-secondary" ng-click="expandSchedule(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
+                            <md-button class="md-secondary" ng-disabled="station['stationKey'] == '' || station['stationKey'] == undefined" ng-click="expandSchedule(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
                         <md-list-item >
