@@ -55,6 +55,19 @@ exports.updateSubway = function (platformID, direction, callbackFunc) {
         }, undefined)
 }
 
+exports.getSubway = function(platformID, direction, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+
+    var dbPath = util.format(global.define.DB_PATH_OPEN_API_PUBLIC_SUBWAY_PLATFORM_DIR, platformID, direction)
+    
+    admin.database().ref(dbPath).once("value", function (subwaySnapshot) {
+        var subwaySnapshotData = subwaySnapshot.val()
+        global.log.debug("publicTransportManager", "getSubway", "data: " + JSON.stringify(subwaySnapshotData))
+        callbackFunc(subwaySnapshotData)
+    })
+}
+
 exports.updateBus = function (routeID, platformID, callbackFunc) {
     const admin = global.admin
     const functions = require('firebase-functions');
@@ -118,4 +131,16 @@ exports.updateBus = function (routeID, platformID, callbackFunc) {
             global.log.debug("publicTransportManager", "updateBus", "cannot get response: " + JSON.stringify(error))
             callbackFunc(false)
         }, undefined)
+}
+
+exports.getBus = function (routeID, platformID, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    var dbPath = util.format(global.define.DB_PATH_OPEN_API_PUBLIC_BUS_PLATFORM_ROUTE, platformID, routeID)
+
+    admin.database().ref(dbPath).once("value", function (busSnapshot) {
+        var busSnapshotData = busSnapshot.val()
+        global.log.debug("publicTransportManager", "getBus", "bus data: " + JSON.stringify(busSnapshotData))
+        callbackFunc(busSnapshotData)
+    })
 }
