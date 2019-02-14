@@ -162,42 +162,50 @@ app.directive('bus', function($window, $timeout, KSAppService) {
                         "228000388": {
                             "name": "5000A용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000174": {
                             "name": "5000B용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000176": {
                             "name": "5001용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000389": {
                             "name": "5003A용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000182": {
                             "name": "5003B용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000175": {
                             "name": "5005용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000184": {
                             "name": "5600용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "241004890": {
                             "name": "8165고양",
                             "type": "공항",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         }
                     }
                 },
@@ -207,42 +215,50 @@ app.directive('bus', function($window, $timeout, KSAppService) {
                         "228000388": {
                             "name": "5000A용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000174": {
                             "name": "5000B용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000176": {
                             "name": "5001용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000389": {
                             "name": "5003A용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000182": {
                             "name": "5003B용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000175": {
                             "name": "5005용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "228000184": {
                             "name": "5600용인",
                             "type": "직행",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         },
                         "241004890": {
                             "name": "8165고양",
                             "type": "공항",
-                            "arriveInfo": ""
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
                         }
                     }
                 }
@@ -271,6 +287,7 @@ app.directive('bus', function($window, $timeout, KSAppService) {
                             var arriveInfo = "이번 " + data["data"]["arrmsg1"] + ", 다음 " + data["data"]["arrmsg2"]
 
                             platformAndRoute[payloadBak["platform"]]["routeList"][payloadBak["route"]]["arriveInfo"] = arriveInfo
+                            platformAndRoute[payloadBak["platform"]]["routeList"][payloadBak["route"]]["lastUpdateDatetime"] = data["data"]["lastUpdateDatetime"]
 
                             scope.stream(platformAndRoute)
                         }
