@@ -49,10 +49,10 @@
                         </div>
                     </md-toolbar>
                     <div layout-padding layout="column" layout-fill>
-                        <div layout="row">
+                        <div layout="row" >
                             <ul class="alt" flex>
                                 <li ng-repeat="menu in menuList" ng-click="toggleLeft()"><a href="{{menu.url}}"><div>{{menu.name}}</div></a></li>
-                                <li><a ng-click="onDonateBtnClicked()" class="button primary"><div class="icon fab fa-cc-paypal"> 수고한 개발자에게 도네이션 보내기</div></a></li>
+                                <li><div ng-click="onDonateBtnClicked()" class="button primary" style="white-space: normal;" layout="row" layout-align="center center" layout-padding><div class="icon fab fa-cc-paypal"> 수고한 개발자에게 도네이션 보내기</div></div></li>
                             </ul>
                         </div>
                     </div>
