@@ -39,6 +39,8 @@ var API_PATCH_ROUTINE_STATION_SCHEDULE = LIVE_SERVER_DOMAIN + "v3PrivateApi/shut
 var API_GET_ROUTE_PATH = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/path"
 var API_PATCH_ROUTE_PATH = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/routine/path"
 var API_POST_SHUTTLE_SCHEDULE_PIC = LIVE_SERVER_DOMAIN + "v3FileApi/upload/shuttleSchedulePic"
+var API_GET_SHUTTLE_NOTICE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/notice"
+var API_PATCH_SHUTTLE_NOTICE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/shuttle/notice"
 //ROLE
 var API_GET_ROLE_LIST = LIVE_SERVER_DOMAIN + "v3PrivateApi/role"
 //API

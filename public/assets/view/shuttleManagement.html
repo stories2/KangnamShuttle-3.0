@@ -18,17 +18,20 @@
                     </div>
                 </div>
                 <div layout-gt-md="row" layout="column">
-                    <md-button ng-click="submitNotice()"><div class="fa fa-2x fa-check"></div></md-button>
+                    <md-button ng-click="submitNotice()" ng-disabled="noticeList.length < 24"><div class="fa fa-2x fa-check"></div></md-button>
                     <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                 </div>
                 <div class="box alt">
                     <div layout="column">
+                        <div>불러와진 공지 갯수: {{ noticeList.length }}</div>
                         <md-list-item ng-repeat="notice in noticeList track by $index">
-                            <p flex="100" flex-gt-md="30"> {{ $index }} 시</p>
-                            <input ng-model="noticeList[$index]">
+                            <p flex="20" class="col-3 col-12-medium"> {{ $index }} 시</p>
+                            <textarea flex class="col-9 col-12-medium" ng-model="noticeList[$index]"></textarea>
                         </md-list-item>
                     </div>
                 </div>
+                <md-divider ></md-divider><br>
+                <md-divider ></md-divider><br>
                 <div class="box alt">
                     <div class="row gtr-50 gtr-uniform">
                         <div class="col-6 col-12-medium">

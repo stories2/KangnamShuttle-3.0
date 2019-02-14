@@ -29,10 +29,12 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
         $scope.stationName = ""
         getRoutineList()
         getRoutePath()
+        getNoticeList()
     }
 
     $scope.submitNotice = function() {
         KSAppService.debug("ShuttleManagementController", "submitNotice", "notice will patch as: " + JSON.stringify($scope.noticeList))
+        patchNoticeList($scope.noticeList)
     }
 
     $scope.uploadShuttleSchedule = function() {
@@ -236,6 +238,50 @@ app.controller("ShuttleManagementController", function ($scope, $http, $mdToast,
             KSAppService.error("ShuttleManagementController", "submitRoutePath", "failed generate token: " + JSON.stringify(error))
             KSAppService.showToast("Failed generate token", TOAST_SHOW_LONG)
         });
+    }
+
+    function getNoticeList() {
+        var payload = {}
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            KSAppService.getReq(
+                API_GET_SHUTTLE_NOTICE_LIST,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "getNoticeList", "data: " + JSON.stringify(data))
+                    initNoticeList(data)
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "getNoticeList", "error: " + JSON.stringify(error))
+                    KSAppService.showToast("Get notice list failed", TOAST_SHOW_LONG)
+                })
+        })
+    }
+
+    function initNoticeList(data) {
+        $scope.noticeList = data["data"]["timeline"]
+        console.log("test", $scope.noticeList)
+    }
+
+    function patchNoticeList(shuttleNoticeList) {
+        var payload = {
+            "timeline": shuttleNoticeList
+        }
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            KSAppService.setToken(idToken)
+            KSAppService.patchReq(
+                API_PATCH_SHUTTLE_NOTICE_LIST,
+                payload,
+                function (data) {
+                    KSAppService.debug("ShuttleManagementController", "patchNoticeList", "patch result: " + JSON.stringify(data))
+                    KSAppService.showToast("Ok notice patched", TOAST_SHOW_LONG)
+                    getNoticeList()
+                },
+                function (error) {
+                    KSAppService.error("ShuttleManagementController", "patchNoticeList", "cannot patch: " + JSON.stringify(error))
+                    KSAppService.showToast("Failed to patch notice timeline", TOAST_SHOW_LONG)
+                })
+        })
     }
 
     function getRoutePath() {
