@@ -12,7 +12,7 @@
                     <md-list-item class="md-3-line" ng-repeat="(directionID, directionData) in platformData['routeList']" ng-click="null">
                         <div class="md-list-item-text" layout="column">
                             <h3>{{ directionData['name'] }}</h3>
-                            <h4>{{ directionData['arriveInfo'] }}</h4>
+                            <h4 style="white-space: normal">{{ directionData['arriveInfo'] }}</h4>
                             <p>마지막 업데이트 시간: {{ directionData['lastUpdateDatetime'] }}</p>
                         </div>
                     </md-list-item>
