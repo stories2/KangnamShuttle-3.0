@@ -47,7 +47,7 @@
                         <label>전체 달구지 경로</label>
                         <textarea ng-model="shuttleRoutePath" type="text" rows="4"></textarea>
                     </md-input-container>
-                    <md-button ng-click="submitRoutePath(shuttleRoutePath)"><div class="fa fa-2x fa-check"></div></md-button>
+                    <md-button ng-click="submitRoutePath(shuttleRoutePath)" ng-disabled="shuttleRoutePath == '' || shuttleRoutePath == undefined"><div class="fa fa-2x fa-check"></div></md-button>
                     <md-button class="md-secondary" ng-click="onLoad()"><div class="fa fa-2x fa-sync"></div></md-button>
                 </div>
                 <div class="box alt">
@@ -140,7 +140,7 @@ https://us-central1-kangnamshuttle3.cloudfunctions.net/v3PublicApi/shuttleSchedu
                             </md-input-container>
 
                             <md-button class="md-secondary" ng-click="deleteRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>
-                            <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="submitRoutine(routine, $index)" style="min-height: auto;min-width: auto" ng-disabled="routine['routineName'] == '' || routine['routineName'] == undefined"><div class="fa fa-2x fa-check"></div></md-button>
                             <md-button class="md-secondary" ng-disabled="routine['routineKey'] == '' || routine['routineKey'] == undefined" ng-click="expandStation(routine, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
@@ -166,7 +166,7 @@ https://us-central1-kangnamshuttle3.cloudfunctions.net/v3PublicApi/shuttleSchedu
                             </md-input-container>
 
                             <md-button class="md-secondary" ng-click="deleteStation(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-trash"></div></md-button>
-                            <md-button class="md-secondary" ng-click="submitStation(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button class="md-secondary" ng-click="submitStation(station, $index)" style="min-height: auto;min-width: auto" ng-disabled="station['stationName'] == '' || station['stationName'] == undefined"><div class="fa fa-2x fa-check"></div></md-button>
                             <md-button class="md-secondary" ng-disabled="station['stationKey'] == '' || station['stationKey'] == undefined" ng-click="expandSchedule(station, $index)" style="min-height: auto;min-width: auto"><div class="fa fa-2x fa-arrow-down"></div></md-button>
                         </md-list-item>
 
