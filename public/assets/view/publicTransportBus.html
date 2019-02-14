@@ -4,9 +4,20 @@
             <div class="content">
                 <header>
                     <h2>주변 대중교통 도착 정보 안내 - 버스 </h2>
-                    <h4>일부 대중교통의 도착정보를 안내하는 페이지입니다.</h4>
+                    <h4>일부 대중교통의 도착정보를 안내하는 페이지입니다. 버스 정보는 자동으로 갱신됩니다.</h4>
                 </header>
                 <div bus stream="streamBus"></div>
+                <md-list flex ng-repeat="(platformID, platformData) in platformAndRoute">
+                    <md-subheader class="md-no-sticky">{{platformData['name']}}</md-subheader>
+                    <md-list-item class="md-3-line" ng-repeat="(routeID, routeData) in platformData['routeList']" ng-click="null">
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ routeData['name'] }}#{{ routeData['type'] }}</h3>
+                            <h4>{{ routeData['arriveInfo'] }}</h4>
+                            <p>마지막 업데이트 시간: {{ routeData['lastUpdateDatetime'] }}</p>
+                        </div>
+                    </md-list-item>
+
+                </md-list>
             </div>
         </div>
     </section>
