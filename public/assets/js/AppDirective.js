@@ -412,6 +412,31 @@ app.directive('subway', function($window, $timeout, KSAppService) {
                 isDestroy = true
             });
 
+            function patchLatestArriveInfo() {
+                for(var platformID in platformAndRoute) {
+                    var platformData = platformAndRoute[platformID]
+                    for(var direction in platformData["routeList"]) {
+
+                        const payload = {
+                            direction: direction,
+                            platform: platformID
+                        }
+
+                        KSAppService.debug("AppDirective-subway", "patchLatestArriveInfo", "payload: " + JSON.stringify(payload))
+
+                        KSAppService.patchReq(
+                            API_PATCH_PUBLIC_SUBWAY,
+                            payload,
+                            function (data) {
+                                KSAppService.debug("AppDirective-subway", "patchLatestArriveInfo", "data: " + JSON.stringify(data))
+                            },
+                            function (error) {
+                                KSAppService.error("AppDirective-subway", "patchLatestArriveInfo", "cannot patch subway data: " + JSON.stringify(error))
+                            })
+                    }
+                }
+            }
+
             function getLatestArriveInfo() {
                 for(var platformID in platformAndRoute) {
                     var platformData = platformAndRoute[platformID]
@@ -455,7 +480,15 @@ app.directive('subway', function($window, $timeout, KSAppService) {
 
             function init() {
                 KSAppService.info("AppDirective-subway", "init", "init")
-                getLatestArriveInfo()
+                publicSubwayRefreshRoutine()
+            }
+
+            function publicSubwayRefreshRoutine() {
+                if(!isDestroy) {
+                    getLatestArriveInfo()
+                    patchLatestArriveInfo()
+                    $timeout(publicSubwayRefreshRoutine, PUBLIC_TRANSPORT_SUBWAY_REFRESH_TIME)
+                }
             }
 
             init()
