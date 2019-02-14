@@ -105,3 +105,15 @@ exports.patchPublicSubway = function (request, response) {
         
     })
 }
+
+exports.patchPublicBus = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    var publicTransportManager = require('../../Core/publicTransportManager')
+
+    var routeID = request.query["route"]
+    var platformID = request.query["platform"]
+
+    publicTransportManager.updateBus(routeID, platformID, function (status) {
+
+    })
+}

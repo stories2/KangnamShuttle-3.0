@@ -55,6 +55,67 @@ exports.updateSubway = function (platformID, direction, callbackFunc) {
         }, undefined)
 }
 
-exports.updateBus = function () {
-    
+exports.updateBus = function (routeID, platformID, callbackFunc) {
+    const admin = global.admin
+    const functions = require('firebase-functions');
+    const util = require('util')
+    const httpRequestManager = require('../Utils/httpRequestManager')
+    const envManager = require('../Utils/envManager')
+    const datetimeManager = require('../Utils/datetimeManager')
+    const x2js = require("x2js")
+
+    var publicBusApiInfo = envManager.getPublicBusOpenApiInfo(functions)
+    var endpointPath = util.format(publicBusApiInfo["endpoint_path"], publicBusApiInfo["key"], routeID)
+    var x2jsManager = new x2js()
+    var dbPath = util.format(global.define.DB_PATH_OPEN_API_PUBLIC_BUS_PLATFORM_ROUTE, platformID, routeID)
+    var currentDatetime = datetimeManager.getCurrentTime()
+
+    global.log.debug("publicTransportManager", "updateBus", "db path: " + dbPath)
+
+    var fakeHeaderOptions = {
+        hostname: publicBusApiInfo["endpoint"],
+        path: endpointPath
+    }
+
+    httpRequestManager.request(fakeHeaderOptions,
+        function (response, responseStr) {
+            global.log.debug("publicTransportManager", "updateBus", "response size " + responseStr.length)
+            var busData = x2jsManager.xml2js(responseStr)
+            var apiResponse = busData["ServiceResult"]["msgHeader"]["headerCd"]
+            if(apiResponse == global.define.PUBLIC_BUS_OPEN_API_RESULT_OK) {
+                var busArriveData = undefined
+                for(var index in busData["ServiceResult"]["msgBody"]["itemList"]) {
+                    var arrive = busData["ServiceResult"]["msgBody"]["itemList"][index]
+                    if(arrive["stId"] == platformID) {
+                        busArriveData = arrive
+                        break
+                    }
+                }
+                if(busArriveData) {
+                    busArriveData["lastUpdateDatetime"] = currentDatetime.toISOString()
+                    admin.database().ref(dbPath).set(busArriveData, function (error) {
+                        if(error) {
+                            global.log.error("publicTransportManager", "updateBus", "cannot save arrived bus data: " + JSON.stringify(error))
+                            callbackFunc(false)
+                        }
+                        else {
+                            global.log.info("publicTransportManager", "updateBus", "arrived bus data saved")
+                            callbackFunc(true)
+                        }
+                    })
+                }
+                else {
+                    global.log.warn("publicTransportManager", "updateBus", "cannot find bus arrived data based on platform id: " + platformID)
+                    callbackFunc(false)
+                }
+            }
+            else {
+                global.log.warn("publicTransportManager", "updateBus", "api response not ok: " + apiResponse)
+                callbackFunc(false)
+            }
+        },
+        function (error) {
+            global.log.debug("publicTransportManager", "updateBus", "cannot get response: " + JSON.stringify(error))
+            callbackFunc(false)
+        }, undefined)
 }
