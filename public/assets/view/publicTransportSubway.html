@@ -7,6 +7,17 @@
                     <h4>일부 대중교통의 도착정보를 안내하는 페이지입니다.</h4>
                 </header>
                 <div subway stream="streamSubway"></div>
+                <md-list flex ng-repeat="(platformID, platformData) in platformAndRoute">
+                    <md-subheader class="md-no-sticky">{{platformData['name']}}</md-subheader>
+                    <md-list-item class="md-3-line" ng-repeat="(directionID, directionData) in platformData['routeList']" ng-click="null">
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ directionData['name'] }}</h3>
+                            <h4>{{ directionData['arriveInfo'] }}</h4>
+                            <p>마지막 업데이트 시간: {{ directionData['lastUpdateDatetime'] }}</p>
+                        </div>
+                    </md-list-item>
+
+                </md-list>
             </div>
         </div>
     </section>

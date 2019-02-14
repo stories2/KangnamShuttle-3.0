@@ -357,6 +357,54 @@ app.directive('subway', function($window, $timeout, KSAppService) {
         },
         link: function (scope, element, attrs) {
 
+            var platformAndRoute = {
+                "4502": {
+                    "name": "강남대역/용인경전철",
+                    "routeList": {
+                        "1": {
+                            "name": "상행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        },
+                        "2": {
+                            "name": "하행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        }
+                    }
+                },
+                "4501": {
+                    "name": "기흥역/용인경전철",
+                    "routeList": {
+                        "1": {
+                            "name": "상행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        },
+                        "2": {
+                            "name": "하행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        }
+                    }
+                },
+                "1865": {
+                    "name": "기흥역/분당선",
+                    "routeList": {
+                        "1": {
+                            "name": "상행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        },
+                        "2": {
+                            "name": "하행선",
+                            "arriveInfo": "",
+                            "lastUpdateDatetime": ""
+                        }
+                    }
+                }
+            }
+
             var isDestroy = false
 
             scope.$on('$destroy', function() {
@@ -364,8 +412,50 @@ app.directive('subway', function($window, $timeout, KSAppService) {
                 isDestroy = true
             });
 
+            function getLatestArriveInfo() {
+                for(var platformID in platformAndRoute) {
+                    var platformData = platformAndRoute[platformID]
+                    for(var direction in platformData["routeList"]) {
+
+                        const payload = {
+                            direction: direction,
+                            platform: platformID
+                        }
+
+                        var setData = function(data) {
+                            const payloadBak = payload
+                            KSAppService.debug("AppDirective-subway", "getLatestArriveInfo", "payload bak: " + JSON.stringify(payloadBak) + " data: " + JSON.stringify(data))
+
+                            var arriveInfo = ""
+                            for(var key in data["data"]) {
+                                if(key != "lastUpdateDatetime") {
+                                    var subwayData = data["data"][key]
+                                    arriveInfo = arriveInfo + subwayData["DESTSTATION_NAME"] + " 행 열차 " + subwayData["ARRIVETIME"] + " | "
+                                }
+                            }
+
+                            platformAndRoute[payloadBak["platform"]]["routeList"][payloadBak["direction"]]["arriveInfo"] = arriveInfo
+                            platformAndRoute[payloadBak["platform"]]["routeList"][payloadBak["direction"]]["lastUpdateDatetime"] = data["data"]["lastUpdateDatetime"]
+
+                            scope.stream(platformAndRoute)
+                        }
+
+                        KSAppService.debug("AppDirective-subway", "getLatestArriveInfo", "payload: " + JSON.stringify(payload))
+
+                        KSAppService.getReq(
+                            API_GET_PUBLIC_SUBWAY,
+                            payload,
+                            setData,
+                            function (error) {
+                                KSAppService.error("AppDirective-subway", "getLatestArriveInfo", "cannot get subway data: " + JSON.stringify(error))
+                            })
+                    }
+                }
+            }
+
             function init() {
                 KSAppService.info("AppDirective-subway", "init", "init")
+                getLatestArriveInfo()
             }
 
             init()
