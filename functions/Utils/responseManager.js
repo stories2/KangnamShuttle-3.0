@@ -75,8 +75,11 @@ exports.forbidden = function(response, msg) {
 }
 
 exports.response = function(response, type, code, msgStr) {
+
     response.setHeader(global.define.HEADERS_CONTENT_TYPE, type)
     response.status(code).send(msgStr)
+
+    global.log.pushLogMsg(JSON.parse(msgStr), global.define.LOGGING_TYPE_RESPONSE_MANAGER)
 }
 
 exports.binary = function (response, binary) {

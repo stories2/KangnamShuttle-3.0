@@ -5,6 +5,8 @@ exports.LOGGING_STRING_FORMAT_WARN = "%s W: [%s] {%s} (%s)"
 exports.LOGGING_STRING_FORMAT_ERROR = "%s E: [%s] {%s} (%s)"
 
 exports.LOGGING_TYPE_SHUTTLE_IMAGE = "ShuttlePicture"
+exports.LOGGING_TYPE_PREPROCESS_MANAGER = "PreprocessManager"
+exports.LOGGING_TYPE_RESPONSE_MANAGER = "ResponseManager"
 
 exports.MAXIMUM_OF_OUTPUTS_LENGTH = 3
 exports.MAXIMUM_OF_QUICK_REPLIES_LENGTH = 10
