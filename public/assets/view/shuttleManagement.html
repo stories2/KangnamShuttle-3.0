@@ -196,7 +196,7 @@ https://us-central1-kangnamshuttle3.cloudfunctions.net/v3PublicApi/shuttleSchedu
 
                         <md-list-item >
                             <p>END OF SCHEDULE</p>
-                            <md-button ng-disabled="stationKey == '' || stationKey == undefined || routineKey == '' || routineKey == undefined" class="md-secondary" ng-click="submitSchedule(scheduleList)"><div class="fa fa-2x fa-check"></div></md-button>
+                            <md-button ng-disabled="stationKey == '' || stationKey == undefined || routineKey == '' || routineKey == undefined || scheduleList.length < 3" class="md-secondary" ng-click="submitSchedule(scheduleList)"><div class="fa fa-2x fa-check"></div></md-button>
                             <md-button ng-disabled="stationKey == '' || stationKey == undefined || routineKey == '' || routineKey == undefined" class="md-secondary" ng-click="addSchedule()"><div class="fa fa-2x fa-plus"></div></md-button>
                         </md-list-item>
                         <md-divider></md-divider>
