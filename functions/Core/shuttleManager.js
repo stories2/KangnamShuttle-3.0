@@ -388,7 +388,7 @@ exports.patchStationSchedule = function (request, response, callbackFunc) {
     // var scheduleList = []
     var routineKey = request.body["routineKey"]
     var stationKey = request.body["stationKey"]
-    var schedule = request.body["schedule"]
+    var schedule = request.body["schedule"].sort()
     var routineStationScheduleDBPath = util.format(global.define.DB_PATH_SHUTTLE_SCHEDULE_ROUTINE_STATION, routineKey, stationKey)
     global.log.debug("shuttleManager", "patchStationSchedule", "station db path: " + routineStationScheduleDBPath)
 
