@@ -1,27 +1,27 @@
-//For firebase
-const functions = require('firebase-functions');
-//Packages
+// For firebase
+const functions = require('firebase-functions')
+// Packages
 const express = require('express')
 const bodyParser = require('body-parser')
-const cors = require('cors')({origin: true})
-//Modules
+const cors = require('cors')({ origin: true })
+// Modules
 const adminManager = require('./Utils/firebaseAdminManager')
-//Express
+// Express
 const v3PublicApi = express()
 const v3KakaoApi = express()
 const v3PrivateApi = express()
 const v3FileApi = express()
-//Routes
+// Routes
 const publicRoute = require('./Route/V3/publicRoute')
 const kakaoRoute = require('./Route/V3/kakaoRoute')
 const privateRoute = require('./Route/V3/privateRoute')
 const fileRoute = require('./Route/V3/fileRoute')
-//Attribute
+// Attribute
 const preprocessManager = require('./Attribute/preprocessManager')
 const authManager = require('./Attribute/AuthManager')
 const rawBodyAttribute = require('./Attribute/RawbodyManager')
 
-//Global
+// Global
 global.define = require('./Settings/defineManager')
 global.envManager = require('./Utils/envManager')
 global.admin = adminManager.getAdminSDK(global.envManager)
@@ -33,7 +33,7 @@ v3FileApi.use(authManager.authRoutine)
 v3FileApi.use(rawBodyAttribute.getRawBodyManager)
 v3FileApi.use(preprocessManager.addModules)
 v3FileApi.post('/upload/shuttleSchedulePic', [bodyParser.json(), bodyParser.urlencoded({
-    extended: true,
+  extended: true
 })], fileRoute.uploadShuttlePic)
 exports.v3FileApi = functions.https.onRequest(v3FileApi)
 
