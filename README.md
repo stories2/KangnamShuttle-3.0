@@ -1,9 +1,20 @@
 # KangnamShuttle-3.0
+
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+![GitHub top language](https://img.shields.io/github/languages/top/stories2/KangnamShuttle-3.0.svg) ![GitHub language count](https://img.shields.io/github/languages/count/stories2/KangnamShuttle-3.0.svg)
+
+![GitHub repo size in bytes](https://img.shields.io/github/repo-size/stories2/KangnamShuttle-3.0.svg) ![GitHub issues](https://img.shields.io/github/issues-raw/stories2/KangnamShuttle-3.0.svg) ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/stories2/KangnamShuttle-3.0.svg) ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/stories2/KangnamShuttle-3.0.svg) ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/stories2/KangnamShuttle-3.0.svg)
+
+![GitHub release](https://img.shields.io/github/release/stories2/KangnamShuttle-3.0.svg) ![Website](https://img.shields.io/website-up-down-green-red/https/kangnamshuttle3.firebaseapp.com.svg) ![GitHub](https://img.shields.io/github/license/stories2/KangnamShuttle-3.0.svg)
+
 강남대학교 셔틀버스 시간표 안내 카카오톡 챗봇 3.0 버전
 
 [![KangnamShuttle-3.0](./banner.png)](https://www.youtube.com/watch?v=mguP1YW3HZQ)
 
 # Dev
+
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 init
 
