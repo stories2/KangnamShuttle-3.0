@@ -7,7 +7,7 @@ app.directive('kakao', function ($window, $timeout, KSAppService) {
     },
     link: function (scope, element, attrs) {
 
-      Kakao.init('f4e975d6e80a0922a29ba12146e3f8eb');
+      Kakao.init('3657731dfc54b48e073cfb7a6787f88e');
       // Create Kakao Login button.
       Kakao.Auth.createLoginButton({
         container: element[0],
