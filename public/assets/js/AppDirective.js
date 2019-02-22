@@ -1,3 +1,27 @@
+app.directive('kakao', function ($window, $timeout, KSAppService) {
+  return {
+    restrict: 'A',
+    scope: {
+      'shareObject': '=',
+      'stream': '='
+    },
+    link: function (scope, element, attrs) {
+
+      Kakao.init('f4e975d6e80a0922a29ba12146e3f8eb');
+      // Create Kakao Login button.
+      Kakao.Auth.createLoginButton({
+        container: element[0],
+        success: function(authObj) {
+          KSAppService.debug("ToolbarController", "kakaoSignIn", "auth: " + JSON.stringify(authObj))
+        },
+        fail: function(err) {
+          KSAppService.error("ToolbarController", "kakaoSignIn", "error: " + JSON.stringify(err))
+        }
+      });
+    }
+  }
+})
+
 app.directive('map', function ($window, $timeout, KSAppService) {
   return {
     restrict: 'A',
