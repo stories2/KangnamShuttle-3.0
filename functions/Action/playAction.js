@@ -42,11 +42,17 @@ exports.rockScissorsPapper = function (request, response, callbackFunc) {
   var botResponse = Math.floor(Math.random() * (max - min + 1)) + min
   var currentUserText = request.body['userRequest']['utterance']
   global.log.debug('playAction', 'rockScissorsPapper', 'bot response: ' + botResponse + ' text: ' + currentUserText)
-  var reaction = action['response'][winningTable[currentUserText][botResponse]]
-  global.log.debug('playAction', 'rockScissorsPapper', 'user data: ' + JSON.stringify(request.user) + ' action data: ' + JSON.stringify(request.action))
-  global.log.debug('playAction', 'rockScissorsPapper', 'bot response' + type[botResponse] + ' user: ' + currentUserText + ' reaction: ' + reaction)
-  var responseFormat = action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"]
-  var responseText = util.format(responseFormat, type[botResponse], reaction)
+  if(winningTable.hasOwnProperty(currentUserText)) {
+    var reaction = action['response'][winningTable[currentUserText][botResponse]]
+    global.log.debug('playAction', 'rockScissorsPapper', 'user data: ' + JSON.stringify(request.user) + ' action data: ' + JSON.stringify(request.action))
+    global.log.debug('playAction', 'rockScissorsPapper', 'bot response' + type[botResponse] + ' user: ' + currentUserText + ' reaction: ' + reaction)
+    var responseFormat = action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"]
+    var responseText = util.format(responseFormat, type[botResponse], reaction)
+  }
+  else {
+    global.log.warn("playAction", "rockScissorsPapper", "wrong input detected: " + currentUserText)
+    responseText = action['response'][4]
+  }
   action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"] = responseText
 
   responseManager.pushTemplate(action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
