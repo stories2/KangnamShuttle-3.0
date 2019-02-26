@@ -28,13 +28,13 @@ exports.rockScissorsPapper = function (request, response, callbackFunc) {
   const responseManager = request.responseManager
   var winningTable = {
     "✌ 가위": [
-      2, 1, 3
+      2, 3, 1
     ],
     "✊ 바위": [
-      3, 2, 1
+      1, 2, 3
     ],
     "✋ 보": [
-      1, 3, 2
+      3, 1, 2
     ]
   }
   var type = ["✌ 가위", "✊ 바위", "✋ 보"]
