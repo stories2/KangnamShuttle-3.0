@@ -44,5 +44,22 @@ exports.rockScissorsPapper = function (request, response, callbackFunc) {
 }
 
 exports.rollingDie = function (request, response, callbackFunc) {
-  
+  const util = require('util')
+  const action = JSON.parse(JSON.stringify(request.action))
+  const responseManager = request.responseManager
+  global.log.debug('playAction', 'rollingDie', 'user data: ' + JSON.stringify(request.user) + ' action data: ' + JSON.stringify(request.action))
+  var min = 1, max = 6
+  var die = Math.floor(Math.random() * (max - min + 1)) + min
+
+  global.log.debug('playAction', 'rollingDie', 'die: ' + die)
+
+  var responseFormat = action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"]
+  var responseText = util.format(responseFormat, die)
+  action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["simpleText"]["text"] = responseText
+
+  responseManager.pushTemplate(action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+  for (var index in action['quickReplies']) {
+    responseManager.pushQuickReply(action['quickReplies'][index])
+  }
+  callbackFunc()
 }

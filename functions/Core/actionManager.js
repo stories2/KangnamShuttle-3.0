@@ -185,6 +185,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
 
     '4000': playAction.selectPlayType,
     '4100': playAction.rockScissorsPapper,
+    '4200': playAction.rollingDie,
 
     '9000': systemAction.showSystemInfo,
 
