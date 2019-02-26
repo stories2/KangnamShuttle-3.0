@@ -163,6 +163,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
   const weatherAction = require('../Action/weatherAction')
   const publicTransportAction = require('../Action/publicTransportAction')
   const emergencyAction = require('../Action/emergencyAction')
+  const playAction = require('../Action/playAction')
 
   const actionTable = {
     '1': basicAction.hello,
@@ -181,6 +182,8 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     '2000': publicTransportAction.selectPublicTransport,
 
     '3000': emergencyAction.selectEmergencyType,
+
+    '4100': playAction.rockScissorsPapper,
 
     '9000': systemAction.showSystemInfo,
 
