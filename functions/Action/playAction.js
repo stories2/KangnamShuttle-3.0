@@ -10,6 +10,18 @@ exports.selectPlayType = function(request, response, callbackFunc) {
   callbackFunc()
 }
 
+exports.readyForRockScissorsPapper = function(request, response, callbackFunc) {
+  const action = JSON.parse(JSON.stringify(request.action))
+  const responseManager = request.responseManager
+  global.log.debug('playAction', 'selectPlayType', 'user data: ' + JSON.stringify(request.user) + ' action data: ' + JSON.stringify(request.action))
+
+  responseManager.pushTemplate(action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO])
+  for (var index in action['quickReplies']) {
+    responseManager.pushQuickReply(action['quickReplies'][index])
+  }
+  callbackFunc()
+}
+
 exports.rockScissorsPapper = function (request, response, callbackFunc) {
   const util = require('util')
   const action = JSON.parse(JSON.stringify(request.action))
@@ -29,6 +41,7 @@ exports.rockScissorsPapper = function (request, response, callbackFunc) {
   var min = 0, max = 2
   var botResponse = Math.floor(Math.random() * (max - min + 1)) + min
   var currentUserText = request.body['userRequest']['utterance']
+  global.log.debug('playAction', 'rockScissorsPapper', 'bot response: ' + botResponse + ' text: ' + currentUserText)
   var reaction = action['response'][winningTable[currentUserText][botResponse]]
   global.log.debug('playAction', 'rockScissorsPapper', 'user data: ' + JSON.stringify(request.user) + ' action data: ' + JSON.stringify(request.action))
   global.log.debug('playAction', 'rockScissorsPapper', 'bot response' + type[botResponse] + ' user: ' + currentUserText + ' reaction: ' + reaction)
