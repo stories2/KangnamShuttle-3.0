@@ -1,26 +1,26 @@
-app.directive('kakao', function ($window, $timeout, KSAppService) {
-  return {
-    restrict: 'A',
-    scope: {
-      'shareObject': '=',
-      'stream': '='
-    },
-    link: function (scope, element, attrs) {
-
-      Kakao.init('3657731dfc54b48e073cfb7a6787f88e');
-      // Create Kakao Login button.
-      Kakao.Auth.createLoginButton({
-        container: element[0],
-        success: function(authObj) {
-          KSAppService.debug("ToolbarController", "kakaoSignIn", "auth: " + JSON.stringify(authObj))
-        },
-        fail: function(err) {
-          KSAppService.error("ToolbarController", "kakaoSignIn", "error: " + JSON.stringify(err))
-        }
-      });
-    }
-  }
-})
+// app.directive('kakao', function ($window, $timeout, KSAppService) {
+//   return {
+//     restrict: 'A',
+//     scope: {
+//       'shareObject': '=',
+//       'stream': '='
+//     },
+//     link: function (scope, element, attrs) {
+//
+//       Kakao.init('3657731dfc54b48e073cfb7a6787f88e');
+//       // Create Kakao Login button.
+//       Kakao.Auth.createLoginButton({
+//         container: element[0],
+//         success: function(authObj) {
+//           KSAppService.debug("ToolbarController", "kakaoSignIn", "auth: " + JSON.stringify(authObj))
+//         },
+//         fail: function(err) {
+//           KSAppService.error("ToolbarController", "kakaoSignIn", "error: " + JSON.stringify(err))
+//         }
+//       });
+//     }
+//   }
+// })
 
 app.directive('map', function ($window, $timeout, KSAppService) {
   return {
