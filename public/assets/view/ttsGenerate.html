@@ -1,4 +1,4 @@
-<div layout-fill layout="row" layout-align="center center" ng-init="onLoad()">
+<div layout-fill layout="column" layout-align="center center" ng-init="onLoad()">
     <section id="main" class="wrapper">
         <div class="inner">
             <div class="content">
@@ -6,6 +6,44 @@
                     <h2>TTS 만들기</h2>
                     <h4></h4>
                 </header>
+                <div layout="row" layout-align="center center">
+                    <div flex="100" flex-gt-sm="80" flex-gt-md="60" layout="row" layout-align="center center">
+                        <input type="text" ng-model="" placeholder="Search Memes">
+                        <md-button><div class="fa fab fa-search"></div></md-button>
+                    </div>
+                </div>
+                <div layout="row" layout-align="center start" style="height: 200px;max-height: 200px;overflow-y: auto">
+                    <md-list flex="100" flex-gt-sm="80" flex-gt-md="60">
+                        <md-subheader class="md-no-sticky">{{ memeList.length }} 건이 조회 되었습니다.</md-subheader>
+                        <md-list-item class="md-3-line" ng-repeat="meme in memeList" ng-click="null">
+                            <!--<img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />-->
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{ meme.name }}</h3>
+                                <h4>#{{ meme.mid }}</h4>
+                            </div>
+                            <div flex></div>
+                            <md-button style="min-height: auto;min-width: auto"><div class="fa fab fa-play"></div></md-button>
+                            <md-button style="min-height: auto;min-width: auto"><div class="fa fab fa-plus"></div></md-button>
+                        </md-list-item>
+                        <md-divider ></md-divider>
+                    </md-list>
+                </div>
+
+                <div layout="row" layout-align="center start">
+                    <form name="ttsForm" flex layout="column" flex="100" flex-gt-sm="80" flex-gt-md="60">
+                        <div layout="row">
+                            <label>TTS 문구 작성하기</label>
+                        </div>
+                        <div layout="row">
+                            <textarea rows="4" placeholder="1글자 이상" minlength="1" required ng-minlength="1" ng-required="true" ng-model="test"></textarea>
+                        </div>
+                        <div layout="row">
+                            <div flex="0" flex-gt-sm="80"></div>
+                            <md-button flex="50" flex-gt-sm="10" ng-disabled="ttsForm.$invalid"><div class="fa fab fa-play"></div></md-button>
+                            <md-button flex="50" flex-gt-sm="10" ng-disabled="ttsForm.$invalid"><div class="fa fab fa-check"></div></md-button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
