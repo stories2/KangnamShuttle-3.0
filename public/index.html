@@ -9,30 +9,25 @@
     <meta name="keywords" content="" />
     <meta name="google-site-verification" content="84o6_aXwlM8kQoyJPeBTpHAIj-YRF-QPmZGuOeWjCEE" />
 
+    <link href="./assets/css/angular-csp.css" rel="stylesheet" type="text/css">
+    <link href="./assets/css/angular-material.min.css" rel="stylesheet" type="text/css">
+    <link href="./assets/css/spinner.css" rel="stylesheet" type="text/css">
+    <link href="./assets/css/font-awesome-v5.4.2.css" rel="stylesheet" type="text/css">
+
     <script type="text/javascript">
         var currentTimeSec = new Date().getTime()
-        document.write('<link href="./assets/css/angular-csp.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
-        document.write('<link href="./assets/css/angular-material.min.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
-        document.write('<link href="./assets/css/spinner.css?time' + currentTimeSec + '" rel="stylesheet" type="text/css">')
-        document.write('<link href="./assets/css/font-awesome-v5.4.2.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
         document.write('<link href="./assets/css/site.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
         document.write('<link href="assets/css/main.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
         document.write('<link href="assets/css/shared.css?time=' + currentTimeSec + '" rel="stylesheet" type="text/css">')
     </script>
-    <!--<link rel="stylesheet" href="./assets/css/angular-csp.css">-->
-    <!--<link rel="stylesheet" href="./assets/css/angular-material.min.css">-->
-    <!--<link rel="stylesheet" href="./assets/css/spinner.css">-->
-    <!--<link rel="stylesheet" href="./assets/css/font-awesome-v5.4.2.css">-->
-    <!--<link rel="stylesheet" href="./assets/css/site.css">-->
-    <!--<link rel="stylesheet" href="assets/css/main.css" />-->
-    <!--<link rel="stylesheet" href="assets/css/shared.css">-->
+    
 </head>
 <body>
 
 <div ng-app="KSApp" layout-fill>
     <div ng-layout="column" layout-fill>
 
-        <section layout="row"  flex style="height: 100%" ng-controller="ToolbarController" ng-init="listenAuthStateChanged()">
+        <section layout="row"  flex style="height: 100%" ng-controller="ToolbarController">
             <md-sidenav class="md-sidenav-left"
                         md-component-id="left"
 
@@ -149,32 +144,33 @@
 </script>
 
 <!--<script src="./assets/lib/jquery-3.3.1.js"></script>-->
+<script src='./assets/lib/angular.js' type='text/javascript'></script>
+<script src='./assets/lib/angular-animate.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-aria.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-cookies.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-loader.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-message-format.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-messages.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-mocks.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-parse-ext.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-resource.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-route.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-sanitize.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-touch.js' type="text/javascript"></script>
+<script src='./assets/lib/ng-file-upload-all.js' type="text/javascript"></script>
+<script src='./assets/lib/ng-file-upload.js' type="text/javascript"></script>
+<script src='./assets/lib/angular-material.min.js' type="text/javascript"></script>
+<script src='./assets/lib/cleave-angular.min.js' type="text/javascript"></script>
+<script src='./assets/lib/firebase.js' type="text/javascript"></script>
+<script src='./assets/lib/jquery.min.js' type="text/javascript"></script>
+<script src='./assets/lib/browser.min.js' type="text/javascript"></script>
+<script src='./assets/lib/breakpoints.min.js' type="text/javascript"></script>
+<script src='./assets/lib/util.js' type="text/javascript"></script>
+<script src='./assets/lib/main.js' type="text/javascript"></script>
+<script src='./assets/lib/kakao.min.js' type="text/javascript"></script>
+
 <script type="text/javascript">
     var currentTimeSec = new Date().getTime()
-    document.write("<scr" + "ipt src='./assets/lib/angular.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-animate.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-aria.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-cookies.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-loader.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-message-format.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-messages.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-mocks.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-parse-ext.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-resource.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-route.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-sanitize.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-touch.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/ng-file-upload-all.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/ng-file-upload.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/angular-material.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/cleave-angular.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/firebase.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/jquery.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/browser.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/breakpoints.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/util.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/main.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
-    document.write("<scr" + "ipt src='./assets/lib/kakao.min.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
 
     document.write("<scr" + "ipt src='./assets/js/App.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
     document.write("<scr" + "ipt src='./assets/js/AppRoute.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
@@ -190,42 +186,5 @@
     document.write("<scr" + "ipt src='./assets/js/Controllers/view/PublicTransportSubwayController.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
     document.write("<scr" + "ipt src='./assets/js/Controllers/view/PublicTransportBusController.js?time=" + currentTimeSec + "' type='text/javascript'>" + "</scr" + "ipt>")
 </script>
-<!--<script src="./assets/lib/angular.js"></script>-->
-<!--<script src="./assets/lib/angular-animate.js"></script>-->
-<!--<script src="./assets/lib/angular-aria.js"></script>-->
-<!--<script src="./assets/lib/angular-cookies.js"></script>-->
-<!--<script src="./assets/lib/angular-loader.js"></script>-->
-<!--<script src="./assets/lib/angular-message-format.js"></script>-->
-<!--<script src="./assets/lib/angular-messages.js"></script>-->
-<!--<script src="./assets/lib/angular-mocks.js"></script>-->
-<!--<script src="./assets/lib/angular-parse-ext.js"></script>-->
-<!--<script src="./assets/lib/angular-resource.js"></script>-->
-<!--<script src="./assets/lib/angular-route.js"></script>-->
-<!--<script src="./assets/lib/angular-sanitize.js"></script>-->
-<!--<script src="./assets/lib/angular-touch.js"></script>-->
-<!--<script src="./assets/lib/ng-file-upload-all.js"></script>-->
-<!--<script src="./assets/lib/ng-file-upload.js"></script>-->
-<!--<script src="./assets/lib/angular-material.min.js"></script>-->
-<!--<script src="./assets/lib/cleave-angular.min.js"></script>-->
-
-<!--<script src="./assets/lib/firebase.js"></script>-->
-
-<!--<script src="assets/lib/jquery.min.js"></script>-->
-<!--<script src="assets/lib/browser.min.js"></script>-->
-<!--<script src="assets/lib/breakpoints.min.js"></script>-->
-<!--<script src="assets/lib/util.js"></script>-->
-<!--<script src="assets/lib/main.js"></script>-->
-
-<!--<script src="./assets/js/App.js"></script>-->
-<!--<script src="./assets/js/AppRoute.js"></script>-->
-<!--<script src="./assets/js/AppDefine.js"></script>-->
-<!--<script src="./assets/js/AppService.js"></script>-->
-<!--<script src="./assets/js/AppDirective.js"></script>-->
-
-<!--<script src="./assets/js/Controllers/Shared/ToolbarController.js"></script>-->
-<!--<script src="./assets/js/Controllers/view/ShuttleLocationController.js"></script>-->
-<!--<script src="./assets/js/Controllers/view/AccountManagementController.js"></script>-->
-<!--<script src="./assets/js/Controllers/view/ApiManagementController.js"></script>-->
-<!--<script src="./assets/js/Controllers/view/ShuttleManagementController.js"></script>-->
 </body>
 </html>

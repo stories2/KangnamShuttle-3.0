@@ -48,6 +48,18 @@ app.config(function ($routeProvider) {
       cache: false,
       disableCache: true
     })
+      .when('/tts', {
+          templateUrl: 'assets/view/ttsGenerate.html',
+          controller: 'TtsGenerateController',
+          cache: false,
+          disableCache: true
+      })
+      .when('/tts/:tid', {
+          templateUrl: 'assets/view/ttsRead.html',
+          controller: 'TtsReadController',
+          cache: false,
+          disableCache: true
+      })
     .otherwise({
       redirectTo: '/',
       cache: false,
