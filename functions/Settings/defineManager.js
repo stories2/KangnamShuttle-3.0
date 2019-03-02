@@ -101,3 +101,6 @@ exports.SUBWAY_SUNDAY_OF_WEEK = '3'
 exports.SUBWAY_OPEN_API_RESULT_OK = 'INFO-000'
 
 exports.PUBLIC_BUS_OPEN_API_RESULT_OK = '0'
+
+exports.URL_SCHOOL_HOST_NAME = "web.kangnam.ac.kr"
+exports.URL_SCHOOL_LIFE_SCHEDULE_PATH = "/menu/02be162adc07170ec7ee034097d627e9.do"

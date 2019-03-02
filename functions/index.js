@@ -50,6 +50,7 @@ v3PublicApi.get('/public/subway', publicRoute.getPublicSubway)
 v3PublicApi.patch('/public/subway', publicRoute.patchPublicSubway)
 v3PublicApi.get('/public/bus', publicRoute.getPublicBus)
 v3PublicApi.patch('/public/bus', publicRoute.patchPublicBus)
+v3PublicApi.get('/school/schedule/latest', publicRoute.routineOfCrawlSchoolLifeSchedule)
 exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
 
 v3PrivateApi.use(cors)

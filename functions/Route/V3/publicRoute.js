@@ -143,3 +143,12 @@ exports.patchPublicBus = function (request, response) {
     })
   })
 }
+
+exports.routineOfCrawlSchoolLifeSchedule = function (request, response) {
+    var responseManager = require('../../Utils/responseManager')
+    const schoolManager = require('../../Core/schoolManager')
+
+    schoolManager.routineOfCrawlSchoolLifeSchedule(request, response, function (scheduleList) {
+        responseManager.ok(response, scheduleList)
+    })
+}

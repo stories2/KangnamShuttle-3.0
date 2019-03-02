@@ -11,6 +11,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "busboy": "^0.2.14",
+    "cheerio": "^1.0.0-rc.2",
     "content-type": "^1.0.4",
     "cors": "^2.8.5",
     "crypto-js": "^3.1.9-1",
