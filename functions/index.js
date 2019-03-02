@@ -89,6 +89,9 @@ v3PrivateApi.get('/role', privateRoute.getAllRoleList)
 
 v3PrivateApi.get('/api', privateRoute.getApiList)
 
+v3PrivateApi.get('/school/mySchedule', privateRoute.getAlreadyRegisteredMyCalendarList)
+v3PrivateApi.patch('/school/mySchedule', privateRoute.registerNewCalendarList)
+
 exports.v3PrivateApi = functions.https.onRequest(v3PrivateApi)
 
 v3KakaoApi.use(cors)

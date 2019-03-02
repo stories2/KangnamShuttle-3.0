@@ -234,3 +234,23 @@ exports.getApiList = function (request, response) {
     responseManager.ok(response, apiList)
   })
 }
+
+exports.getAlreadyRegisteredMyCalendarList = function (request, response) {
+    var schoolManager = require('../../Core/schoolManager')
+    var responseManager = request.responseManager
+
+    schoolManager.getAlreadyRegisteredMyCalendarList(request, response, function (scheduleList) {
+        responseManager.ok(response, scheduleList)
+    })
+}
+
+exports.registerNewCalendarList = function (request, response) {
+    var schoolManager = require('../../Core/schoolManager')
+    var responseManager = request.responseManager
+
+    schoolManager.registerNewCalendarList(request, response, function (status) {
+        responseManager.ok(response, {
+          success: status
+        })
+    })
+}

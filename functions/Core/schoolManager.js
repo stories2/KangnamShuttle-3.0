@@ -91,3 +91,48 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
 
     callbackFunc(schedule)
 }
+
+exports.getAlreadyRegisteredMyCalendarList = function (request, response, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const accountInfo = request.accountInfo
+    const uid = accountInfo.uid
+    var dbPath = util.format(global.define.DB_PATH_ACCOUNTS_UID_CALENDAR, uid)
+
+    global.log.debug("schoolManager", "getAlreadyRegisteredMyCalendarList", "calendar db path: " + dbPath)
+
+    var calendarRef = admin.database().ref(dbPath)
+
+    calendarRef.once("value", function (calendarSnapshot) {
+        var calendarData = calendarSnapshot.val() || []
+
+        global.log.debug("schoolManager", "getAlreadyRegisteredMyCalendarList", "data: " + calendarData)
+
+        callbackFunc(calendarData)
+    })
+}
+
+exports.registerNewCalendarList = function (request, response, callbackFunc) {
+    const admin = global.admin
+    const util = require('util')
+    const accountInfo = request.accountInfo
+    const uid = accountInfo.uid
+    var dbPath = util.format(global.define.DB_PATH_ACCOUNTS_UID_CALENDAR, uid)
+    var data = request.body["schedule"]
+
+    global.log.debug("schoolManager", "getAlreadyRegisteredMyCalendarList", "calendar db path: " + dbPath)
+    global.log.debug("schoolManager", "getAlreadyRegisteredMyCalendarList", "data: " + JSON.stringify(data))
+
+    var calendarRef = admin.database().ref(dbPath)
+
+    calendarRef.set(data, function (error) {
+        if(error) {
+            global.log.error("schoolManager", "getAlreadyRegisteredMyCalendarList", "cannot register new calendar: " + JSON.stringify(error))
+            callbackFunc(false)
+        }
+        else {
+            global.log.info("schoolManager", "getAlreadyRegisteredMyCalendarList", "calendar registered")
+            callbackFunc(true)
+        }
+    })
+}
