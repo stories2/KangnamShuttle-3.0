@@ -359,8 +359,10 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                                     const googleUser = authInstance.signIn()
                                         .then(function () {
                                             if (authInstance.isSignedIn.get()) {
-                                                $scope.isUserSignedIn = true
-                                                $scope.googleAuthStatus = "계정이 확인되었습니다."
+                                                $scope.$apply(function () {
+                                                    $scope.isUserSignedIn = true
+                                                    $scope.googleAuthStatus = "계정이 확인되었습니다."
+                                                })
                                                 KSAppService.debug('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi user signed in')
                                             }
                                         })
