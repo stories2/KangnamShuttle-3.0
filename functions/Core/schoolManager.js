@@ -72,9 +72,9 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
 
         for(var row = 0; row < scheduleObj.length; row += 1) {
             const scheduleRowObj = scheduleObj.eq(row)
-            var date = scheduleRowObj.find('th').text()
+            var date = scheduleRowObj.find('th').text().replace(/\./g, "-")
             var eventText = scheduleRowObj.find('td').text()
-            var regexpDate = date.match(/([0-9]){2}\.([0-9]){2}/g)
+            var regexpDate = date.match(/([0-9]){2}\-([0-9]){2}/g)
             global.log.debug("schoolManager", "crawlCurrentMonthSchedule", date + " : " + eventText)
 
             currentMonthSchedule.push({
