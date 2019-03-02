@@ -74,10 +74,12 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
             const scheduleRowObj = scheduleObj.eq(row)
             var date = scheduleRowObj.find('th').text()
             var eventText = scheduleRowObj.find('td').text()
+            var regexpDate = date.match(/([0-9]){2}\.([0-9]){2}/g)
             global.log.debug("schoolManager", "crawlCurrentMonthSchedule", date + " : " + eventText)
 
             currentMonthSchedule.push({
                 date: date,
+                regexpDate: regexpDate,
                 eventText: eventText
             })
         }
