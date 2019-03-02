@@ -1,6 +1,7 @@
 app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $mdSidenav, $window, $mdDialog, KSAppService) {
     KSAppService.info('SchoolScheduleController', 'SchoolScheduleController', 'init')
 
+    $scope.googleAuthStatus = "계정 확인 중"
     $scope.isUserSignedIn = false
 
     function listenAuthStatusChanged () {
@@ -17,7 +18,6 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                 // ...
                 KSAppService.debug('SchoolScheduleController', 'listenAuthStatusChanged', 'signed in user info: ' + JSON.stringify(user))
                 if (emailVerified) {
-                    $scope.isUserSignedIn = true
 
                     gapi.load('client', {
                         callback: function() {
@@ -37,14 +37,22 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                                 // Loading is finished, so start the app
                                 .then(function() {
                                     // Make sure the Google API Client is properly signed in
-                                    // const googleUser = gapi.auth2.getAuthInstance().signIn()
-                                    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                                        // startApp(user);
-                                        KSAppService.debug('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi user signed in')
-                                    } else {
-                                        // firebase.auth().signOut(); // Something went wrong, sign out
-                                        KSAppService.warn('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi user not signed in')
-                                    }
+                                    const authInstance = gapi.auth2.getAuthInstance()
+                                    const googleUser = authInstance.signIn()
+                                        .then(function () {
+                                            if (authInstance.isSignedIn.get()) {
+                                                $scope.isUserSignedIn = true
+                                                $scope.googleAuthStatus = "계정이 확인되었습니다."
+                                                KSAppService.debug('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi user signed in')
+                                            }
+                                        })
+                                        .catch(function (error) {
+
+                                            $scope.isUserSignedIn = false
+                                            // firebase.auth().signOut(); // Something went wrong, sign out
+                                            $scope.googleAuthStatus = "계정을 확인하는 중 문제가 발생하였습니다."
+                                            KSAppService.error('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi auth error: ' + JSON.stringify(error))
+                                        })
                                 });
                         }
                     })
@@ -53,6 +61,7 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                 // User is signed out.
                 // ...
                 $scope.isUserSignedIn = false
+                $scope.googleAuthStatus = "로그인 되지 않았습니다."
                 KSAppService.warn('SchoolScheduleController', 'listenAuthStatusChanged', 'user not signed in')
             }
         })

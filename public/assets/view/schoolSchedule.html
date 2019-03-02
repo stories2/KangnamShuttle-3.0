@@ -4,8 +4,25 @@
             <div class="content">
                 <header>
                     <h2>학사 일정</h2>
-                    <h4>최근 학사 일정을 보여주는 페이지입니다. 오호라 구글 켈린더와 연동도 가능하군요?!</h4>
+                    <h4>최근 학사 일정을 보여주는 페이지입니다. 오호라 구글 캘린더와 연동도 가능하군요?!</h4>
                 </header>
+                <div layout="row">
+                    <div flex>
+                        상태: {{ googleAuthStatus }}
+                    </div>
+                    <md-button ng-disabled="isUserSignedIn != true">캘린더 동기화</md-button>
+                </div>
+                <div>
+                    <div class="md-dialog-content" layout="column">
+                        <h3>도움말</h3>
+                        <ol>
+                            <li>본 기능은 베타 테스트 기능입니다. 불안정한 요소가 존재하니 주의해주시기 바랍니다.</li>
+                            <li>계정확인을 위해 팝업이 표시되고 권한을 요청합니다. 본 페이지에서는 팝업을 허용해주세요.</li>
+                            <li>문제가 생겼을 경우 <a href="https://github.com/stories2/KangnamShuttle-3.0/issues">여기</a> 에 문제를 최대한 자세히 기술해주세요.</li>
+                        </ol>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
     </section>
