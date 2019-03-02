@@ -5,8 +5,8 @@ exports.routineOfCrawlSchoolLifeSchedule = function(request, response, callbackF
     loadSchoolLifeSchedulePage(function (schedulePageHtml) {
 
         if(schedulePageHtml) {
-            crawlCurrentMonthSchedule(schedulePageHtml, function () {
-
+            crawlCurrentMonthSchedule(schedulePageHtml, function (scheduleList) {
+                callbackFunc(scheduleList)
             })
         }
         else {
@@ -62,14 +62,30 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
     // global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "children: " + JSON.stringify(scrapObj.children()))
     // console.log(scrapObj.children().eq(0).text())
 
+    var schedule = []
+
     for(var index = 0; index < scrapObj.length; index += 1) {
         const scheduleObj = scrapObj.eq(index).find('tbody tr')
+        var currentMonthSchedule = []
 
         global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "#" + index + " founded row: " + scheduleObj.length)
 
         for(var row = 0; row < scheduleObj.length; row += 1) {
             const scheduleRowObj = scheduleObj.eq(row)
-            global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "" + scheduleRowObj.find('th').text() + " : " + scheduleRowObj.find('td').text())
+            var date = scheduleRowObj.find('th').text()
+            var eventText = scheduleRowObj.find('td').text()
+            global.log.debug("schoolManager", "crawlCurrentMonthSchedule", date + " : " + eventText)
+
+            currentMonthSchedule.push({
+                date: date,
+                eventText: eventText
+            })
         }
+
+        schedule.push(currentMonthSchedule)
     }
+
+    global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "ok schedule is: " + JSON.stringify(schedule))
+
+    callbackFunc(schedule)
 }
