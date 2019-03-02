@@ -4,9 +4,15 @@ exports.routineOfCrawlSchoolLifeSchedule = function(request, response, callbackF
 
     loadSchoolLifeSchedulePage(function (schedulePageHtml) {
 
-        // crawlCurrentMonthSchedule(schedulePageHtml, function () {
-        //
-        // })
+        if(schedulePageHtml) {
+            crawlCurrentMonthSchedule(schedulePageHtml, function () {
+
+            })
+        }
+        else {
+            global.log.warn("schoolManager", "routineOfCrawlSchoolLifeSchedule", "cannot crawl school life schedule page")
+            callbackFunc(undefined)
+        }
     })
 }
 
@@ -46,5 +52,24 @@ exports.loadSchoolLifeSchedulePage = function (callbackFunc) {
 }
 
 exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
+    const cheerio = require('cheerio')
+    const $ = cheerio.load(schedulePageHtml)
+    const scrapObj = $('div.com_tab_div.year ul').find('li div.tbl.typeA.calendal_list').children()
 
+    global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "" + scrapObj.text())
+    global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "length: " + scrapObj.length)
+
+    // global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "children: " + JSON.stringify(scrapObj.children()))
+    // console.log(scrapObj.children().eq(0).text())
+
+    for(var index = 0; index < scrapObj.length; index += 1) {
+        const scheduleObj = scrapObj.eq(index).find('tbody tr')
+
+        global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "#" + index + " founded row: " + scheduleObj.length)
+
+        for(var row = 0; row < scheduleObj.length; row += 1) {
+            const scheduleRowObj = scheduleObj.eq(row)
+            global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "" + scheduleRowObj.find('th').text() + " : " + scheduleRowObj.find('td').text())
+        }
+    }
 }
