@@ -201,6 +201,7 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
         $scope.insertCounter = ZERO
         $scope.insertLength = ZERO
 
+        $scope.googleAuthStatus = "최신 학사 일정을 추가하는 중"
         for(var month = 0; month < $scope.schoolScheduleList.length; month += 1) {
             $scope.insertLength += $scope.schoolScheduleList[month].length
         }
