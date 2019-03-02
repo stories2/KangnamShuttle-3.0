@@ -3,6 +3,28 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
 
     $scope.googleAuthStatus = "계정 확인 중"
     $scope.isUserSignedIn = false
+    $scope.isSyncProcessWorking = false
+    $scope.deleteCounter = ZERO
+    $scope.deleteLength = ZERO
+    $scope.insertCounter = ZERO
+    $scope.insertLength = ZERO
+    $scope.schoolScheduleList = []
+
+    $scope.onLoad = function() {
+        getLatestSchoolLifeSchedule()
+    }
+
+    $scope.syncCalendar = function() {
+        if($scope.isSyncProcessWorking === false) {
+            $scope.deleteCounter = ZERO
+            $scope.deleteLength = ZERO
+            $scope.insertCounter = ZERO
+            $scope.insertLength = $scope.schoolScheduleList.length
+            $scope.googleAuthStatus = "동기화가 시작됨"
+            $scope.isSyncProcessWorking = true
+            KSAppService.info("SchoolScheduleController", "syncCalendar", "sync started")
+        }
+    }
     
     $scope.testInsert = function () {
         var resource = {
@@ -53,6 +75,29 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                 console.log("cannot generate token", error)
             })
     }
+    
+    function getAlreadyRegisteredMyCalendarList() {
+        
+    }
+    
+    function registerNewCalendarList() {
+        
+    }
+
+    function getLatestSchoolLifeSchedule() {
+        var payload = {}
+        
+        KSAppService.getReq(
+            API_GET_PUBLIC_SCHOOL_LIFE_SCHEDULE,
+            payload,
+            function (data) {
+                KSAppService.debug("SchoolScheduleController", "getLatestSchoolLifeSchedule", "result: " + JSON.stringify(data))
+            },
+            function (error) {
+                KSAppService.error("SchoolScheduleController", "getLatestSchoolLifeSchedule", "cannot get schedule: " + JSON.stringify(error))
+            }
+        )
+    }
 
     function listenAuthStatusChanged () {
         firebase.auth().onAuthStateChanged(function (user) {
@@ -100,7 +145,7 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
 
                                             $scope.isUserSignedIn = false
                                             // firebase.auth().signOut(); // Something went wrong, sign out
-                                            $scope.googleAuthStatus = "계정을 확인하는 중 문제가 발생하였습니다."
+                                            $scope.googleAuthStatus = "계정을 확인하는 중 문제가 발생하였습니다. 대부분 팝업 허용이 되지 않았을 경우 이 메시지가 출력됩니다."
                                             KSAppService.error('SchoolScheduleController', 'listenAuthStatusChanged', 'gapi auth error: ' + JSON.stringify(error))
                                         })
                                 });
