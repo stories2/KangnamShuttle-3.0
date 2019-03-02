@@ -9,6 +9,7 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
     $scope.insertCounter = ZERO
     $scope.insertLength = ZERO
     $scope.schoolScheduleList = []
+    $scope.registeredMySchedule = []
 
     $scope.onLoad = function() {
         getLatestSchoolLifeSchedule()
@@ -23,6 +24,8 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
             $scope.googleAuthStatus = "동기화가 시작됨"
             $scope.isSyncProcessWorking = true
             KSAppService.info("SchoolScheduleController", "syncCalendar", "sync started")
+
+            routineOfSyncCalendar()
         }
     }
     
@@ -75,13 +78,227 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
                 console.log("cannot generate token", error)
             })
     }
-    
-    function getAlreadyRegisteredMyCalendarList() {
-        
+
+    function routineOfSyncCalendar() {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+            .then(function (idToken) {
+                KSAppService.setToken(idToken)
+                $scope.googleAuthStatus = "이미 등록된 캘린더 리스트를 가져오는 중"
+                getAlreadyRegisteredMyCalendarList(function () {
+
+                    $scope.googleAuthStatus = "이미 등록된 캘린더 리스트를 삭제하는 중"
+                    deleteAlreadyRegisteredCalendar(function () {
+                        KSAppService.info("SchoolScheduleController", "routineOfSyncCalendar", "delete already registered calendar done")
+
+                        $scope.googleAuthStatus = "새 캘린더 리스트를 등록하는 중"
+                        registerNewCalendarList(function (myRegisterCalendarList) {
+
+                            $scope.googleAuthStatus = "새 캘린더 리스트를 저장하는 중"
+                            uploadMyNewCalendarList(myRegisterCalendarList)
+                        })
+                    })
+
+
+                })
+            }).catch(function (error) {
+                KSAppService.error("SchoolScheduleController", "routineOfSyncCalendar", "error: " + JSON.stringify(error))
+        })
+    }
+
+    function deleteAlreadyRegisteredCalendar(callbackFunc) {
+        KSAppService.info("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "start delete")
+        var batch = gapi.client.newBatch();
+        $scope.deleteCounter = ZERO
+        $scope.deleteLength = $scope.registeredMySchedule.length
+
+        KSAppService.debug("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "registered schedule: " + $scope.registeredMySchedule.length)
+
+        if($scope.registeredMySchedule.length <= ZERO) {
+            KSAppService.info("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "nothing to delete calendar, skip it")
+            callbackFunc()
+            return
+        }
+
+        for(var scheduleIndex = 0; scheduleIndex < $scope.registeredMySchedule.length; scheduleIndex += 1) {
+            var schedule = $scope.registeredMySchedule[scheduleIndex]
+            if(schedule.hasOwnProperty("id")) {
+                var id = schedule["id"]
+                KSAppService.debug("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "del #" + id)
+
+                var resource = {
+                    calendarId: 'primary',
+                    eventId: id
+                }
+                var request = gapi.client.calendar.events.delete(resource)
+                batch.add(request)
+                $scope.deleteCounter += 1
+            }
+            else {
+                $scope.deleteCounter += 1
+            }
+        }
+        if($scope.deleteCounter >= $scope.deleteLength) {
+            batch.then(function (data) {
+
+                KSAppService.debug("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "delete batch result: " + JSON.stringify(data))
+
+                callbackFunc()
+            })
+                .catch(function (error) {
+                    KSAppService.error("SchoolScheduleController", "deleteAlreadyRegisteredCalendar", "cannot batch: " + JSON.stringify(error))
+
+                    callbackFunc()
+                })
+        }
     }
     
-    function registerNewCalendarList() {
-        
+    function getAlreadyRegisteredMyCalendarList(callbackFunc) {
+        var payload = {}
+        KSAppService.getReq(
+            API_GET_PRIVATE_SCHOOL_MY_CALENDAR,
+            payload,
+            function (data) {
+                KSAppService.debug("SchoolScheduleController", "getAlreadyRegisteredMyCalendarList", "data: " + JSON.stringify(data))
+                initMyRegisteredScheduleList(data, callbackFunc)
+            },
+            function (error) {
+                KSAppService.error("SchoolScheduleController", "getAlreadyRegisteredMyCalendarList", "error: " + JSON.stringify(error))
+            }
+        )
+    }
+
+    function initMyRegisteredScheduleList(data, callbackFunc) {
+        $scope.registeredMySchedule = data["data"]
+        $scope.deleteLength = $scope.registeredMySchedule.length
+        $scope.deleteCounter = ZERO
+        KSAppService.info("SchoolScheduleController", "initMyRegisteredScheduleList", "already registered data received")
+        callbackFunc()
+    }
+
+    function uploadMyNewCalendarList(myNewCalendarList) {
+        var payload = {
+            schedule: myNewCalendarList
+        }
+
+        KSAppService.patchReq(
+            API_PATCH_PRIVATE_SCHOOL_MY_CALENDAR,
+            payload,
+            function (data) {
+                KSAppService.debug("SchoolScheduleController", "uploadMyNewCalendarList", "data: " + JSON.stringify(data))
+                KSAppService.showToast("캘린더 동기화가 끝났습니다.", TOAST_SHOW_LONG)
+                $scope.googleAuthStatus = "캘린더 동기화가 끝났습니다."
+                $scope.isSyncProcessWorking = false
+            },
+            function (error) {
+                KSAppService.error("SchoolScheduleController", "uploadMyNewCalendarList", "error: " + JSON.stringify(error))
+            }
+        )
+    }
+    
+    function registerNewCalendarList(callbackFunc) {
+        var registerCalendarList = []
+        var batch = gapi.client.newBatch();
+        $scope.insertCounter = ZERO
+        $scope.insertLength = ZERO
+
+        for(var month = 0; month < $scope.schoolScheduleList.length; month += 1) {
+            $scope.insertLength += $scope.schoolScheduleList[month].length
+        }
+        // $scope.insertCounter = 1
+        KSAppService.debug("SchoolScheduleController", "registerNewCalendarList", "event " + $scope.insertLength + " detected")
+
+        for(var month = 0; month < $scope.schoolScheduleList.length; month += 1) {
+
+            var monthStr = (month + 1) < 10 ? "0" + (month + 1) : "" + month
+            var monthFirst = monthStr + "-00"
+            var currentYear = new Date().getFullYear()
+
+            for(var itemIndex = 0; itemIndex < $scope.schoolScheduleList[month].length; itemIndex += 1) {
+
+                var item = $scope.schoolScheduleList[month][itemIndex]
+                var startYear = currentYear + "-",
+                    endYear = currentYear + "-",
+                    startDate = "",
+                    endDate = ""
+
+                if(item["regexpDate"].length > 1) {
+                    startDate = item["regexpDate"][0]
+                    endDate = item["regexpDate"][1]
+                }
+                else {
+                    startDate = item["regexpDate"][0]
+                    endDate = item["regexpDate"][0]
+                }
+
+                if(startDate < endDate !== true && startDate != endDate) {
+                    if(startDate < monthFirst !== true && monthFirst < endDate) {
+                        startYear = (currentYear - 1) + "-"
+                    }
+                    else {
+                        endYear = (currentYear + 1) + "-"
+                    }
+                }
+                startDate = startYear + startDate
+                endDate = endYear + endDate
+
+                var endDateObj = new Date(endDate)
+                endDateObj.setDate(endDateObj.getDate() + 1)
+                endDate = endDateObj.toISOString().substring(0, 10);
+
+                var resource = {
+                    "summary": item["eventText"],
+                    // "location": "Somewhere",
+                    "start": {
+                        "date": startDate,
+                        // "dateTime": "2019-03-01T10:00:00-07:00",
+                        "timeZone": "Asia/Seoul"
+                    },
+                    "end": {
+                        "date": endDate,
+                        // "dateTime": "2019-03-02T10:25:00-07:00",
+                        "timeZone": "Asia/Seoul"
+                    },
+                    "description": item["date"] + "\n" + item["eventText"] + "\n" + "<Generated by KangnamShuttle-3.0>"
+                };
+                var request = gapi.client.calendar.events.insert({
+                    'calendarId': 'primary',
+                    'resource': resource
+                });
+
+                batch.add(request)
+
+                KSAppService.debug("SchoolScheduleController", "registerNewCalendarList", "month: " + month + " item: " + itemIndex + " resource: " + JSON.stringify(resource))
+
+                $scope.insertCounter += 1
+                // registerCalendarList.push(request)
+                // KSAppService.debug("SchoolScheduleController", "registerNewCalendarList", "calendar: " + JSON.stringify(registerCalendarList))
+
+
+
+                // break
+            }
+            // break
+        }
+
+        if($scope.insertCounter >= $scope.insertLength) {
+            registerCalendarList = []
+            KSAppService.info("SchoolScheduleController", "registerNewCalendarList", "ok insert done")
+            batch.then(function (data) {
+                console.log("batch", data)
+                for(var key in data["result"]) {
+                    var event = data["result"][key]
+                    registerCalendarList.push(JSON.parse(event["body"]))
+                }
+                KSAppService.debug("SchoolScheduleController", "registerNewCalendarList", "schedule list: " + JSON.stringify(registerCalendarList))
+                callbackFunc(registerCalendarList)
+            })
+                .catch(function (error) {
+                    KSAppService.error("SchoolScheduleController", "registerNewCalendarList", "cannot batch: " + JSON.stringify(error))
+
+                    callbackFunc(registerCalendarList)
+                })
+
+        }
     }
 
     function getLatestSchoolLifeSchedule() {
@@ -92,11 +309,16 @@ app.controller('SchoolScheduleController', function ($scope, $http, $mdToast, $m
             payload,
             function (data) {
                 KSAppService.debug("SchoolScheduleController", "getLatestSchoolLifeSchedule", "result: " + JSON.stringify(data))
+                initLatestSchoolLifeSchedule(data)
             },
             function (error) {
                 KSAppService.error("SchoolScheduleController", "getLatestSchoolLifeSchedule", "cannot get schedule: " + JSON.stringify(error))
             }
         )
+    }
+
+    function initLatestSchoolLifeSchedule(data) {
+        $scope.schoolScheduleList = data["data"]
     }
 
     function listenAuthStatusChanged () {
