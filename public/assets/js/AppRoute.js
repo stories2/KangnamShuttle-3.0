@@ -60,6 +60,12 @@ app.config(function ($routeProvider) {
           cache: false,
           disableCache: true
       })
+      .when('/school/schedule', {
+          templateUrl: 'assets/view/schoolSchedule.html',
+          controller: 'SchoolScheduleController',
+          cache: false,
+          disableCache: true
+      })
     .otherwise({
       redirectTo: '/',
       cache: false,
