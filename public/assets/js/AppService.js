@@ -6,7 +6,16 @@ app.service('KSAppService', function ($log, $http, $window, $mdToast) {
     databaseURL: 'https://kangnamshuttle3.firebaseio.com',
     projectId: 'kangnamshuttle3',
     storageBucket: 'kangnamshuttle3.appspot.com',
-    messagingSenderId: '1098842159621'
+    messagingSenderId: '1098842159621',
+
+      clientId: "1098842159621-j11r4mmc89d8n2a2c3502geri390jfv5.apps.googleusercontent.com",
+
+      scopes: [
+          "https://www.googleapis.com/auth/calendar"
+      ],
+      discoveryDocs: [
+          "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+      ]
   }
   firebase.initializeApp(config)
 
@@ -266,6 +275,7 @@ app.service('KSAppService', function ($log, $http, $window, $mdToast) {
     'setToken': setToken,
     'getToken': getToken,
     'removeToken': removeToken,
-    'showToast': showToast
+    'showToast': showToast,
+      'config': config
   }
 })
