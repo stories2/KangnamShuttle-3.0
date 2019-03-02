@@ -10,7 +10,8 @@
                     <div flex>
                         상태: {{ googleAuthStatus }}
                     </div>
-                    <md-button ng-disabled="isUserSignedIn != true">캘린더 동기화</md-button>
+                    <md-button ng-disabled="isUserSignedIn != true" ng-click="testInsert()">캘린더 동기화</md-button>
+                    <!--<md-button ng-disabled="isUserSignedIn != true" ng-click="testDelete()">캘린더 삭제 테스트</md-button>-->
                 </div>
                 <div>
                     <div class="md-dialog-content" layout="column">
