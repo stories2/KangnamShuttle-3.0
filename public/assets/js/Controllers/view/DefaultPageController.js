@@ -18,6 +18,14 @@ app.controller('DefaultPageController', function ($scope, $http, $mdToast, $mdSi
       })
   }
 
+  $scope.onLoad = function () {
+      // 플러스친구 친구추가 버튼을 생성합니다.
+      Kakao.PlusFriend.createAddFriendButton({
+          container: '#kakaoBtn',
+          plusFriendId: '_wkxjxoxl' // 플러스친구 홈 URL에 명시된 id로 설정합니다.
+      });
+  }
+
   function donateDialogController ($scope, $mdDialog) {
     $scope.data = {}
     $scope.donateMoney = 5

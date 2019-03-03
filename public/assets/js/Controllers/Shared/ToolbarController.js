@@ -28,6 +28,10 @@ app.controller('ToolbarController', function ($scope, $http, $mdToast, $mdSidena
   $scope.isUserSignedIn = false
   var uid = undefined
 
+  $scope.initPage = function() {
+      Kakao.init('3657731dfc54b48e073cfb7a6787f88e');
+  }
+
   $scope.onBtnSignInClicked = function () {
     $mdDialog.show({
       controller: signInDialogController,
