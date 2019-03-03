@@ -64,24 +64,41 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
 
     var schedule = []
 
-    for(var index = 0; index < scrapObj.length; index += 1) {
+    for(var index = ZERO; index < scrapObj.length; index += 1) {
         const scheduleObj = scrapObj.eq(index).find('tbody tr')
         var currentMonthSchedule = []
 
         global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "#" + index + " founded row: " + scheduleObj.length)
 
-        for(var row = 0; row < scheduleObj.length; row += 1) {
+        for(var row = ZERO; row < scheduleObj.length; row += 1) {
+            var duplicateEvent = false
             const scheduleRowObj = scheduleObj.eq(row)
             var date = scheduleRowObj.find('th').text().replace(/\./g, "-")
             var eventText = scheduleRowObj.find('td').text()
-            var regexpDate = date.match(/([0-9]){2}\-([0-9]){2}/g)
-            global.log.debug("schoolManager", "crawlCurrentMonthSchedule", date + " : " + eventText)
 
-            currentMonthSchedule.push({
-                date: date,
-                regexpDate: regexpDate,
-                eventText: eventText
-            })
+            if(index > ZERO) {
+                for(var eventIndex in schedule[index - 1]) {
+                    const event = schedule[index - 1][eventIndex]
+                    // console.log("event", event)
+                    if(event.eventText === eventText) {
+                        duplicateEvent = true
+                        break;
+                    }
+                }
+            }
+
+            if(duplicateEvent != true) {
+                var regexpDate = date.match(/([0-9]){2}\-([0-9]){2}/g)
+                global.log.debug("schoolManager", "crawlCurrentMonthSchedule", date + " : " + eventText)
+                currentMonthSchedule.push({
+                    date: date,
+                    regexpDate: regexpDate,
+                    eventText: eventText
+                })
+            }
+            else {
+                global.log.warn("schoolManager", "crawlCurrentMonthSchedule", "duplicate event detected: " + date + " : " + eventText)
+            }
         }
 
         schedule.push(currentMonthSchedule)
