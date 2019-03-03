@@ -77,12 +77,17 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
             var eventText = scheduleRowObj.find('td').text()
 
             if(index > global.define.ZERO) {
-                for(var eventIndex in schedule[index - 1]) {
-                    const event = schedule[index - 1][eventIndex]
-                    // console.log("event", event)
-                    if(event.eventText === eventText) {
-                        duplicateEvent = true
-                        break;
+                for(var checkIndex = global.define.ZERO; checkIndex < index; checkIndex += 1) {
+                    for(var eventIndex in schedule[checkIndex]) {
+                        const event = schedule[checkIndex][eventIndex]
+                        // console.log("event", event)
+                        if(event.eventText === eventText) {
+                            duplicateEvent = true
+                            break;
+                        }
+                    }
+                    if(duplicateEvent) {
+                        break
                     }
                 }
             }
