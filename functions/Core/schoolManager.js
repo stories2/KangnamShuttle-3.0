@@ -64,19 +64,19 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
 
     var schedule = []
 
-    for(var index = ZERO; index < scrapObj.length; index += 1) {
+    for(var index = global.define.ZERO; index < scrapObj.length; index += 1) {
         const scheduleObj = scrapObj.eq(index).find('tbody tr')
         var currentMonthSchedule = []
 
         global.log.debug("schoolManager", "crawlCurrentMonthSchedule", "#" + index + " founded row: " + scheduleObj.length)
 
-        for(var row = ZERO; row < scheduleObj.length; row += 1) {
+        for(var row = global.define.ZERO; row < scheduleObj.length; row += 1) {
             var duplicateEvent = false
             const scheduleRowObj = scheduleObj.eq(row)
             var date = scheduleRowObj.find('th').text().replace(/\./g, "-")
             var eventText = scheduleRowObj.find('td').text()
 
-            if(index > ZERO) {
+            if(index > global.define.ZERO) {
                 for(var eventIndex in schedule[index - 1]) {
                     const event = schedule[index - 1][eventIndex]
                     // console.log("event", event)
