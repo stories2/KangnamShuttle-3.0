@@ -81,7 +81,7 @@ exports.crawlCurrentMonthSchedule = function (schedulePageHtml, callbackFunc) {
                     for(var eventIndex in schedule[checkIndex]) {
                         const event = schedule[checkIndex][eventIndex]
                         // console.log("event", event)
-                        if(event.eventText === eventText) {
+                        if(event.eventText === eventText && event.date === date) {
                             duplicateEvent = true
                             break;
                         }
