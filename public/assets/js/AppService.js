@@ -8,14 +8,14 @@ app.service('KSAppService', function ($log, $http, $window, $mdToast) {
     storageBucket: 'kangnamshuttle3.appspot.com',
     messagingSenderId: '1098842159621',
 
-      clientId: "1098842159621-j11r4mmc89d8n2a2c3502geri390jfv5.apps.googleusercontent.com",
+    clientId: '1098842159621-j11r4mmc89d8n2a2c3502geri390jfv5.apps.googleusercontent.com',
 
-      scopes: [
-          "https://www.googleapis.com/auth/calendar"
-      ],
-      discoveryDocs: [
-          "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
-      ]
+    scopes: [
+      'https://www.googleapis.com/auth/calendar'
+    ],
+    discoveryDocs: [
+      'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+    ]
   }
   firebase.initializeApp(config)
 
@@ -276,6 +276,6 @@ app.service('KSAppService', function ($log, $http, $window, $mdToast) {
     'getToken': getToken,
     'removeToken': removeToken,
     'showToast': showToast,
-      'config': config
+    'config': config
   }
 })

@@ -20,10 +20,10 @@ app.controller('ToolbarController', function ($scope, $http, $mdToast, $mdSidena
       'name': '주변 버스 도착 정보',
       'url': '#!/transport/bus'
     },
-      {
-          'name': '학사 일정',
-          'url': '#!/school/schedule'
-      }
+    {
+      'name': '학사 일정',
+      'url': '#!/school/schedule'
+    }
   ]
   $scope.isUserSignedIn = false
   var uid = undefined
