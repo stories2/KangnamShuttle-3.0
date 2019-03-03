@@ -10,7 +10,7 @@
                     <div flex>
                         상태: {{ googleAuthStatus }}
                     </div>
-                    <md-button ng-disabled="isUserSignedIn != true || isSyncProcessWorking == true" ng-click="syncCalendar()">캘린더 동기화</md-button>
+                    <md-button ng-disabled="isUserSignedIn != true || isSyncProcessWorking == true || schoolScheduleList.length <= 0" ng-click="syncCalendar()">캘린더 동기화</md-button>
                     <!--<md-button ng-disabled="isUserSignedIn != true" ng-click="testDelete()">캘린더 삭제 테스트</md-button>-->
                 </div>
                 <div>
@@ -23,7 +23,6 @@
                             <li>문제가 생겼을 경우 <a href="https://github.com/stories2/KangnamShuttle-3.0/issues">여기</a> 에 문제를 최대한 자세히 기술해주세요.</li>
                         </ol>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
