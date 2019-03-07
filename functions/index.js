@@ -35,7 +35,7 @@ v3FileApi.use(preprocessManager.addModules)
 v3FileApi.post('/upload/shuttleSchedulePic', [bodyParser.json(), bodyParser.urlencoded({
   extended: true
 })], fileRoute.uploadShuttlePic)
-exports.v3FileApi = functions.https.onRequest(v3FileApi)
+exports.v3FileApi = functions.region('asia-northeast1').https.onRequest(v3FileApi)
 
 v3PublicApi.use(cors)
 v3PublicApi.use(preprocessManager.addModules)
@@ -51,7 +51,7 @@ v3PublicApi.patch('/public/subway', publicRoute.patchPublicSubway)
 v3PublicApi.get('/public/bus', publicRoute.getPublicBus)
 v3PublicApi.patch('/public/bus', publicRoute.patchPublicBus)
 v3PublicApi.get('/school/schedule/latest', publicRoute.routineOfCrawlSchoolLifeSchedule)
-exports.v3PublicApi = functions.https.onRequest(v3PublicApi)
+exports.v3PublicApi = functions.region('asia-northeast1').https.onRequest(v3PublicApi)
 
 v3PrivateApi.use(cors)
 v3PrivateApi.use(authManager.authRoutine)
@@ -92,10 +92,10 @@ v3PrivateApi.get('/api', privateRoute.getApiList)
 v3PrivateApi.get('/school/mySchedule', privateRoute.getAlreadyRegisteredMyCalendarList)
 v3PrivateApi.patch('/school/mySchedule', privateRoute.registerNewCalendarList)
 
-exports.v3PrivateApi = functions.https.onRequest(v3PrivateApi)
+exports.v3PrivateApi = functions.region('asia-northeast1').https.onRequest(v3PrivateApi)
 
 v3KakaoApi.use(cors)
 v3KakaoApi.use(preprocessManager.addModules)
 v3KakaoApi.post('/continue', kakaoRoute.continue)
 v3KakaoApi.post('/action/:index', kakaoRoute.action)
-exports.v3KakaoApi = functions.https.onRequest(v3KakaoApi)
+exports.v3KakaoApi = functions.region('asia-northeast1').https.onRequest(v3KakaoApi)
