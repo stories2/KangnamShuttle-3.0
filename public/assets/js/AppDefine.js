@@ -15,7 +15,7 @@ var SHUTTLE_LOCATION_REFRESH_TIME = 30000
 var PUBLIC_TRANSPORT_BUS_REFRESH_TIME = 60000
 var PUBLIC_TRANSPORT_SUBWAY_REFRESH_TIME = 60000
 
-var LIVE_SERVER_DOMAIN = 'https://us-central1-kangnamshuttle3.cloudfunctions.net/'
+var LIVE_SERVER_DOMAIN = 'https://asia-northeast1-kangnamshuttle3.cloudfunctions.net/'
 
 var API_GET_SHUTTLE_LOCATION = LIVE_SERVER_DOMAIN + 'v3PublicApi/realtimeShuttleLocation'
 var API_AUTH_SIGN_UP = LIVE_SERVER_DOMAIN + 'v3PublicApi/auth'
