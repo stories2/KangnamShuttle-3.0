@@ -164,6 +164,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
   const publicTransportAction = require('../Action/publicTransportAction')
   const emergencyAction = require('../Action/emergencyAction')
   const playAction = require('../Action/playAction')
+  const schoolLifeAction = require('../Action/schoolLifeAction')
 
   const actionTable = {
     '1': basicAction.hello,
@@ -187,6 +188,10 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     '4100': playAction.readyForRockScissorsPapper,
     '4101': playAction.rockScissorsPapper,
     '4200': playAction.rollingDie,
+
+    '5000': schoolLifeAction.selectSchoolLifeService,
+    '5001': schoolLifeAction.syncLatestSchoolLifeSchedule,
+    '5002': schoolLifeAction.latestLibrarySeatStatus,
 
     '9000': systemAction.showSystemInfo,
 
