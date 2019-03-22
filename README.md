@@ -58,8 +58,15 @@ package pre-configured. Functions can be deployed with firebase deploy.
 ## Set/Get env var
 
 ### Set
+
+- Linux terminal
 ```
-firebase functions:config:set someservice.key="THE API KEY"
+firebase functions:config:get > .runtimeconfig.json
+```
+
+- Windows PowerShell
+```
+firebase functions:config:get | ac .runtimeconfig.json
 ```
 
 ### Get

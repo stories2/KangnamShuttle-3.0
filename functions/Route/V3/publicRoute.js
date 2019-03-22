@@ -152,3 +152,14 @@ exports.routineOfCrawlSchoolLifeSchedule = function (request, response) {
     responseManager.ok(response, scheduleList)
   })
 }
+
+exports.runUpdateLibrarySeatObjects = function(request, response) {
+  var responseManager = require('../../Utils/responseManager')
+  const schoolManager = require('../../Core/schoolManager')
+
+  schoolManager.runUpdateLibrarySeatObjects(request, response, function(status) {
+    responseManager.ok(response, {
+      'success': status
+    })
+  })
+}

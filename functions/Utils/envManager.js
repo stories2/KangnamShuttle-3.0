@@ -42,3 +42,9 @@ exports.getPublicBusOpenApiInfo = function (functions) {
     'station_id_kangnam_univ_platform': functions.config().bus_open_api.station_id_kangnam_univ_platform
   }
 }
+
+exports.getSchoolInfo = function(functions) {
+  return {
+    'library_seat_api_endpoint': functions.config().school.library_seat_api_endpoint
+  }
+}

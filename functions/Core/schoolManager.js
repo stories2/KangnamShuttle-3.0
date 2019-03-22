@@ -154,3 +154,95 @@ exports.registerNewCalendarList = function (request, response, callbackFunc) {
     }
   })
 }
+
+exports.runUpdateLibrarySeatObjects = function(request, response, callbackFunc) {
+  const getLatestLibrarySeatObjects = this.getLatestLibrarySeatObjects
+  const patchLatestLibrarySeatObjects = this.patchLatestLibrarySeatObjects
+  const admin = global.admin
+  const roomListRef = admin.database().ref(global.define.DB_PATH_LIBRARY_CONFIG_ROOM_ID)
+  roomListRef.once('value', function(roomListSnapshot) {
+    const roomListData = roomListSnapshot.val()
+    var roomCnt = global.define.ZERO
+    var summaryStatus = true
+    for(var key in roomListData) {
+      const roomID = roomListData[key]["id"]
+      const roomName = roomListData[key]["name"]
+      global.log.debug('schoolManager', 'runUpdateLibrarySeatObjects', 'room id: ' + roomID + ' name: ' + roomName)
+
+      getLatestLibrarySeatObjects(roomID, function(seatObjects) {
+        patchLatestLibrarySeatObjects(roomID, seatObjects, roomName, function(status) {
+          roomCnt += 1
+          if(status == false) {
+            summaryStatus = false
+          }
+          if(roomCnt == Object.keys(roomListData).length) {
+            callbackFunc(summaryStatus)
+          }
+        })
+      })
+    }
+  })
+}
+
+exports.getLatestLibrarySeatObjects = function(roomID, callbackFunc) {
+  const functions = require('firebase-functions')
+  const envManager = require('../Utils/envManager')
+  const util = require('util')
+  var request = require('request')
+  const apiEndpoint = util.format(envManager.getSchoolInfo(functions)['library_seat_api_endpoint'], roomID)
+
+  global.log.debug('schoolManager', 'getLatestLibrarySeatObjects', 'req to: ' + apiEndpoint)
+
+  request(apiEndpoint, function(error, response, body) {
+    if(error) {
+      global.log.error('schoolManager', 'getLatestLibrarySeatObjects', 'error: ' + JSON.stringify(error))
+      callbackFunc(undefined)
+    }
+    else {
+      const seatObjects = JSON.parse(body)['_Model_lg_clicker_for_compact_object_list']
+      global.log.debug('schoolManager', 'getLatestLibrarySeatObjects', 'seat size: ' + seatObjects.length)
+  
+      callbackFunc(seatObjects)
+    }
+  })
+}
+
+exports.patchLatestLibrarySeatObjects = function(roomID, seatObjects, roomName, callbackFunc) {
+  if(seatObjects === undefined || seatObjects === null) {
+    global.log.warn('schoolManager', 'patchLatestLibrarySeatObjects', 'seat objects is undefined')
+    callbackFunc(false)
+    return
+  }
+  const admin = global.admin
+  const util = require('util')
+  const datetimeManager = require('../Utils/datetimeManager')
+  const seatPath = util.format(global.define.DB_PATH_LIBRARY_SEAT_ROOM_ID, roomID)
+  const seatRef = admin.database().ref(seatPath)
+  const updateDateTimeStr = datetimeManager.getCurrentTime().toISOString()
+  var availableSeatNum = global.define.ZERO
+  for(var index in seatObjects) {
+    if(seatObjects['l_percent'] === "100") {
+      availableSeatNum += 1
+    }
+  }
+  var summary = {
+    'allSeat': seatObjects.length,
+    'availableSeat': availableSeatNum,
+    'name': roomName
+  }
+  global.log.debug('schoolManager', 'patchLatestLibrarySeatObjects', 'summary: ' + JSON.stringify(summary))
+  seatRef.set({
+    lastUpdateDateTime: updateDateTimeStr,
+    summary: summary,
+    seatObjects: seatObjects
+  }, function(error) {
+    if(error) {
+      global.log.error('schoolManager', 'patchLatestLibrarySeatObjects', 'error: ' + JSON.stringify(error))
+      callbackFunc(false)
+    }
+    else {
+      global.log.info('schoolManager', 'patchLatestLibrarySeatObjects', 'latest library seat objects updated')
+      callbackFunc(true)
+    }
+  })
+}
