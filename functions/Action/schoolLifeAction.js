@@ -59,7 +59,7 @@ exports.latestLibrarySeatStatus = function(request, response, callbackFunc) {
 
             action['response'][global.define.DEFAULT_RESPONSE_TYPE_ZERO]["listCard"]["items"].push({
                 'description': util.format(descFormat, summary['availableSeat'], summary['allSeat']),
-                'title': util.format(titleFormat, summary['title'])
+                'title': util.format(titleFormat, summary['name'])
             })
         }
 
