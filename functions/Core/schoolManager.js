@@ -221,7 +221,7 @@ exports.patchLatestLibrarySeatObjects = function(roomID, seatObjects, roomName, 
   const updateDateTimeStr = datetimeManager.getCurrentTime().toISOString()
   var availableSeatNum = global.define.ZERO
   for(var index in seatObjects) {
-    if(seatObjects['l_percent'] === "100") {
+    if(seatObjects[index]['l_percent'] === "100") {
       availableSeatNum += 1
     }
   }
