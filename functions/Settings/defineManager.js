@@ -52,6 +52,7 @@ exports.DB_PATH_OPEN_API_PUBLIC_SUBWAY_PLATFORM_DIR = '/openAPI/subway/%s/%s'
 exports.DB_PATH_OPEN_API_PUBLIC_BUS_PLATFORM_ROUTE = '/openAPI/bus/%s/%s'
 exports.DB_PATH_LIBRARY_CONFIG_ROOM_ID = '/library/config/roomID'
 exports.DB_PATH_LIBRARY_SEAT_ROOM_ID = '/library/seat/%s'
+exports.DB_PATH_LIBRARY_SEAT = '/library/seat'
 
 exports.DEFAULT_USER_DATA = {
   'action': '1',
