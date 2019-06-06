@@ -164,7 +164,7 @@ exports.runUpdateLibrarySeatObjects = function(request, response) {
   })
 }
 
-exports.testFeature = function(request, response) {
+exports.runUpdateSchoolNoticeList = function(request, response) {
   var responseManager = require('../../Utils/responseManager')
   const schoolManager = require('../../Core/schoolManager')
   schoolManager.routineOfCrawlSchoolNotice(function(status) {
