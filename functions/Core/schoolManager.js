@@ -250,10 +250,13 @@ exports.patchLatestLibrarySeatObjects = function(roomID, seatObjects, roomName, 
 exports.routineOfCrawlSchoolNotice = function(callbackFunc) {
   const loadSchoolNoticePage = this.loadSchoolNoticePage;
   const crawlNoticeList = this.crawlNoticeList;
+  const saveSchoolNoticeList = this.saveSchoolNoticeList;
 
   loadSchoolNoticePage(function(noticePageHtml) {
     if (noticePageHtml) {
-      crawlNoticeList(noticePageHtml, callbackFunc)
+      crawlNoticeList(noticePageHtml, function(noticeList) {
+        saveSchoolNoticeList(noticeList, callbackFunc)
+      })
     }
     else {
       global.log.warn('schoolManager', 'routineOfCrawlSchoolNotice', 'cannot crawl school life notice page')
@@ -328,5 +331,20 @@ exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
     })
   }
   global.log.debug('schoolManager', 'crawlNoticeList', 'notice list: ' + JSON.stringify(noticeList))
-  callbackFunc(true)
+  callbackFunc(noticeList)
+}
+
+exports.saveSchoolNoticeList = function(noticeList, callbackFunc) {
+  const admin = global.admin
+  const schoolNotiRef = admin.database().ref(global.define.DB_PATH_SCHOOL_NOTICE)
+  schoolNotiRef.set(noticeList, function(error) {
+    if(error) {
+      global.log.error('schoolManager', 'saveSchoolNoticeList', 'error: ' + JSON.stringify(error))
+      callbackFunc(false)
+    }
+    else {
+      global.log.info('schoolManager', 'saveSchoolNoticeList', 'notice list saved')
+      callbackFunc(true)
+    }
+  })
 }
