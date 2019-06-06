@@ -298,5 +298,11 @@ exports.loadSchoolNoticePage = function(callbackFunc) {
 }
 
 exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
-
+  const cheerio = require('cheerio')
+  const $ = cheerio.load(noticePageHtml)
+  const scrapObj = $('div.tbody').children()
+  for (let index = global.define.ZERO; index < scrapObj.length; index += 1) {
+    const notice = scrapObj.eq(index)
+    console.log('notice', notice.text());
+  }
 }

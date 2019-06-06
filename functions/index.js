@@ -52,6 +52,7 @@ v3PublicApi.get('/public/bus', publicRoute.getPublicBus)
 v3PublicApi.patch('/public/bus', publicRoute.patchPublicBus)
 v3PublicApi.get('/school/schedule/latest', publicRoute.routineOfCrawlSchoolLifeSchedule)
 v3PublicApi.get('/school/library/seat', publicRoute.runUpdateLibrarySeatObjects)
+v3PublicApi.get('/feature/test', publicRoute.testFeature)
 exports.v3PublicApi = functions.region('asia-northeast1').https.onRequest(v3PublicApi)
 
 v3PrivateApi.use(cors)
