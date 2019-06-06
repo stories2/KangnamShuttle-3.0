@@ -303,6 +303,9 @@ exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
   const scrapObj = $('div.tbody').children()
   for (let index = global.define.ZERO; index < scrapObj.length; index += 1) {
     const notice = scrapObj.eq(index)
-    console.log('notice', notice.text());
+    const noticeID = notice.children('li').eq(0).text().trim()
+    const noticeTitle = notice.children('li').eq(2).text().trim()
+    const dataParams = JSON.parse(notice.children('li').eq(2).find('a').attr('data-params'))
+    console.log(noticeID, noticeTitle, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"])
   }
 }
