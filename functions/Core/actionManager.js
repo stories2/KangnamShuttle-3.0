@@ -192,6 +192,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     '5000': schoolLifeAction.selectSchoolLifeService,
     '5001': schoolLifeAction.syncLatestSchoolLifeSchedule,
     '5002': schoolLifeAction.latestLibrarySeatStatus,
+    '5003': schoolLifeAction.latestSchoolNoticeList,
 
     '9000': systemAction.showSystemInfo,
 
