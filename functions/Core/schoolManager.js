@@ -298,14 +298,35 @@ exports.loadSchoolNoticePage = function(callbackFunc) {
 }
 
 exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
+  const util = require('util')
   const cheerio = require('cheerio')
   const $ = cheerio.load(noticePageHtml)
   const scrapObj = $('div.tbody').children()
+  const urlFormat = 'http://web.kangnam.ac.kr/menu/board/info/f19069e6134f8f8aa7f689a4a675e66f.do?scrtWrtiYn=%s&encMenuSeq=%s&encMenuBoardSeq=%s'
+  let noticeList = []
   for (let index = global.define.ZERO; index < scrapObj.length; index += 1) {
+    if(noticeList.length >= 5) {
+      break;
+    }
     const notice = scrapObj.eq(index)
     const noticeID = notice.children('li').eq(0).text().trim()
+    if(noticeID === '필독') {
+      continue;
+    }
     const noticeTitle = notice.children('li').eq(2).text().trim()
     const dataParams = JSON.parse(notice.children('li').eq(2).find('a').attr('data-params'))
-    console.log(noticeID, noticeTitle, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"])
+    // console.log(noticeID, noticeTitle, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"])
+    noticeList.push({
+      id: noticeID,
+      title: noticeTitle,
+      url: util.format(urlFormat, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"]),
+      data: {
+        scrtWrtiYn: dataParams["scrtWrtiYn"],
+        encMenuSeq: dataParams["encMenuSeq"],
+        encMenuBoardSeq: dataParams["encMenuBoardSeq"],
+      }
+    })
   }
+  global.log.debug('schoolManager', 'crawlNoticeList', 'notice list: ' + JSON.stringify(noticeList))
+  callbackFunc(true)
 }
