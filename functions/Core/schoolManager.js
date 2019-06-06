@@ -316,6 +316,7 @@ exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
     if(noticeID === '필독') {
       continue;
     }
+    const noticeType = notice.children('li').eq(1).text().trim()
     const noticeTitle = notice.children('li').eq(2).text().trim()
     const dataParams = JSON.parse(notice.children('li').eq(2).find('a').attr('data-params'))
     // console.log(noticeID, noticeTitle, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"])
@@ -323,6 +324,7 @@ exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
       id: noticeID,
       title: noticeTitle,
       url: util.format(urlFormat, dataParams["scrtWrtiYn"], dataParams["encMenuSeq"], dataParams["encMenuBoardSeq"]),
+      type: noticeType,
       data: {
         scrtWrtiYn: dataParams["scrtWrtiYn"],
         encMenuSeq: dataParams["encMenuSeq"],
