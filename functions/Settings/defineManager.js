@@ -108,3 +108,4 @@ exports.PUBLIC_BUS_OPEN_API_RESULT_OK = '0'
 
 exports.URL_SCHOOL_HOST_NAME = 'web.kangnam.ac.kr'
 exports.URL_SCHOOL_LIFE_SCHEDULE_PATH = '/menu/02be162adc07170ec7ee034097d627e9.do'
+exports.URL_SCHOOL_LIFE_NOTICE_PATH = '/menu/f19069e6134f8f8aa7f689a4a675e66f.do'
