@@ -165,6 +165,7 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
   const emergencyAction = require('../Action/emergencyAction')
   const playAction = require('../Action/playAction')
   const schoolLifeAction = require('../Action/schoolLifeAction')
+  const translateAction = require('../Action/translateAction')
 
   const actionTable = {
     '1': basicAction.hello,
@@ -193,6 +194,12 @@ exports.executeOrder = function (request, response, actionIndex, callbackFunc) {
     '5001': schoolLifeAction.syncLatestSchoolLifeSchedule,
     '5002': schoolLifeAction.latestLibrarySeatStatus,
     '5003': schoolLifeAction.latestSchoolNoticeList,
+    '5004': translateAction.hello,
+    '5010': translateAction.translateStringToOtherLang,
+    '5011': translateAction.translateStringToOtherLang,
+    '5012': translateAction.translateStringToOtherLang,
+    '5013': translateAction.translateStringToOtherLang,
+    '5014': translateAction.translateStringToOtherLang,
 
     '9000': systemAction.showSystemInfo,
 
