@@ -106,6 +106,6 @@ exports.v3KakaoApi = functions.region('asia-northeast1').https.onRequest(v3Kakao
 
 fbMessengerApi.use(cors)
 fbMessengerApi.use(preprocessManager.addModules)
-fbMessengerApi.get('/webhook', fbMessengerRoute.test)
+fbMessengerApi.get('/webhook', fbMessengerRoute.verify)
 fbMessengerApi.post('/webhook', fbMessengerRoute.test)
 exports.fbMessengerApi = functions.region('asia-northeast1').https.onRequest(fbMessengerApi)
