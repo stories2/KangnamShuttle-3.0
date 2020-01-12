@@ -10,7 +10,7 @@
 
 강남대학교 셔틀버스 시간표 안내 카카오톡 챗봇 3.0 버전 [바로가기](http://pf.kakao.com/_wkxjxoxl)
 
-[![KangnamShuttle-3.0](./banner.jpg)](https://www.youtube.com/watch?v=mguP1YW3HZQ)
+[![KangnamShuttle-3.0](./banner202001.JPG)](https://www.youtube.com/watch?v=mguP1YW3HZQ)
 
 ## 지원 기능
 
