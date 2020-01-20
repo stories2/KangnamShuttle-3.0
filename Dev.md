@@ -50,6 +50,12 @@ package pre-configured. Functions can be deployed with firebase deploy.
 
 ### Set
 
+```
+firebase functions:config:set someservice.key="THE API KEY" someservice.id="THE CLIENT ID"
+```
+
+### Get
+
 - Linux terminal
 ```
 firebase functions:config:get > .runtimeconfig.json
@@ -60,7 +66,6 @@ firebase functions:config:get > .runtimeconfig.json
 firebase functions:config:get | ac .runtimeconfig.json
 ```
 
-### Get
 ```
 firebase functions:config:get
 ```
