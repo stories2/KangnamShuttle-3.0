@@ -39,17 +39,70 @@ exports.getLatestArticles = function(cookie, boardID, callbackFunc) {
             callbackFunc(null);
             return;
         } else {
-            var parser = require('xml2json');
-            var json = parser.toJson(body);
-            console.log('xml2json', json);
-            callbackFunc(json);
-            // console.log('body', body);
+            var convert = require('xml-js');
+            var result1 = convert.xml2json(body, {compact: true, spaces: 4});
+            callbackFunc(JSON.parse(result1).response.article);
         }
     })
 }
 
 exports.updateArticlesToDB = function(articles, boardID, callbackFunc) {
-    
+    const util = require('util')
+
+    const admin = global.admin
+
+    articles.forEach(item => {
+        const article = item['_attributes'];
+        files = [];
+        
+        if (item.attach) {
+            if (!Array.isArray(item.attach)) {
+                files.push({
+                    filename: item.attach["_attributes"].filename,
+                    filesize: item.attach["_attributes"].filesize,
+                    id: item.attach["_attributes"].id,
+                    fileurl: item.attach["_attributes"].fileurl
+                })
+            } else {
+                item.attach.forEach(fileItem => {
+                    
+                    const file = fileItem["_attributes"]
+                    files.push({
+                        filename: file.filename,
+                        filesize: file.filesize,
+                        id: file.id,
+                        fileurl: file.fileurl
+                    })
+                })
+            }
+        }
+
+        const data = {
+            title: article.title,
+            text: article.text,
+            created_at: article.created_at,
+            posvote: article.posvote,
+            comment: article.comment,
+            scrap_count: article.scrap_count,
+            files
+        }
+
+        const everytimeBoardDBPath = util.format(global.define.DB_PATH_EVERY_TIME, boardID, article.id)
+
+        global.log.debug('everytimeManager', 'updateArticlesToDB', `Everytime db path ${everytimeBoardDBPath}`);
+
+        const everytimeRef = admin.database().ref(everytimeBoardDBPath)
+
+        everytimeRef.set(data, (err) => {
+            if (err) {
+                global.log.error('everytimeManager', 'updateArticlesToDB', `Everytime login error #${boardID} - ${article.id} ${err}`);
+                callbackFunc(false);
+            } else {
+                global.log.info('everytimeManager', 'updateArticlesToDB', `Update ok #${boardID} - ${article.id}`);
+                callbackFunc(true);
+            }
+        })
+    })
 }
 
 exports.routineOfCrawlArticle = function(callbackFunc) {

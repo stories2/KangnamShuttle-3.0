@@ -54,6 +54,7 @@ exports.DB_PATH_LIBRARY_CONFIG_ROOM_ID = '/library/config/roomID'
 exports.DB_PATH_LIBRARY_SEAT_ROOM_ID = '/library/seat/%s'
 exports.DB_PATH_LIBRARY_SEAT = '/library/seat'
 exports.DB_PATH_SCHOOL_NOTICE = '/school/notice'
+exports.DB_PATH_EVERY_TIME = '/everytime/%s/%s'
 
 exports.DEFAULT_USER_DATA = {
   'action': '1',
