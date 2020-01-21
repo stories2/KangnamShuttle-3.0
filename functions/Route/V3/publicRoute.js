@@ -173,3 +173,15 @@ exports.runUpdateSchoolNoticeList = function(request, response) {
     })
   })
 }
+
+exports.runCrawlEveryTimeData = function(request, response) {
+  var responseManager = require('../../Utils/responseManager');
+  const everytimeManager = require('../../Core/everytimeManager');
+  
+  everytimeManager.routineOfCrawlArticle(() => {
+    responseManager.ok(response, {
+      'success': true,
+      message: 'Process still running.'
+    })
+  })
+}

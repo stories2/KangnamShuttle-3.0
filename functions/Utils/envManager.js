@@ -48,3 +48,11 @@ exports.getSchoolInfo = function(functions) {
     'library_seat_api_endpoint': functions.config().school.library_seat_api_endpoint
   }
 }
+
+exports.getEverytimeInfo = function(functions) {
+  return {
+    id: functions.config().everytime.id,
+    pw: functions.config().everytime.pw,
+    boards: functions.config().everytime.boards.split(',')
+  }
+}
