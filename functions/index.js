@@ -12,6 +12,8 @@ const v3KakaoApi = express()
 const v3PrivateApi = express()
 const v3FileApi = express()
 const fbMessengerApi = express()
+//DB
+const everytimeTrigger = require('./Route/DB/everytimeTrigger')
 // Routes
 const publicRoute = require('./Route/V3/publicRoute')
 const kakaoRoute = require('./Route/V3/kakaoRoute')
@@ -111,3 +113,5 @@ fbMessengerApi.use(preprocessManager.addModules)
 fbMessengerApi.get('/webhook', fbMessengerRoute.verify)
 fbMessengerApi.post('/webhook', fbMessengerRoute.test)
 exports.fbMessengerApi = functions.region('asia-northeast1').https.onRequest(fbMessengerApi)
+
+exports.everytimeTrigger = functions.database.ref('/everytime/{boardID}/{articleID}').onCreate(everytimeTrigger.articleCreated);
