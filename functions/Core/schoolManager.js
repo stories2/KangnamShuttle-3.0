@@ -390,7 +390,7 @@ exports.crawlSchoolWorkerList = function() {
   const request = require('request');
   const cheerio = require('cheerio');
 
-  const fullWorkerData = {};
+  const crawlSchoolWorkerDetail = this.crawlSchoolWorkerDetail;
 
   pageList.forEach(page => {
     request.post({
@@ -402,8 +402,11 @@ exports.crawlSchoolWorkerList = function() {
             global.log.error('schoolManager', 'crawlSchoolWorkerList', `Cannot get school worker page ${err}`);
             return;
         } else {
+          global.log.info('schoolManager', 'crawlSchoolWorkerList', `cheerio start`)
           const $ = cheerio.load(body)
           const workerDivList = $('div.phone_loop').children()
+          global.log.debug('schoolManager', 'crawlSchoolWorkerList', `cheerio is ready, row: ${workerDivList.length}`)
+
           // console.log('workerDivList length', workerDivList.length);
           for(var i = 0; i < workerDivList.length; i ++) {
             // console.log('worker', workerDivList.eq(i).text())
@@ -413,24 +416,85 @@ exports.crawlSchoolWorkerList = function() {
               name: workerDivList.eq(i).find('span.areaName').text().split(' ')[0],
               tel: workerDivList.eq(i).find('span.f_right').text()
             }
-
+            global.log.debug('schoolManager', 'crawlSchoolWorkerList', `crawl data: ${JSON.stringify(data)}`)
             const telRegexp = [/^[0-9]{4}$/, /^[0-9]{3}-[0-9]{4}$/]
 
             if (telRegexp[0].test(data.tel)) {
               data.tel = `031-280-${data.tel}`;
-              // console.log('worker', JSON.stringify(data));
-
-              fullWorkerData[data.tel] = data;
+              crawlSchoolWorkerDetail(data, null);
             } else if (telRegexp[1].test(data.tel)) {
               data.tel = `031-${data.tel}`
-              // console.log('worker', JSON.stringify(data));
-
-              fullWorkerData[data.tel] = data;
+              crawlSchoolWorkerDetail(data);
             } 
           }
-
-          console.log('fullWorkerData', fullWorkerData);
         }
     })
   })
+}
+
+exports.crawlSchoolWorkerDetail = function(data) {
+  setTimeout(() => {
+    const request = require('request');
+    const cheerio = require('cheerio');
+    const admin = global.admin
+    const util = require('util')
+    const schoolWorkerPath = util.format(global.define.DB_PATH_SCHOOL_WORKER, data.tel)
+    const schoolWorkerRef = admin.database().ref(schoolWorkerPath)
+    request.post({
+      url: 'https://web.kangnam.ac.kr/menu/7a5545db676e4a6f2d3995ceed5e7c4d.do',
+      form: {
+        searchValue3: data.name
+      },
+      headers: {
+        'Referer': 'http://web.kangnam.ac.kr/',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+        'Host': 'web.kangnam.ac.kr',
+        'DNT': '1',
+        'Upgrade-Insecure-Requests': '1',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8'
+      }
+    }, function(err,httpResponse,body){
+      if (!err) {
+        global.log.debug("schoolManager", "crawlSchoolWorkerDetail", `cheerio start ${data.name}, ${data.tel}`)
+        const $ = cheerio.load(body)
+        const searchRows = $('div.tbody').children('ul')
+        global.log.debug("schoolManager", "crawlSchoolWorkerDetail", `cheerio is ready ${data.name}, ${data.tel}`)
+    
+        if (searchRows.length > 0) {
+          // console.log(`search rows: ${searchRows.length} name: ${data.name}`);
+    
+          for (i = 0; i < searchRows.length; i ++) {
+            const searchCols = searchRows.eq(i).children('li');
+            // console.log(`#${i}, col: ${searchCols.length} text: ${searchRows.eq(i).text()}`)
+            const tempDetail = {
+              area: searchCols.eq(0).text().trim(),
+              name: searchCols.eq(1).text().trim(),
+              tel: searchCols.eq(2).text().trim(),
+              location: searchCols.eq(3).text().trim(),
+              email: searchCols.eq(4).text().trim()
+            }
+    
+            // console.log(`#${i} data: ${JSON.stringify(tempDetail)}, is eq? ${tempDetail.tel.includes(data.tel)}`)
+            if (tempDetail.tel.includes(data.tel)) {
+              tempDetail.tel = data.tel;
+              tempDetail.name = data.name;
+              tempDetail.area = data.area;
+              schoolWorkerRef.set(tempDetail, (err) => {
+                if (err) {
+                  global.log.error("schoolManager", "crawlSchoolWorkerDetail", `error ${JSON.stringify(tempDetail)}, msg: ${err}`);
+                } else {
+                  global.log.debug("schoolManager", "crawlSchoolWorkerDetail", `data added ${JSON.stringify(tempDetail)}`)
+                }
+              })
+            }
+            // console.log()
+          }
+        }
+      } else {
+        global.log.error("schoolManager", "crawlSchoolWorkerDetail", `body error ${JSON.stringify(data)}, msg: ${err}`);
+      }
+    })
+  }, Math.floor(Math.random() * (2000 - 1000)) + 1000);
 }
