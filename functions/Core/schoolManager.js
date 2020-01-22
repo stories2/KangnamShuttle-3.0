@@ -350,3 +350,87 @@ exports.saveSchoolNoticeList = function(noticeList, callbackFunc) {
     }
   })
 }
+
+exports.crawlSchoolWorkerList = function() {
+
+  const pageList = [{
+    url: 'https://web.kangnam.ac.kr/menu/d32b0ae4b98a62cad835c588275d3407.do',
+    form: {
+      rmrkNote: 1
+    },
+    headers: {
+      'Referer': 'http://web.kangnam.ac.kr/',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+      'Host': 'web.kangnam.ac.kr',
+      'DNT': '1',
+      'Upgrade-Insecure-Requests': '1',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+      'Accept-Encoding': 'gzip, deflate',
+      'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8'
+    }
+  }, 
+  {
+    url: 'https://web.kangnam.ac.kr/menu/d32b0ae4b98a62cad835c588275d3407.do',
+    form: {
+      rmrkNote: 2
+    },
+    headers: {
+      'Referer': 'http://web.kangnam.ac.kr/',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+      'Host': 'web.kangnam.ac.kr',
+      'DNT': '1',
+      'Upgrade-Insecure-Requests': '1',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+      'Accept-Encoding': 'gzip, deflate',
+      'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8'
+    }
+  }
+]
+
+  const request = require('request');
+  const cheerio = require('cheerio');
+
+  const fullWorkerData = {};
+
+  pageList.forEach(page => {
+    request.post({
+      url: page.url, 
+      form: page.form,
+      headers: page.headers
+    }, function(err,httpResponse,body){
+        if(err) {
+            global.log.error('schoolManager', 'crawlSchoolWorkerList', `Cannot get school worker page ${err}`);
+            return;
+        } else {
+          const $ = cheerio.load(body)
+          const workerDivList = $('div.phone_loop').children()
+          // console.log('workerDivList length', workerDivList.length);
+          for(var i = 0; i < workerDivList.length; i ++) {
+            // console.log('worker', workerDivList.eq(i).text())
+            
+            const data = {
+              area: workerDivList.eq(i).find('span.areaGame').text(),
+              name: workerDivList.eq(i).find('span.areaName').text().split(' ')[0],
+              tel: workerDivList.eq(i).find('span.f_right').text()
+            }
+
+            const telRegexp = [/^[0-9]{4}$/, /^[0-9]{3}-[0-9]{4}$/]
+
+            if (telRegexp[0].test(data.tel)) {
+              data.tel = `031-280-${data.tel}`;
+              // console.log('worker', JSON.stringify(data));
+
+              fullWorkerData[data.tel] = data;
+            } else if (telRegexp[1].test(data.tel)) {
+              data.tel = `031-${data.tel}`
+              // console.log('worker', JSON.stringify(data));
+
+              fullWorkerData[data.tel] = data;
+            } 
+          }
+
+          console.log('fullWorkerData', fullWorkerData);
+        }
+    })
+  })
+}

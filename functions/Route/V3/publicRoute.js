@@ -185,3 +185,14 @@ exports.runCrawlEveryTimeData = function(request, response) {
     })
   })
 }
+
+exports.runCrawlSchoolWorkerData = function(request, response) {
+  var responseManager = require('../../Utils/responseManager');
+  const schoolManager = require('../../Core/schoolManager');
+
+  schoolManager.crawlSchoolWorkerList();
+  responseManager.ok(response, {
+    success: true,
+    message: 'Process still running.'
+  })
+}
