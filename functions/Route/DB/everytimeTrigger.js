@@ -19,7 +19,7 @@ exports.articleCreated = (snapshot, context) => {
                     workerKeyList.forEach(key => {
                         // const worker = 
                         const worker = workerList[key];
-                        const resultMsg = commentMsg + `<소속: ${worker.area}\n성함: ${worker.name}\n연락처: ${worker.tel}\n이메일: ${worker.email}\n위치: ${worker.location}> `
+                        const resultMsg = commentMsg + `<소속: ${worker.area}, 성함: ${worker.name}, 연락처: ${worker.tel}, 이메일: ${worker.email}, 위치: ${worker.location}> `
                         everytimeManager.routineOfAddComment(context.params.articleID, resultMsg);
                     })
                 }

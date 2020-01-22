@@ -158,22 +158,26 @@ exports.routineOfAddComment = function(articleID, text) {
 
 exports.addCommentToArticle = function(cookie, articleID, text) {
     const request = require('request');
-    request.post({
-        headers: {
-            'Cookie': cookie,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        url: 'https://everytime.kr/save/board/comment',
-        form: {
+    setTimeout(() => {
+        const payload = {
             text,
             is_anonym: 1,
             id: articleID
         }
-    }, function(err,httpResponse,body){
-        if (!err) {
-            global.log.debug('everytimeManager', 'addCommentToArticle', `#${articleID} comment ${text} added`);
-        } else {
-            global.log.error('everytimeManager', 'addCommentToArticle', `#${articleID} error ${err}`);
-        }
-    })
+        request.post({
+            headers: {
+                'Cookie': cookie,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            url: 'https://everytime.kr/save/board/comment',
+            form: payload
+        }, function(err,httpResponse,body){
+            if (!err) {
+                global.log.debug('everytimeManager', 'addCommentToArticle', `#${articleID} comment ${text} added`);
+                global.log.debug('everytimeManager', 'addCommentToArticle', `body: ${body}, payload: ${JSON.stringify(payload)}`)
+            } else {
+                global.log.error('everytimeManager', 'addCommentToArticle', `#${articleID} error ${err}`);
+            }
+        })
+    }, Math.floor(Math.random() * (1000 - 500)) + 500)
 }
