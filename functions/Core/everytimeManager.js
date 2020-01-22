@@ -136,3 +136,44 @@ exports.routineOfCrawlArticle = function(callbackFunc) {
 
     callbackFunc();
 }
+
+exports.routineOfAddComment = function(articleID, text) {
+
+    const functions = require('firebase-functions')
+    const envManager = require('../Utils/envManager')
+
+    const loginToEverytime = this.loginToEverytime;
+    const addCommentToArticle = this.addCommentToArticle;
+
+    const everytimeData = envManager.getEverytimeInfo(functions);
+
+    loginToEverytime(everytimeData.id, everytimeData.pw, (cookie) => {
+        if (cookie) {
+            addCommentToArticle(cookie, articleID, text);
+        } else {
+            global.log.warn('everytimeManager', 'routineOfCrawlArticle', `Cookie is null`);
+        }
+    })
+}
+
+exports.addCommentToArticle = function(cookie, articleID, text) {
+    const request = require('request');
+    request.post({
+        headers: {
+            'Cookie': cookie,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        url: 'https://everytime.kr/save/board/comment',
+        form: {
+            text,
+            is_anonym: 1,
+            id: articleID
+        }
+    }, function(err,httpResponse,body){
+        if (!err) {
+            global.log.debug('everytimeManager', 'addCommentToArticle', `#${articleID} comment ${text} added`);
+        } else {
+            global.log.error('everytimeManager', 'addCommentToArticle', `#${articleID} error ${err}`);
+        }
+    })
+}

@@ -498,3 +498,17 @@ exports.crawlSchoolWorkerDetail = function(data) {
     })
   }, Math.floor(Math.random() * (2000 - 1000)) + 1000);
 }
+
+exports.searchSchoolWorkerByName = function(name, callbackFunc) {
+  if (name.length < 2) {
+    callbackFunc(null);
+    return;
+  }
+  const admin = global.admin
+  const schoolWorkerRef = admin.database().ref('/school/worker').orderByChild('name').equalTo(name);
+  schoolWorkerRef.once('value', (snapshot) => {
+    global.log.debug("schoolManager", "searchSchoolWorkerByName", `${name} search result: ${JSON.stringify(snapshot.val())}`);
+    callbackFunc(snapshot.val())
+  })
+
+}
