@@ -267,37 +267,46 @@ exports.routineOfCrawlSchoolNotice = function(callbackFunc) {
 
 exports.loadSchoolNoticePage = function(callbackFunc) {
   const httpRequestManager = require('../Utils/httpRequestManager')
+  const request = require('request');
 
   var fakeHeaderOptions = {
-    hostname: global.define.URL_SCHOOL_HOST_NAME,
-    path: global.define.URL_SCHOOL_LIFE_NOTICE_PATH,
+    uri: 'https://web.kangnam.ac.kr/menu/f19069e6134f8f8aa7f689a4a675e66f.do',
+    
     port: '80',
     method: 'GET',
     Referer: 'http://web.kangnam.ac.kr/',
     headers: {
       'Referer': 'http://web.kangnam.ac.kr/',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+      'User-Agent': 'PostmanRuntime/7.22.0',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Sec-Fetch-Dest': 'document',
+      'Sec-Fetch-Mode': 'navigate',
+      'Sec-Fetch-Site': 'none',
+      'Sec-Fetch-User': '?1',
+      'Connection': 'keep-alive',
       'Host': 'web.kangnam.ac.kr',
       'DNT': '1',
       'Upgrade-Insecure-Requests': '1',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-      'Accept-Encoding': 'gzip, deflate',
+      'Cookie': 'JSESSIONID=D0E2FEB0366AACC1F7119B4A90922D36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+      'Accept-Encoding': 'gzip, deflate, br',
       'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8'
     }
   }
 
   global.log.debug('schoolManager', 'loadSchoolNoticePage', 'fake header: ' + JSON.stringify(fakeHeaderOptions))
 
-  httpRequestManager.request(
-    fakeHeaderOptions,
-    function (reqResponse, reqResponseStr) {
-      global.log.debug('schoolManager', 'loadSchoolNoticePage', 'page html size: ' + reqResponseStr.length)
-      callbackFunc(reqResponseStr)
-    },
-    function (error) {
-      global.log.error('schoolManager', 'loadSchoolNoticePage', 'cannot get page: ' + JSON.stringify(error))
+  request.get(fakeHeaderOptions, function(err,httpResponse,body) {
+    if (err) {
+      global.log.error('schoolManager', 'loadSchoolNoticePage', 'cannot get page: ' + JSON.stringify(err))
       callbackFunc(undefined)
-    }, undefined)
+    } else {
+      // console.log('body', body);
+      global.log.debug('schoolManager', 'loadSchoolNoticePage', 'page html size: ' + body.length)
+      callbackFunc(body)
+    }
+  })
 }
 
 exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
@@ -307,6 +316,8 @@ exports.crawlNoticeList = function(noticePageHtml, callbackFunc) {
   const scrapObj = $('div.tbody').children()
   const urlFormat = 'http://web.kangnam.ac.kr/menu/board/info/f19069e6134f8f8aa7f689a4a675e66f.do?scrtWrtiYn=%s&encMenuSeq=%s&encMenuBoardSeq=%s'
   let noticeList = []
+  console.log('noticePageHtml', noticePageHtml);
+  console.log('scrapObj.length', scrapObj.length);
   for (let index = global.define.ZERO; index < scrapObj.length; index += 1) {
     if(noticeList.length >= 5) {
       break;
