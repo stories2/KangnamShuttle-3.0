@@ -4,18 +4,20 @@ app.controller('DefaultPageController', function ($scope, $http, $mdToast, $mdSi
   $scope.onDonateBtnClicked = function () {
     KSAppService.info('DefaultPageController', 'onDonateBtnClicked', 'yea! donate!')
 
-    $mdDialog.show({
-      controller: donateDialogController,
-      templateUrl: 'assets/view/dialog/donate.html',
-      parent: angular.element(document.body),
-      // targetEvent: ev,
-      clickOutsideToClose: true
-    })
-      .then(function () {
-        KSAppService.debug('DefaultPageController', 'onDonateBtnClicked', 'donate ok')
-      }, function () {
-        KSAppService.info('DefaultPageController', 'onDonateBtnClicked', 'you just canceled donate dialog')
-      })
+    window.open('https://qr.kakaopay.com/2810060110000138602277141f409145', '_blank').focus();
+
+    // $mdDialog.show({
+    //   controller: donateDialogController,
+    //   templateUrl: 'assets/view/dialog/donate.html',
+    //   parent: angular.element(document.body),
+    //   // targetEvent: ev,
+    //   clickOutsideToClose: true
+    // })
+    //   .then(function () {
+    //     KSAppService.debug('DefaultPageController', 'onDonateBtnClicked', 'donate ok')
+    //   }, function () {
+    //     KSAppService.info('DefaultPageController', 'onDonateBtnClicked', 'you just canceled donate dialog')
+    //   })
   }
 
   $scope.onLoad = function () {
